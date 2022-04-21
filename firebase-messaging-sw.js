@@ -12,7 +12,7 @@ importScripts(
 firebase.initializeApp({
     messagingSenderId: "146658723248",
                 apiKey: "AIzaSyCVFrlFa7i7uLveSoQBuzdDWk-st6DB8Sg",
-                projectId: "ihalilaltun-me",
+                projectId: "ihalilaltun.github.io",
                 appId: "1:146658723248:web:bc203317dd908e75354275"
 });
 
