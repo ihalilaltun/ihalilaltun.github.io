@@ -4684,6 +4684,15 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+        });
       },
       LAST_BOUGHT_TIME: function (campaign) {
         var config = {
@@ -4721,6 +4730,15 @@ function initializeMustache(mustache) {
           type: 'impression',
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
+        });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
         });
       },
       PRODUCT_PURCHASE_COUNTER: function (campaign) {
@@ -4760,6 +4778,15 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+        });
       },
       PRODUCT_VIEW_COUNTER: function (campaign) {
         var config = {
@@ -4797,6 +4824,15 @@ function initializeMustache(mustache) {
           type: 'impression',
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
+        });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
         });
       },
       SAVING_OVER: function (campaign) {
@@ -4836,6 +4872,15 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+        });
       },
       SCORE_AND_REVIEW: function (campaign) {
         var config = {
@@ -4874,6 +4919,15 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+        });
       },
       STOCK_COUNT: function (campaign) {
         var config = {
@@ -4911,6 +4965,15 @@ function initializeMustache(mustache) {
           type: 'impression',
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
+        });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
         });
       }
     },
