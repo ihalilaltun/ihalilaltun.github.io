@@ -84,7 +84,7 @@
 .sgm-recommendation ul.sgm-recommendation-list > li.sgm-recommendation-list-item a div.sgm-recommendation-image-container {
   width: 100%;
   height: 200px;
-  background: url(http://placehold.it/150&text=i) center center no-repeat #FFF;
+  background: url(https://cdn.segmentify.com/v3/assets/i.png) center center no-repeat #FFF;
   background-size: auto 100%;
   margin-bottom: 5px
 }
@@ -1948,6 +1948,7 @@ p.seg-popup-push-desc {
   border-radius: 10px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 0 25px rgba(0, 0, 0, 0.18);
   transform-style: preserve-3d;
+  -moz-transform-style: flat;
   outline: 1px solid transparent;
   -webkit-backface-visibility: hidden;
   will-change: transform;
@@ -1962,6 +1963,7 @@ p.seg-popup-push-desc {
   -moz-box-sizing: border-box !important;
   box-sizing: border-box !important;
   transform-style: preserve-3d;
+  -moz-transform-style: flat;
   outline: 0;
   backface-visibility: unset;
   -webkit-backface-visibility: unset;
@@ -3156,6 +3158,10 @@ div.seg-search-wrapper.sgm-search-mobile.open {
   margin-bottom: 10px;
   display: block;
 }
+.seg-search-wrapper .sgm-search-products .sgm-search-product-out-of-stock {
+  background-color: #dadada;
+  opacity: 50%;
+}
 /* Sidebar */
 .seg-search-wrapper .sgm-search-sidebar {
   width: 30%;
@@ -3508,6 +3514,44 @@ div.seg-search-wrapper.sgm-search-mobile.open {
   display: none !important;
 }
 
+.seg-search-banner-position {
+  display: flex;
+  flex-direction: row;
+  align-content: flex-start;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 5px;
+}
+
+@keyframes seg-search-placeholder-animate {
+  0% {
+    background-position: -500px 0;
+  }
+  100% {
+    background-position: 500px 0;
+  }
+}
+
+.seg-search-banner__anchor {
+  display: block;
+  text-align: center;
+}
+
+.seg-search-banner {
+  border-radius: 3px;
+  overflow: hidden;
+  animation-duration: 1.7s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-name: seg-search-placeholder-animate;
+  background: #f6f7f8;
+  background: linear-gradient(to right, #eee 2%, #ddd 18%, #eee 33%);
+  background-size: 1000px;
+}
+
 .sgm-input-loading {
   background-image: url(data:image/gif;base64,R0lGODlhgAABAKEAAOTi5OTm5P///wAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQJAwACACwAAAAAgAABAAACDQxuBiHtD6OctNqLMy4AIfkECQMAAgAsAAAAAIAAAQAAAg8MbnYLiQKjnLTai7PePBYAIfkECQMAAgAsAAAAAIAAAQAAAhEMbnYLyeuamLTai7PevHtcAAAh+QQJAwACACwAAAAAgAABAAACEgxudgvJ616bTdiLs968+w96BQAh+QQJAwACACwAAAAAgAABAAACEwxudgvJ616bMgaBs968+w+GYgEAIfkECQMAAgAsAAAAAIAAAQAAAhQMbnYLyetemzK+GITevPsPhuKoFQAh+QQJAwACACwAAAAAgAABAAACFQxudgvJ616bMj7LYhC8+w+G4kh2BQAh+QQJAwACACwAAAAAgAABAAACFgxudgvJ616bMj7LMKRB+A+G4kiWXwEAIfkECQMAAgAsAAAAAIAAAQAAAhcMbnYLyetemzI+yzCklwYBhuJIliZYAAAh+QQJAwACACwAAAAAgAABAAACFwxudgvJ616bMj7LMKSXZxoI4kiW5lkAACH5BAkDAAIALAAAAACAAAEAAAIXDG52C8nrXpsyPsswpJdnvymBQJbmWRYAIfkECQMAAgAsAAAAAIAAAQAAAhcMbnYLyetemzI+yzCkl2e/KZ0SCOZpFgAh+QQJAwADACwAAAAAgAABAIHk4uTs6uzk5uT///8CF9wEiMCtDR9kctaYJs36Om6B2BKSY1AAACH5BAkDAAMALAAAAACAAAEAgeTi5Ozq7OTm5P///wIYnI8msAsPG5xyvmoxZfbyrkVfNm4OKQQFACH5BAkDAAMALAAAAACAAAEAgeTi5Ozq7OTm5P///wIYnI+pI9ANonyy0hov1tbh7H3cFG5lJwQFACH5BAkDAAMALAAAAACAAAEAgeTi5Ozq7OTm5P///wIXnI+piwLugJxw2molzvu+rH1gR4ncExQAIfkECQMAAwAsAAAAAIAAAQCB5OLk7Ors5Obk////Ahecj6nLKvAemDTSa+/MmmOobWDoVVBQAAAh+QQJAwADACwAAAAAgAABAIHk4uTs6uzk5uT///8CFpyPqcu9AiAEtMqKL6Z69xxtXChKQQEAIfkECQMAAwAsAAAAAIAAAQCB5OLk7Ors5Obk////AhWcj6nL7StAjKDaaTPOdXOvSVwnBQUAIfkECQMAAwAsAAAAAIAAAQCB5OLk7Ors5Obk////AhScj6nL7a8EkBLYS6/O2vL+bVNQAAAh+QQJAwADACwAAAAAgAABAIHk4uTs6uzk5uT///8CE5yPqcvtD5EAc4KLK9563+5VQQEAIfkECQMAAwAsAAAAAIAAAQCB5OLk7Ors5Obk////AhKcj6nL7Q/jEIBSgLPNfHNsBQUAIfkECQMAAwAsAAAAAIAAAQCB5OLk7Ors5Obk////AhCcj6nL7Q/jE4BSgLPN3IYCACH5BAkDAAMALAAAAACAAAEAgeTi5Ozq7OTm5P///wIPnI+py+0Po1wC1AqyvqEAACH5BAkDAAMALAAAAACAAAEAgeTi5Ozq7OTm5P///wINnI+py+0Po5xGACtCAQA7MUpkUG9XWmtSZEs0VzlZMEJmd3hUeWFocndDQm9NVnNYdFZjVnBIOHJuM0ZqdmNKMEkvdGVISDVSdk9ONEl6bg==)!important;
   background-size: 100% 2px!important;
@@ -3725,7 +3769,7 @@ div.seg-search-wrapper.sgm-search-mobile.open {
 }
 .sgm-journey-content {
   width: 100%;
-  min-height: 65%;
+  min-height: 60%;
   align-items: center;
   justify-content: center;
 }
@@ -3830,6 +3874,30 @@ div.seg-search-wrapper.sgm-search-mobile.open {
   color: white;
   font-weight: 300;
 }
+
+.sgm-journey-progress {
+  width: 20%;
+  background-color: #ddd;
+  border-radius: 15px;
+  display: inline-block;
+  margin-bottom: 3px;
+}
+
+#sgm-journey-bar {
+  width: 10%;
+  height: 4px;
+  border-radius: 15px;
+  background-color: #000;
+}
+
+#sgm-journey-progress-label {
+  margin-right: 5px;
+}
+
+.sgm-journey-progress-bar {
+  text-align: center;
+}
+
 .sgm-journey-content-selected {
   background-color: #a0a0a0 !important;
 }
@@ -4158,4 +4226,22 @@ div.seg-search-wrapper.sgm-search-mobile.open {
   transform: rotate(270deg);
   right: -30px;
   top: 50%;
+}
+
+.seg-popup .seg-social-proof-popup-close {}
+.seg-popup.seg-social-proof-banner {
+  padding: 0;
+  z-index: 2147483649;
+}
+.seg-social-proof-header {
+  margin-bottom: 10px;
+  padding-top: 10px;
+}
+.seg-social-proof-header p {
+  margin: 0;
+  font-size: 13px;
+  padding: 0 15px;
+  font-family: sans-serif;
+  font-weight: normal;
+  letter-spacing: .2px;
 }

@@ -4685,11 +4685,11 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
         // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
           var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
           window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
+            $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
@@ -4732,11 +4732,11 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
         // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
           var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
           window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
+            $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
@@ -4779,11 +4779,11 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
         // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
           var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
           window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
+            $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
@@ -4826,11 +4826,11 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
         // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
           var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
           window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
+            $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
@@ -4873,11 +4873,11 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
         // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
           var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
           window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
+            $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
@@ -4920,11 +4920,11 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
         // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
           var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
           window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
+            $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
@@ -4967,11 +4967,11 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
         // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
           var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
           window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
+            $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
