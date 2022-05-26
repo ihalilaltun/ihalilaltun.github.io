@@ -4865,7 +4865,7 @@ function initializeMustache(mustache) {
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
         }
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'ProductViewCounter appended to html body for campaign(' + campaign['instanceId'] + ')');
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'SavingOver appended to html body for campaign(' + campaign['instanceId'] + ')');
         // send impression
         _SgmntfY_._variables.segmentifyObj('event:interaction', {
           type: 'impression',
@@ -4960,6 +4960,147 @@ function initializeMustache(mustache) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
         }
         _SgmntfY_.LOG_MESSAGE('DEBUG', 'StockCount appended to html body for campaign(' + campaign['instanceId'] + ')');
+        // send impression
+        _SgmntfY_._variables.segmentifyObj('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+        });
+      },
+      PREVIOUSLY_ADDED_TO_BASKET: function (campaign) {
+        var config = {
+          campaignMessage: campaign['campaignMessage'],
+          bgColor: campaign['bgColor'],
+          textColor: campaign['textColor'],
+          instanceId: campaign['instanceId'],
+          vertical: campaign['verticalPosition'],
+          horizontal: campaign['horizontalPosition']
+        };
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        _SgmntfY_._getJq()('body').prepend(renderedHtml);
+        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        try {
+          campaign['postJs'] && eval(campaign['postJs']);
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'PreviouslyAddedToBasket appended to html body for campaign(' + campaign['instanceId'] + ')');
+        // send impression
+        _SgmntfY_._variables.segmentifyObj('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+        });
+      },
+      LAST_VISIT_TIME: function (campaign) {
+        var config = {
+          campaignMessage: campaign['campaignMessage'],
+          bgColor: campaign['bgColor'],
+          textColor: campaign['textColor'],
+          instanceId: campaign['instanceId'],
+          vertical: campaign['verticalPosition'],
+          horizontal: campaign['horizontalPosition']
+        };
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        _SgmntfY_._getJq()('body').prepend(renderedHtml);
+        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        try {
+          campaign['postJs'] && eval(campaign['postJs']);
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'LastVisitTime appended to html body for campaign(' + campaign['instanceId'] + ')');
+        // send impression
+        _SgmntfY_._variables.segmentifyObj('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+        });
+      },
+      FAVORITE_ACTIVITY: function (campaign) {
+        var config = {
+          campaignMessage: campaign['campaignMessage'],
+          bgColor: campaign['bgColor'],
+          textColor: campaign['textColor'],
+          instanceId: campaign['instanceId'],
+          vertical: campaign['verticalPosition'],
+          horizontal: campaign['horizontalPosition']
+        };
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        _SgmntfY_._getJq()('body').prepend(renderedHtml);
+        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        try {
+          campaign['postJs'] && eval(campaign['postJs']);
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'FavoriteActivity appended to html body for campaign(' + campaign['instanceId'] + ')');
         // send impression
         _SgmntfY_._variables.segmentifyObj('event:interaction', {
           type: 'impression',
@@ -5228,15 +5369,19 @@ function initializeMustache(mustache) {
         _SgmntfY_._extend(_SgmntfY_._variables, variables);
         _SgmntfY_.LOG_MESSAGE('DEBUG', 'Segmentify Variables are updated - New Values: ' + variables);
       },
-      setUserId: function (userId) {
+      setUserId: function (userId, doNotSendUserChangeEvent) {
         var oldUserId = _SgmntfY_._getUserId();
         _SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey, userId, 390, _SgmntfY_._variables.storage.user.local);
         _SgmntfY_.LOG_MESSAGE('DEBUG', 'Segmentify User Id Changed to: ' + userId);
-        if (oldUserId !== userId) {
-          var data = {};
-          data['oldUserId'] = oldUserId || '';
-          data['async'] = 'false';
-          return _SgmntfY_._prepareRequest(data, 'USER_CHANGE');
+        if (_SgmntfY_._isNotEmpty(doNotSendUserChangeEvent) && ('true' === doNotSendUserChangeEvent || true === doNotSendUserChangeEvent)) {
+          _SgmntfY_.LOG_MESSAGE('DEBUG', 'Segmentify User Id Changed to: ' + userId + ' without sending USER_CHANGE event.');
+        } else {
+          if (oldUserId !== userId) {
+            var data = {};
+            data['oldUserId'] = oldUserId || '';
+            data['async'] = 'false';
+            return _SgmntfY_._prepareRequest(data, 'USER_CHANGE');
+          }
         }
       },
       pageView: function (data) {
@@ -5733,6 +5878,7 @@ function initializeMustache(mustache) {
           region: params['region'] || _SgmntfY_._variables.region,
           async: params['async'] || 'true',
           globalMode: _SgmntfY_._getControlGroup(),
+          experiments: _SgmntfY_._experiment.init() || {},
           email: params['email'] || '',
           ft: _SgmntfY_._getFireTime(eventTime) || '',
           tz: _SgmntfY_._getTimeZone(eventTime) || ''
@@ -6938,6 +7084,13 @@ function initializeMustache(mustache) {
           var campaigns = responseData['campaigns'];
           var searches = responseData['search'];
           var coupons = responseData['coupons'] || [[]];
+          var experiments = responseData['experiments'] || {};
+
+          if(_SgmntfY_._experiment.get() !== _SgmntfY_._experiment.toString(experiments)){
+            _SgmntfY_._experiment.store(
+              _SgmntfY_._experiment.toString(experiments)
+            );
+          }
 
           if (responses.length === requestDataArray.length && campaigns.length === requestDataArray.length) {
             for (var j = 0; j < responses.length; j++) {
@@ -7362,6 +7515,7 @@ function initializeMustache(mustache) {
         _SgmntfY_._variables.search.shadowRootElementsForHide = searchArray[0].shadowRootElementsForHide || [];
         _SgmntfY_._variables.search.shadowRootElementsForTrigger = searchArray[0].shadowRootElementsForTrigger || [];
         _SgmntfY_._variables.search.forceRemoveInputVal = (initialCampaign && typeof initialCampaign.forceRemoveInputVal !== "undefined" ? initialCampaign.forceRemoveInputVal : false);
+        _SgmntfY_._variables.search.clearInputBindingsOnSite = searchArray[0].clearInputBindingsOnSite; 
 
         if (_SgmntfY_._variables.search.input.indexOf(",input#sgm-qa-search") === -1) {
           _SgmntfY_._variables.search.input = _SgmntfY_._variables.search.input + ",input#sgm-qa-search";
@@ -7506,7 +7660,9 @@ function initializeMustache(mustache) {
       _SgmntfY_._storePersistentData(_SgmntfY_._variables.search.queryOverrideKey, null, 0, true);
     },
     _disableSearchTriggerEventsOnSite: function() {
-      _SgmntfY_._searchGetInputElement().off();
+      if(_SgmntfY_._variables.search.clearInputBindingsOnSite === true){
+        _SgmntfY_._searchGetInputElement().off();
+      }
       if (_SgmntfY_._getActiveSearchManuelTrigger()) {
         _SgmntfY_._searchGetManuelTriggerElementForMobile().off();
       }
@@ -9873,7 +10029,171 @@ function initializeMustache(mustache) {
       if (typeof logLevelObject != 'undefined' && logLevelObject <= currentLevel) {
         console.log('Segmentify[' + logLevel + ']: ' + message);
       }
-    }
+    },
+    _experiment: {
+      /**
+       * String formatted experiments.
+       * Contains: EXPERIMENT ID, VARIATION ID, MODULE NAME
+       * @typedef {string} ExperimentString
+       */
+    
+      /**
+       * Json formatted experiments.
+       * @typedef {object} ExperimentJson
+       */
+    
+      /**
+       * Allows converting object formatted experiments to supported string
+       * format
+       * @param {ExperimentJson} experiments Object formatted experiments
+       * @return {ExperimentString} String formatted experiments
+       */
+      toString: function (experiments) {
+        try {
+          var config = _SgmntfY_._experiment.config;
+          var keys = Object.keys(config.modules);
+          var formatted = [];
+    
+          for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            for (var id in experiments[key]) {
+              if (Object.prototype.hasOwnProperty.call(experiments[key], id)) {
+                var value = experiments[key][id];
+                var module = config.modules[key];
+                formatted.push([id, value, module].join(config.seperator.sub));
+              }
+            }
+          }
+    
+          return formatted.join(config.seperator.items);
+        } catch (error) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in converting experiments to string: ' + error);
+        }
+      },
+      /**
+       * Allows converting supported string format to object format.
+       * @param {ExperimentString} experiments String formatted experiments
+       * @return {ExperimentJson} Object formatted experiments
+       */
+      toJson: function (experiments) {
+        try {
+    
+          if (experiments === null || experiments === '') return {};
+    
+          var config = _SgmntfY_._experiment.config;
+          var list = experiments.split(config.seperator.items);
+          var modules = Object.fromEntries(
+            Object.entries(config.modules).map(function (entry) {
+              return [entry[1], entry[0]];
+            })
+          );
+          var response = {};
+    
+          for (var i = 0; i < list.length; i++) {
+            var experiment = list[i].split(config.seperator.sub);
+    
+            var id = experiment[0];
+            var value = experiment[1];
+            var module = experiment[2];
+    
+            if(typeof response[modules[module]] === 'undefined'){
+              response[modules[module]] = {};
+            }
+            response[modules[module]][id] = value;
+          }
+    
+          return response;
+        } catch (error) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in converting experiments to JSON: ' + error);
+        }
+      },
+      /**
+       * Allows to store experiments
+       * @param {ExperimentString} experiments String formatted experiments
+       */
+      store: function (experiments) {
+        var config = _SgmntfY_._experiment.config;
+
+        _SgmntfY_.LOG_MESSAGE('INFO', 'Experiment stored: ['+ experiments +']');
+    
+        _SgmntfY_._storePersistentData(
+          config.storage.name,
+          experiments,
+          config.storage.expire
+        );
+      },
+      /**
+       * Able to get active experiments
+       * @return {ExperimentString} String formatted experiments
+       */
+      get: function () {
+        var config = _SgmntfY_._experiment.config;
+    
+        return _SgmntfY_._getPersistentData(config.storage.name);
+      },
+      /**
+       * This method able to change experiment group
+       * @param {ExperimentString} experiment {{EXPERIMENT ID}}:{{NEW GROUP}}
+       */
+      preview: function (experiment) {
+        try {
+          var config = _SgmntfY_._experiment.config;
+    
+          var exp = experiment || _SgmntfY_._getQueryParameter('_sgf_experiment');
+          if (exp === '') return;
+    
+          var id = exp.split(config.seperator.sub)[0];
+          var value = exp.split(config.seperator.sub)[1];
+    
+          var keys = Object.keys(config.modules);
+          var experiments = _SgmntfY_._experiment.toJson(_SgmntfY_._experiment.get());
+    
+          for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+    
+            if (typeof experiments[key] !== 'undefined') {
+              if (typeof experiments[key][id] !== 'undefined') {
+                experiments[key][id] = value;
+
+                if(_SgmntfY_._experiment.toString(experiments) !== _SgmntfY_._experiment.get()){
+                  _SgmntfY_.LOG_MESSAGE('INFO', 'Experiment "' + id + '" group changed to the "' + value +'"');
+                  _SgmntfY_._experiment.store(
+                    _SgmntfY_._experiment.toString(experiments)
+                  );
+                }
+              }
+            }
+          }
+        } catch (error) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in experiments preview: ' + error);
+        }
+      },
+      /**
+       * Initialize experiments.
+       * @return {ExperimentJson} Json formatted experiments
+       */
+      init: function () {
+        _SgmntfY_._experiment.preview();
+        return _SgmntfY_._experiment.toJson(_SgmntfY_._experiment.get()) || {};
+      },
+      config: {
+        storage: {
+          name: '_sgf_exp',
+          expire: 30,
+        },
+        queryName: '_sgf_experiment',
+        modules: {
+          RECOMMENDATION: 'R',
+          SEARCH: 'S',
+          PUSH: 'P',
+          BT: 'B'
+        },
+        seperator: {
+          items: '|',
+          sub: ':',
+        },
+      },
+    },
   };
 
   // initialize Segmentify
