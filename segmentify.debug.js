@@ -1287,6 +1287,11 @@ function initializeMustache(mustache) {
           "RESULTS_FOOTER": ".sgm-search-products"
         }
       },
+      pa: {
+        loaded: false,
+        disabled: false,
+        wait: false
+      },
       journey: {},
       userStorageKey: "_sgf_user_id",
       sessionStorageKey: "_sgf_session_id",
@@ -1360,7 +1365,7 @@ function initializeMustache(mustache) {
           "stockStatus", "brand", "gender", "labels", "sizes", "allSizes", "colors", "publishTime", "source", "noUpdate", "activeBanners", "groupId", "scoreCount", "reviewCount"],
         BASKET_OPERATIONS: ["price", "quantity", "size", "activeBanners"],
         CHECKOUT: ["productList", "orderNo", "paymentType", "activeBanners", "cartUrl", "totalDiscount", "discounts", "shipment", "tax", "coupon"],
-        USER_OPERATIONS: ["username", "fullName", "phone", "gender", "birthDate", "segments", "memberSince", "service", "isRegistered", "isLogin", "location", "emailNtf", "mailTest", "pushTest", "custom"],
+        USER_OPERATIONS: ["username", "fullName", "phone", "gender", "birthDate", "segments", "memberSince", "service", "isRegistered", "isLogin", "location", "emailNtf", "mailTest", "pushTest", "custom", "external"],
         FORM: [],
         CUSTOM_EVENT: [],
         INTERACTION: ["interactionId", "instanceId"],
@@ -1379,6 +1384,7 @@ function initializeMustache(mustache) {
       segmentifyQaApiUrl: '//gandalf-qa.segmentify.com',
       segmentifyCDNUrl: "//cdn.segmentify.com/",
       jQueryUrl: "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js",
+      paUrl: "https://cdn.sgmntfy.com/pa.js",
       dataLayer: 'sgfLayer',
       consumeDataLayer: true,
       dataLayerConfig: {},
@@ -5532,6 +5538,10 @@ function initializeMustache(mustache) {
         data['async'] = 'false';
         data['isLogin'] = true;
         data['isRegistered'] = true;
+
+        if (_SgmntfY_._variables.pa.loaded === true && _SgmntfY_._variables.pa.disabled === false) {
+          data['external'] = _SgmntfY_._variables.pa.data.output;
+        }
         return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
       },
       userSignOut: function (data) {
@@ -5539,6 +5549,10 @@ function initializeMustache(mustache) {
         data["step"] = "signout";
         data['async'] = 'false';
         data['isLogin'] = false;
+
+        if (_SgmntfY_._variables.pa.loaded === true && _SgmntfY_._variables.pa.disabled === false) {
+          data['external'] = _SgmntfY_._variables.pa.data.output;
+        }
         return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
       },
       userSignUp: function (data) {
@@ -5547,18 +5561,29 @@ function initializeMustache(mustache) {
         data['async'] = 'false';
         data['isRegistered'] = true;
 
+        if (_SgmntfY_._variables.pa.loaded === true && _SgmntfY_._variables.pa.disabled === false) {
+          data['external'] = _SgmntfY_._variables.pa.data.output;
+        }
         return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
       },
       userSubscribe: function (data) {
         data = data || {};
         data["step"] = "subscribe";
         data['async'] = 'false';
+
+        if (_SgmntfY_._variables.pa.loaded === true && _SgmntfY_._variables.pa.disabled === false) {
+          data['external'] = _SgmntfY_._variables.pa.data.output;
+        }
         return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
       },
       userUnsubscribe: function (data) {
         data = data || {};
         data["step"] = "unsubscribe";
         data['async'] = 'false';
+
+        if (_SgmntfY_._variables.pa.loaded === true && _SgmntfY_._variables.pa.disabled === false) {
+          data['external'] = _SgmntfY_._variables.pa.data.output;
+        }
         return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
       },
       userInfoUpdate: function (data) {
@@ -5568,6 +5593,11 @@ function initializeMustache(mustache) {
         if (typeof data["isLogin"] !== 'undefined') {
           data["isRegistered"] = (data['isLogin'] === "true" || data["isLogin"] === true) ? "true" : data['isRegistered'];
         }
+
+        if (_SgmntfY_._variables.pa.loaded === true && _SgmntfY_._variables.pa.disabled === false) {
+          data['external'] = _SgmntfY_._variables.pa.data.output;
+        }
+
         var dataStr = JSON.stringify(data);
         var localDataStr = _SgmntfY_._getPersistentData('sgfUserUpdateData', true);
         if (localDataStr === undefined || dataStr !== localDataStr) {
@@ -9746,6 +9776,21 @@ function initializeMustache(mustache) {
           _SgmntfY_._setQaMode();
         }
 
+        if (_SgmntfY_._variables.pa.loaded === false) {
+          _SgmntfY_._loadJavascript(_SgmntfY_._variables.paUrl, true, function () {
+            _SgmntfY_._variables.pa.loaded = true;
+            _SgmntfY_._variables.pa.data = __PA.default;
+          });
+
+          // When the PA methods 5 frequency times still not loaded, skip the loading
+          setTimeout(function(){
+            if (_SgmntfY_._variables.pa.loaded === false) {
+              _SgmntfY_._variables.pa.loaded = true;
+              _SgmntfY_._variables.pa.disabled = true;
+            }
+          }, _SgmntfY_._variables.constants.frequency * 5);
+        }
+
         if (_SgmntfY_._variables.mustache == null) {
           _SgmntfY_._variables.mustache = {};
           initializeMustache(_SgmntfY_._variables.mustache);
@@ -9870,8 +9915,16 @@ function initializeMustache(mustache) {
     // run - process messages in queue
     run: function () {
       try {
+        var paStatus;
+
+        if (_SgmntfY_._variables.pa.wait === true) {
+          paStatus = _SgmntfY_._variables.pa.loaded === true;
+        } else {
+          paStatus = true;
+        }
+
         // if jQuery not loaded or queue not created, wait for it
-        if (_SgmntfY_._variables.jq && ((_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) || _SgmntfY_._getDataLayer())) {
+        if (_SgmntfY_._variables.jq && paStatus && ((_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) || _SgmntfY_._getDataLayer())) {
           if (!_SgmntfY_._variables.waitingKeys && _SgmntfY_._variables.keysTryCount < 5) {
             // update user & session id if necessary
             var requiredKeyCount = 0;
