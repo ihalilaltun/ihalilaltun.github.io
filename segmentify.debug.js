@@ -1290,7 +1290,6 @@ function initializeMustache(mustache) {
       pa: {
         loaded: false,
         disabled: false,
-        wait: false
       },
       journey: {},
       userStorageKey: "_sgf_user_id",
@@ -1365,7 +1364,7 @@ function initializeMustache(mustache) {
           "stockStatus", "brand", "gender", "labels", "sizes", "allSizes", "colors", "publishTime", "source", "noUpdate", "activeBanners", "groupId", "scoreCount", "reviewCount"],
         BASKET_OPERATIONS: ["price", "quantity", "size", "activeBanners"],
         CHECKOUT: ["productList", "orderNo", "paymentType", "activeBanners", "cartUrl", "totalDiscount", "discounts", "shipment", "tax", "coupon"],
-        USER_OPERATIONS: ["username", "fullName", "phone", "gender", "birthDate", "segments", "memberSince", "service", "isRegistered", "isLogin", "location", "emailNtf", "mailTest", "pushTest", "custom", "external"],
+        USER_OPERATIONS: ["username", "fullName", "phone", "gender", "birthDate", "segments", "memberSince", "service", "isRegistered", "isLogin", "location", "emailNtf", "mailTest", "pushTest", "custom"],
         FORM: [],
         CUSTOM_EVENT: [],
         INTERACTION: ["interactionId", "instanceId"],
@@ -5122,6 +5121,94 @@ function initializeMustache(mustache) {
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
           }, 1000);
         });
+      },
+      SEE_ALL: function(campaign){
+        var config = {
+          instanceId: campaign['instanceId'],
+          buttonText: campaign['buttonText'],
+          buttonUrl: campaign['buttonUrl'],
+          bgColor: campaign['bgColor'],
+          textColor: campaign['textColor']
+        };
+        // widget-view callback definition
+        var _instanceId = campaign['instanceId']; // will also be used for interactionId
+        var wvCB = function ($elem) {
+          var eventSent = false;
+          if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
+            _SgmntfY_._interaction('widget-view', _instanceId, _instanceId);
+            eventSent = true;
+          } else {
+            if (!eventSent) {
+              var widgetViewInterval = setInterval(function() {
+                if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
+                  _SgmntfY_._interaction('widget-view', _instanceId, _instanceId);
+                  eventSent = true;
+                  window.clearInterval(widgetViewInterval);
+                }
+              }, 100);
+            }
+          }
+        };
+        // html & preJs & postJs & css
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        try {
+          // get target element as jQuery object
+          var _target = campaign['targetSelector'];
+          var targetElement = _SgmntfY_._getJq()(_target).first();
+          // put rendered banner HTML into the target
+          var _targetPosition = campaign['targetPosition'];
+          if (_targetPosition === 'SELF') {
+            targetElement.html(renderedHtml);
+            if (wvCB) {
+              wvCB(targetElement);
+            }
+          } else {
+            var $div = _SgmntfY_._getJq()('<div/>', {'class': 'sgm-see-all-button-wrapper seg-clear'});
+            if (_targetPosition === 'AFTER' || _targetPosition === 'BEFORE') {
+              _targetPosition === 'AFTER' ? $div.html(renderedHtml).insertAfter(targetElement) : $div.html(renderedHtml).insertBefore(targetElement);
+            } else if (_targetPosition === 'APPEND' || _targetPosition === 'PREPEND') {
+              _targetPosition === 'APPEND' ? $div.html(renderedHtml).appendTo(targetElement) : $div.html(renderedHtml).prependTo(targetElement);
+            }
+            if (wvCB) {
+              wvCB($div);
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in filling target element [' + _target + '] for banner: ' + err);
+        }
+        if (campaign['css']) {
+          _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        }
+        try {
+          if (campaign['postJs']) {
+            eval(campaign['postJs']);
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'SeeAll campaign inserted to html for campaign(' + _instanceId + ')');
+        // interaction events
+        // send impression
+        _SgmntfY_._interaction('impression', _instanceId, _instanceId);
+        // bind click handler
+        if (_SgmntfY_._getJq()('.seg-see-all-link-' + _instanceId).length) {
+          _SgmntfY_._getJq()('.seg-see-all-link-' + _instanceId).bind('click', function () {
+            location.href = config.buttonUrl;
+          });
+        }
       }
     },
     // Functions
@@ -9915,16 +10002,8 @@ function initializeMustache(mustache) {
     // run - process messages in queue
     run: function () {
       try {
-        var paStatus;
-
-        if (_SgmntfY_._variables.pa.wait === true) {
-          paStatus = _SgmntfY_._variables.pa.loaded === true;
-        } else {
-          paStatus = true;
-        }
-
         // if jQuery not loaded or queue not created, wait for it
-        if (_SgmntfY_._variables.jq && paStatus && ((_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) || _SgmntfY_._getDataLayer())) {
+        if (_SgmntfY_._variables.jq && ((_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) || _SgmntfY_._getDataLayer())) {
           if (!_SgmntfY_._variables.waitingKeys && _SgmntfY_._variables.keysTryCount < 5) {
             // update user & session id if necessary
             var requiredKeyCount = 0;
