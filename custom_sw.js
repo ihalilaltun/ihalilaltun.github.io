@@ -165,7 +165,7 @@ function showSuccess(data) {
     notification.data.apiKey = data.apiKey;
     notification.data.instanceId = data.instanceId;
     notification.data.userId = data.userId || '';
-    return fetch(data.dataCenterUrl + 'interaction/notification?apiKey=' + data.apiKey + '&instanceId=' + data.instanceId + '&type=show').then(function () {
+    return fetch(data.dataCenterUrl + 'interaction/notification?apiKey=' + data.apiKey + '&instanceId=' + data.instanceId + '&type=show&userId=' + data.userId).then(function () {
       return showNotification(notification);
     }).catch(function (err) {
       return showNotification(notification);
