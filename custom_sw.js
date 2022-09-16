@@ -166,11 +166,14 @@ function showSuccess(data) {
     notification.data.instanceId = data.instanceId;
     notification.data.userId = data.userId || '';
     return fetch(data.dataCenterUrl + 'interaction/notification?apiKey=' + data.apiKey + '&instanceId=' + data.instanceId + '&type=show&userId=' + data.userId).then(function () {
+      sendShowInfoViaSubscription(data.dataCenterUrl, data.apiKey);
       return showNotification(notification);
     }).catch(function (err) {
+      sendShowInfoViaSubscription(data.dataCenterUrl, data.apiKey);
       return showNotification(notification);
     });
   } else {
+    sendShowInfoViaSubscription(data.dataCenterUrl, data.apiKey);
     return showNotification(notification);
   }
 }
@@ -316,6 +319,21 @@ function sendSubscriptionDetails(apiKey, dataCenter, tryCount) {
         }
         return;
       });
+    }
+  });
+}
+
+function sendShowInfoViaSubscription(dataCenter, apiKey) {
+  self.registration.pushManager.getSubscription().then(function (subscription) {
+    if (subscription) {
+      var dataArray = {
+        subscriptionId: subscription.endpoint.split('/').slice(-1)[0]
+      };
+      fetch(dataCenter + 'interaction/show?apiKey=' + apiKey, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(dataArray)
+      }).then(function (res) {}).catch(function () {});
     }
   });
 }
