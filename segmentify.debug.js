@@ -1290,6 +1290,7 @@ function initializeMustache(mustache) {
       pa: {
         loaded: false,
         disabled: false,
+        wait: false
       },
       journey: {},
       userStorageKey: "_sgf_user_id",
@@ -1356,6 +1357,8 @@ function initializeMustache(mustache) {
         COUPON: ['type'],
         JOURNEY: ['type'],
         WISHLIST: ['step'],
+        PERSONA_QUIZ: [],
+        GAMIFICATION: [],
       },
       optionalParams: {
         PAGE_VIEW: ["category", "subCategory"],
@@ -1364,7 +1367,7 @@ function initializeMustache(mustache) {
           "stockStatus", "brand", "gender", "labels", "sizes", "allSizes", "colors", "publishTime", "source", "noUpdate", "activeBanners", "groupId", "scoreCount", "reviewCount"],
         BASKET_OPERATIONS: ["price", "quantity", "size", "activeBanners"],
         CHECKOUT: ["productList", "orderNo", "paymentType", "activeBanners", "cartUrl", "totalDiscount", "discounts", "shipment", "tax", "coupon"],
-        USER_OPERATIONS: ["username", "fullName", "phone", "gender", "birthDate", "segments", "memberSince", "service", "isRegistered", "isLogin", "location", "emailNtf", "mailTest", "pushTest", "custom"],
+        USER_OPERATIONS: ["username", "fullName", "phone", "gender", "birthDate", "segments", "memberSince", "service", "isRegistered", "isLogin", "location", "emailNtf", "mailTest", "pushTest", "custom", "external"],
         FORM: [],
         CUSTOM_EVENT: [],
         INTERACTION: ["interactionId", "instanceId"],
@@ -1377,7 +1380,9 @@ function initializeMustache(mustache) {
         FILTER: ['productId', 'categories', 'brands', 'sizes', 'prices'],
         COUPON: [],
         JOURNEY: ['step', 'answer', 'instanceId'],
-        WISHLIST: ['productId', 'favoritesList']
+        WISHLIST: ['productId', 'favoritesList'],
+        PERSONA_QUIZ: ['answers', 'instanceId'],
+        GAMIFICATION: [],
       },
       segmentifyApiUrl: "//gandalf.segmentify.com/",
       segmentifyQaApiUrl: '//gandalf-qa.segmentify.com',
@@ -4356,6 +4361,260 @@ function initializeMustache(mustache) {
           interactionId: campaign['instanceId']
         });
       },
+      /** 
+       * Persona Quiz SDK implementation
+       * @see https://segmentify.atlassian.net/browse/SFY-157
+       * Only Persona Quiz specified params added here, most detailed 
+       * information please checkout the response.
+       * @param {object} campaign Campaign object
+       * @param {string} campaign.quizTitle Quiz title
+       * @param {object[]} campaign.responses Quiz responses
+       * @param {string} campaign.responses.response Quiz response title
+       * @param {string} campaign.responses.image Quiz response image
+       * @param {string} campaign.responses.segmentName Quiz response segment name
+       * @param {number} campaign.responses.segmentId Quiz response segment id
+       * @param {object} campaign.resultButton Quiz submit button
+       * @param {string} campaign.resultButton.title Submit button text
+       * @param {string} campaign.resultButton.backgroundColor Submit button background color
+       * @param {string} campaign.resultButton.textColor Submit button text color
+       * @param {string} campaign.html Quiz html
+       * @param {string} campaign.css Quiz css
+       * @param {string} campaign.preJs Quiz pre-js
+       * @param {string} campaign.postJs Quiz post-js
+       * @param {string} campaign.overlay Popup overlay
+       * @param {string} campaign.verticalPosition Popup vertical position
+       * @param {string} campaign.horizontalPosition Popup horizontal position
+       * @return {undefined} no return value
+       */
+      PERSONA_QUIZ: function (campaign, request) {
+        if (typeof campaign === 'undefined') return;
+
+        // Required _SgmntfY_ variables
+        var jQuery = _SgmntfY_._getJq();
+        var Mustache = _SgmntfY_._getMustache();
+        var queue = _SgmntfY_._variables.segmentifyObj;
+        var log = _SgmntfY_.LOG_MESSAGE;
+
+        // Accessable variables from the pre-render and render methods.
+        var config = {
+          quizTitle: campaign['quizTitle'],
+          responses: campaign['responses'],
+          resultButton: campaign['resultButton'],
+          vertical: campaign['verticalPosition'],
+          horizontal: campaign['horizontalPosition'],
+          instanceId: campaign['instanceId'],
+          onlyOneSelected: campaign['onlyOneSelected']
+        };
+
+        // Pre-render the Persona Quiz HTML
+        if (campaign.hasOwnProperty('preJs') === true) {
+          try {
+            /**
+             * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function
+             * DO NOT USE eval() here. @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
+             */
+            var preRender = Function('"use strict";return ('.concat(campaign["preJs"], ")"))();
+
+            var preRenderStatus = preRender(config);
+            if (typeof preRenderStatus !== 'undefined' && !preRenderStatus) {
+              log('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          } catch (error) {
+            log('WARN', 'Error in executing campaign pre js code: '.concat(error));
+          }
+        }
+
+        // Render the Persona Quiz HTML
+        if (campaign.hasOwnProperty('html') === true) {
+          var html = Mustache.render(campaign.html, config);
+          var htmlContainer = document.createElement('div');
+          htmlContainer.innerHTML = html;
+
+          document.body.appendChild(htmlContainer);
+        }
+
+        // Append the CSS into the head
+        if (campaign.hasOwnProperty('css') === true) {
+          var css = document.createElement('style');
+          css.innerHTML = campaign.css;
+
+          document.head.appendChild(css);
+        }
+
+        var logic = (
+          /**
+           * Persona Quiz logic
+           * @param {object} config Config object
+           * @param {string} config.instanceId The instance id of the campaign
+           * @param {boolean} config.onlyOneSelected Whether or not to allow only one selection
+           * @param {Function} queue Segmentify event queue
+           * @return {boolean} Whether or not to continue the campaign
+           */
+          function (config, queue) {
+            var instanceId = config.instanceId;
+            var onlyOneSelected = config.onlyOneSelected;
+            var successTimeout = config.successTimeout || 5000;
+
+            // DOM querys
+            var persona = document.querySelectorAll(
+              ".seg-my-persona-".concat(instanceId, " .seg-persona-item")
+            );
+            var button = document.querySelector(
+              ".seg-my-persona-".concat(instanceId, " .seg-persona-submit--button")
+            );
+            var checkboxes = document.querySelectorAll(
+              ".seg-my-persona-".concat(instanceId, " .seg-persona-item .seg-persona-item--checkbox")
+            );
+            var container = document.querySelector(
+              ".seg-my-persona-".concat(instanceId)
+            );
+            var closeButton = document.getElementById(
+              "seg-my-persona-".concat(instanceId, "--close")
+            );
+
+            // If the required elements are not exist, exit.
+            if (
+              persona === null ||
+              button === null ||
+              checkboxes === null ||
+              container === null ||
+              closeButton === null
+            ) return false;
+
+            /**
+             * Add the event listener to the persona items
+             * @param {MouseEvent} event @see https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event
+             * @param {MouseEvent.currentTarget} currentTarget the target element of the event 
+             */
+            var personaClickHandler = function (event) {
+              var currentTarget = event.currentTarget;
+
+              var checkbox = currentTarget.querySelector('.seg-persona-item--checkbox');
+
+              // Checks for multiple answers
+              if (onlyOneSelected === true) {
+                checkboxes.forEach(function (checkboxEl) {
+                  checkboxEl.classList.remove('selected');
+                });
+                persona.forEach(function (personaEl) {
+                  personaEl.classList.remove('selected');
+                });
+              }
+
+              if (checkbox.classList.contains('selected')) {
+                // If already checked remove the selected class
+                currentTarget
+                  .querySelector('.seg-persona-item--checkbox')
+                  .classList
+                  .remove('selected');
+
+                currentTarget.classList.remove('selected');
+              } else {
+                // If not checked add the selected class
+                currentTarget
+                  .querySelector('.seg-persona-item--checkbox')
+                  .classList
+                  .add('selected');
+
+                currentTarget.classList.add('selected');
+              }
+
+              return true;
+            }
+
+            // Bind the event listener to the persona items
+            persona.forEach(function (element) {
+              element.addEventListener('click', personaClickHandler);
+            });
+
+            // Bind the event listener to the submit button
+            button.addEventListener('click', function () {
+              const state = [];
+
+              // Get the selected persona items
+              checkboxes.forEach(function (element) {
+                if (element.classList.contains('selected') === false) return;
+
+                state.push({
+                  segmentName: element.getAttribute('segment-name'),
+                  segmentId: element.getAttribute('segment-id')
+                });
+              });
+
+              if (state.length === 0) {
+                // If no persona item is selected, show error.
+                container.classList.add('seg-persona-error');
+              } else {
+                // If persona item is selected, remove the error class and send the event & show success.
+                container.classList.remove('seg-persona-error');
+                container.classList.add('seg-persona-success');
+                setTimeout(function () { closeButton.click() }, successTimeout);
+
+                // Send the impression event
+                queue('select:persona', {
+                  answers: state,
+                  instanceId: campaign['instanceId'],
+                });
+              }
+            });
+          })(
+            config,
+            queue
+          );
+
+        if (typeof logic !== 'undefined' && logic === false) {
+          log('WARN', 'Persona Quiz logic returned false, please checkout the required elements!');
+        }
+
+        // Post-render the Persona Quiz HTML
+        if (campaign.hasOwnProperty('postJs') === true) {
+          try {
+            /**
+             * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function
+             * DO NOT USE eval() here. @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
+             */
+            Function('"use strict";return ('.concat(campaign.postJs, ")"))();
+          } catch (error) {
+            log('WARN', 'Error in executing campaign post js code: '.concat(error));
+          }
+        }
+
+        // Popup overlay
+        // TODO: Convert to the pure JS version
+        if (campaign['overlay'] === 'true') {
+          jQuery('.seg-popup-overlay').show();
+        }
+
+        // Bind the close button handler
+        // TODO: Convert to the pure JS version
+        jQuery('.seg-popup-close').bind('click', function () {
+          var closeElement = jQuery(this);
+          closeElement
+            .parent('.seg-popup')
+            .removeClass('segFadeInUp')
+            .addClass('segFadeOutDown');
+
+          window.setTimeout(function () {
+            closeElement.parent('.seg-popup').remove();
+            jQuery('.seg-popup-overlay').remove();
+          }, 1000);
+
+          // Send the interaction event
+          queue("event:interaction", {
+            type: 'close',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+        });
+
+        // Send the impression event
+        queue('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+      },
       NOTIFICATION_BAR: function (campaign, request) {
         var config = {
           title: campaign['title'],
@@ -4654,12 +4913,15 @@ function initializeMustache(mustache) {
       },
       ADDED_TO_BASKET: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          iconUrl: campaign['iconUrl'],
+          horizontal: campaign['horizontalPosition'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4669,6 +4931,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -4689,24 +4955,44 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       LAST_BOUGHT_TIME: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4716,6 +5002,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -4736,24 +5026,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       PRODUCT_PURCHASE_COUNTER: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4763,6 +5072,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -4783,24 +5096,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       PRODUCT_VIEW_COUNTER: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4810,6 +5142,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -4830,24 +5166,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       SAVING_OVER: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4857,6 +5212,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -4877,24 +5236,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       SCORE_AND_REVIEW: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4904,6 +5282,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -4924,24 +5306,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       STOCK_COUNT: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4951,6 +5352,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -4971,24 +5376,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       PREVIOUSLY_ADDED_TO_BASKET: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -4998,6 +5422,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -5018,24 +5446,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       LAST_VISIT_TIME: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -5045,6 +5492,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -5065,24 +5516,43 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       FAVORITE_ACTIVITY: function (campaign) {
         var config = {
+          instanceId: campaign['instanceId'],
           campaignMessage: campaign['campaignMessage'],
           bgColor: campaign['bgColor'],
           textColor: campaign['textColor'],
-          instanceId: campaign['instanceId'],
           vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
+          horizontal: campaign['horizontalPosition'],
+          iconUrl: campaign['iconUrl'],
+          fadeOut: campaign['fadeOut'],
+          runFadeOut: true
         };
         try {
           if (campaign['preJs']) {
@@ -5092,6 +5562,10 @@ function initializeMustache(mustache) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
               return;
             }
+          }
+          if (config.fadeOut === undefined || config.fadeOut === 0) {
+            config.fadeOut = 1;
+            config.runFadeOut = false;
           }
         } catch (err) {
           _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
@@ -5112,14 +5586,30 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId']
         });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-social-proof-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+        if (config.runFadeOut === false) {
+          // bind close handler
+          _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId).bind('click', function () {
+            var $this = _SgmntfY_._getJq()(this);
+            window.setTimeout(function () {
+              $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+              $this.remove();
+              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+            }, config.fadeOut * 1000);
+          });
+        } else {
+          var $this = _SgmntfY_._getJq()(_SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId));
           window.setTimeout(function () {
+            $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
             $this.remove();
             _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
+          }, config.fadeOut * 1000);
+        }
+
+        _SgmntfY_._getJq()('.seg-social-proof-close-' + config.instanceId).bind('click', function () {
+          var $this = _SgmntfY_._getJq()('.seg-social-proof-popup-close-' + config.instanceId);
+          $this.removeClass('segFadeInUp').addClass('segFadeOutDown');
+          $this.remove();
+          _SgmntfY_._getJq()('.seg-popup-overlay').remove();
         });
       },
       SEE_ALL: function(campaign){
@@ -5209,6 +5699,807 @@ function initializeMustache(mustache) {
             location.href = config.buttonUrl;
           });
         }
+      },
+      WHEEL_OF_FORTUNE: function (campaign){
+        var config = {
+          slices: campaign['possibleRewards'],
+          reward: campaign['reward'],
+          instanceId: campaign['instanceId'],
+          wofBackGroundImg: campaign['bgImage'],
+          wofHeader: campaign['campaignTitle'],
+          pointerColor: campaign['pointerColor'],
+          wheelBaseColor: campaign['baseColor'],
+          pointerImage: campaign['pointerImage'],
+          contentOfButton: campaign['ctaButtonContent'],
+          contentButtonColor: campaign['ctaButtonColor'],
+          contentButtonTextColor: campaign['ctaButtonTextColor']
+        };
+
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        _SgmntfY_._getJq()('body').prepend(renderedHtml);
+        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        try {
+          campaign['postJs'] && eval(campaign['postJs']);
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'FavoriteActivity appended to html body for campaign(' + campaign['instanceId'] + ')');
+
+        // send impression
+        _SgmntfY_._variables.segmentifyObj('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+
+        // WOF IMPLEMENTATIONS START HERE
+
+
+        // CAMPAIGN OBJECT AND VARIABLES
+
+
+        function getScreenWidth() {
+          return window.innerWidth;
+        }
+
+        var slicesLength = config.slices.length;
+
+
+        var autoCloseModal = {
+          isTrue: false,
+          timing: 5000,
+        };
+
+        var wofHeader = document.querySelector(".seg-wof-header");
+        var elSpin = document.querySelector(".seg-wof-content-of-button");
+        var ctx = document.querySelector(".seg-wheel").getContext`2d`;
+        var wheelBaseRectangle = document.querySelector("#seg-wheel-base-circle");
+        var wheelBaseCircle = document.querySelector("#seg-wheel-circle");
+        var wheelPointer = document.querySelector("#seg-wof-pointer-svg");
+        // var pointerContainer = document.querySelector(".seg-wof-pointer"); //TODO: remove if not used
+        var wheelCenterPointImg = document.querySelector(".seg-wof-center-point-image");
+        var contentOfButton = document.querySelector(".seg-wof-content-of-button");
+        var overlay = document.querySelector(".seg-drop-layout");
+
+        var modalClose = document.querySelector(".seg-modal-bg .seg-wof-modal-close");
+        var winModalClose = document.querySelector(
+            ".seg-wof-win-bg .seg-wof-modal-close",
+        );
+
+        var wheelBg = document.querySelector(".seg-modal-bg");
+        var winModalBackGround = document.querySelector(".seg-wof-win-bg");
+        var windDescription = document.querySelector(".seg-wof-win-description");
+        var winCoupon = document.querySelectorAll(".seg-wof-win-coupon");
+        var anchorButton = document.querySelector(".seg-wof-win-description-button");
+
+
+        var couponBtn = document.querySelectorAll(".seg-wof-copy-coupon");
+        var btnCouponInitialState = document.querySelectorAll(".seg-copy-btn-initial-state");
+        var btnCouponFinalState = document.querySelectorAll(".seg-copy-btn-final-state");
+
+        var couponReady = document.querySelector(".seg-coupon-ready-icon");
+        var couponReadyIcon = document.querySelector(".seg-coupon-ready-icon");
+        var couponReadyModal = document.querySelector(".seg-coupon-ready-modal");
+        var couponReadyContainer = document.querySelector(
+            ".seg-coupon-ready-container",
+        );
+        var couponReadyCloseIcon = document.querySelector(".seg-arrow-close-icon");
+        var couponReadyContent = document.querySelector(
+            ".seg-coupon-ready-header-content",
+        );
+
+        function drawWheelBase() {
+          // Set wheel background image
+          wheelBg.style.backgroundImage = `url(${config.wofBackGroundImg})`;
+          // Set wheel header
+          wofHeader.innerHTML = config.wofHeader;
+          // Wheel Pointer
+          wheelPointer.style.fill = config.pointerColor;
+          // Wheel Base Circle
+          wheelBaseRectangle.style.fill = config.wheelBaseColor;
+          // Wheel Base
+          wheelBaseCircle.style.fill = config.wheelBaseColor;
+          // Pointer Image
+          wheelCenterPointImg.src = config.pointerImage;
+          // Content of Button
+          contentOfButton.innerHTML = config.contentOfButton;
+          // Content of Button Color
+          contentOfButton.style.backgroundColor = config.contentButtonColor;
+          // Content of Button Text Color
+          contentOfButton.style.color = config.contentButtonTextColor;
+        }
+
+        var PI = Math.PI;
+        var tot = slicesLength;
+        var diameter = ctx.canvas.width; //
+        var radius = diameter / 2;
+        var TAU = 2 * PI;
+        var arc = TAU / tot; //current angles
+        var isSpinning = false; //Is wheel spinning?
+        var isAccelerating = false; //Is wheel accelerating?
+        var responseFlag = true; //Is wheel response received on initialization? //
+        var userHasSpinWheel = false; //
+        var freeSpinning = true; //Is wheel response received or spin free?
+        var finishDegree = 0; // last degree of wheel
+        var isReadyToFinish = false; // is wheel has all flags set to true
+        var differenceDegreeForFinish = 360 * 8; // 8 rotations
+        var angleForOneSlice = 360 / slicesLength;
+        var userHasSpinWheelWonReward = config.reward.assignedToUser
+
+        function randomInRange(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+
+        function winHandler() {
+          wheelBg.style.display = "none";
+
+          winModalBackGround.style.backgroundImage = `url(${config.wofBackGroundImg})`;
+
+          winModalBackGround.style.display = "block";
+
+          windDescription.innerHTML = config.reward.description;
+
+          for (var c = 0; c < winCoupon.length; c++) {
+            winCoupon[c].value = config.reward.index;
+          }
+
+          anchorButton.href = config.slices[config.reward.index].couponUrl;
+
+          _SgmntfY_._variables.segmentifyObj("gamification:wof", {
+            type: "win",
+            interactionId: config.instanceId,
+            instanceId: config.instanceId,
+            used: 'true',
+            record: config.reward
+          });
+
+          anchorButton.addEventListener("click", function () {
+            winModalBackGround.style.display = "none";
+          });
+
+          if (autoCloseModal.isTrue) {
+            setTimeout(function () {
+              winModalBackGround.style.display = "none";
+            }, autoCloseModal.timing);
+          }
+        }
+
+        modalClose.addEventListener("click", function (e) {
+          _SgmntfY_._variables.segmentifyObj("gamification:wof", {
+            type: "win",
+            interactionId: config.instanceId,
+            instanceId: config.instanceId,
+            used: 'false',
+            record: config.reward
+          });
+          wheelBg.style.display = "none";
+          overlay.style.display = "none";
+        });
+
+        winModalClose.addEventListener("click", function (e) {
+          winModalBackGround.style.display = "none";
+          overlay.style.display = "none";
+          couponReadyContainer.style.display = "inline-flex";
+        });
+
+        function degreesToRadians(degrees) {
+          return (degrees * Math.PI) / 180;
+        }
+
+        function getLines(ctx, text, maxWidth) {
+          var words = text.split(" ");
+          var lines = [];
+          var currentLine = words[0];
+
+          for (var i = 1; i < words.length; i++) {
+            var word = words[i];
+            var width = ctx.measureText(currentLine + " " + word).width;
+            if (width < maxWidth) {
+              currentLine += " " + word;
+            } else {
+              lines.push(currentLine);
+              currentLine = word;
+            }
+          }
+          lines.push(currentLine);
+          return lines;
+        }
+
+        for (var cp = 0; cp < couponBtn.length; cp++) {
+          couponBtn[cp].addEventListener("click", function (e) {
+            navigator.clipboard.writeText(config.reward.description);
+
+            for (let bsi = 0; bsi < btnCouponInitialState.length; bsi++) {
+              btnCouponInitialState[bsi].style.display = "none";
+              btnCouponFinalState[bsi].style.display = "block";
+            }
+
+            setTimeout(function () {
+              for (let bsi = 0; bsi < btnCouponInitialState.length; bsi++) {
+                btnCouponFinalState[bsi].style.display = "none";
+                btnCouponInitialState[bsi].style.display = "block";
+              }
+            }, 1000);
+          });
+        }
+
+        function drawWheelCanvas(sector, i) {
+          var ang = angleForOneSlice * -i;
+          ctx.save();
+          // COLOR
+          ctx.beginPath();
+          ctx.fillStyle = sector.color;
+          ctx.moveTo(radius, radius);
+          ctx.arc(
+              radius,
+              radius,
+              radius,
+              degreesToRadians(ang - (90 + angleForOneSlice)),
+              degreesToRadians(ang + angleForOneSlice - (90 + angleForOneSlice)),
+          );
+          ctx.lineTo(radius, radius);
+          ctx.fill();
+
+          // TEXT
+          ctx.translate(radius, radius);
+          ctx.rotate(
+              degreesToRadians(
+                  ang + angleForOneSlice - (90 + angleForOneSlice) - angleForOneSlice / 2,
+              ),
+          );
+          var labelArray = getLines(ctx, sector.label, radius - 20);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#fff";
+          ctx.font = labelArray.length > 1 ? "10px Roboto" : "14px Roboto";
+          labelArray.forEach((label, index) => {
+            var middle = Math.floor(labelArray.length / 2);
+            var x = radius - 16;
+            var y = 6;
+            switch (labelArray.length) {
+              case 1:
+                y = 6;
+                break;
+              case 2:
+                y = index === 0 ? -6 : 6;
+                break;
+              case 3:
+                y = index === middle ? 0 : index < middle ? -10 : 10;
+                break;
+              default:
+                y = index === middle ? 0 : index < middle ? -10 : 10;
+                break;
+            }
+            ctx.fillText(label, x, y);
+          });
+
+          ctx.restore();
+        }
+
+        function frame() {
+          if (!isSpinning) return;
+
+          if (responseFlag) {
+            if (!isReadyToFinish) {
+              var randomFinishDegreeInSlice = randomInRange(2, angleForOneSlice - 2);
+              differenceDegreeForFinish += randomFinishDegreeInSlice;
+              finishDegree =
+                  config.reward.index * angleForOneSlice + differenceDegreeForFinish;
+            }
+            isReadyToFinish = true;
+
+            if (isReadyToFinish) {
+              ctx.canvas.style.transition = "none";
+              ctx.canvas.style.transform = `rotate(0deg)`;
+              ctx.canvas.style.transition = "transform 3s ease-out 0s";
+              ctx.canvas.style.transform = `rotate(${finishDegree}deg)`;
+
+              isSpinning = false;
+
+              setTimeout(function() {
+                winHandler();
+              }, 4750);
+            }
+          }
+        }
+
+        function wheelEngine() {
+          frame();
+          requestAnimationFrame(wheelEngine);
+        }
+
+        elSpin.addEventListener("click", function (e) {
+          if (isSpinning) return;
+          isSpinning = true;
+          isAccelerating = true;
+
+          ctx.canvas.style.transition = "transform 15s cubic-bezier(0.1, 0, 1, 1) 0s";
+          ctx.canvas.style.transform = `rotate(10800deg)`;
+
+          _SgmntfY_._variables.segmentifyObj('event:interaction', {
+            type: 'click',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+
+          userHasSpinWheel = true;
+
+          setTimeout(function () {
+            responseFlag = true;
+            freeSpinning = false;
+          }, 3000);
+        });
+
+        couponReadyIcon.addEventListener("click", function (e) {
+          if (getScreenWidth() <= 576) {
+            couponReadyIcon.style.display = "none";
+            couponReadyModal.style.display = "flex";
+            couponReadyContainer.top = "15%";
+            couponReadyContainer.style.marginLeft = "-30px";
+            couponReadyContent.innerHTML = config.reward.description;
+          }
+          couponReadyModal.style.display = "flex";
+          couponReadyContent.innerHTML = config.reward.description;
+        });
+
+        couponReadyCloseIcon.addEventListener("click", function (e) {
+          if (getScreenWidth() <= 576) {
+            couponReadyModal.style.display = "none";
+            couponReadyContainer.top = "0%";
+            couponReadyContainer.style.marginLeft = "0px";
+            couponReadyIcon.style.display = "flex";
+          }
+          couponReadyModal.style.display = "none";
+          couponReadyIcon.style.display = "flex";
+        });
+
+        // INIT!
+        if(!userHasSpinWheelWonReward) {
+          drawWheelBase();
+          config.slices.forEach(drawWheelCanvas);
+          wheelEngine(); // Start wof engine!
+        } else {
+          couponReadyContainer.style.display = "flex";
+          couponReadyContent.innerHTML = config.reward.description;
+        }
+
+        // WOF IMPLEMENTATIONS FINISHES HERE
+      },
+      POP_UP_BANNER_COUNTDOWN: function (campaign) {
+        var config = {
+          targetUrl: campaign['targetUrl'],
+          name: campaign['name'],
+          title: campaign['title'],
+          description: campaign['description'],
+          seperator: campaign['seperator'],
+          showOnWebsite: campaign['showOnWebsite'],
+          bgColor: campaign['bgColor'],
+          textColor: campaign['textColor'],
+          image: campaign['image'],
+          showOverlayInBg: campaign['showOverlayInBg'],
+        };
+
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        _SgmntfY_._getJq()('body').prepend(renderedHtml);
+        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        try {
+          campaign['postJs'] && eval(campaign['postJs']);
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'FavoriteActivity appended to html body for campaign(' + campaign['instanceId'] + ')');
+
+        // bind close handler
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+          _SgmntfY_._variables.segmentifyObj("event:interaction", {
+            type: 'close',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+        });
+        // bind click handler
+        _SgmntfY_._getJq()('.seg-banner-container img').bind('click', function () {
+          _SgmntfY_._variables.segmentifyObj('event:interaction', {
+            type: 'click',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+        });
+
+
+        // send impression
+        _SgmntfY_._variables.segmentifyObj('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+
+        // COUNT_DOWN_BNP IMPLEMENTATIONS STARTS HERE
+        var countdownSeperator = document.querySelectorAll('.seg-countdown-seperator');
+        var mainElement = document.querySelector('.seg-countdown-timeWrapper');
+
+        function createCountDownItem (obj) {
+          var count = 0;
+          count ++;
+          var timeCardHTML;
+          if(count > 1){
+            timeCardHTML =
+                '<div id='+obj.type+' class="seg-flexCol-center '+obj.activate+'Countdown'+'">\n' +
+                '<h2 id="seg-countdown-'+ obj.type +'n"></h2>\n' +
+                '<span id="seg-countdown-'+ obj.type +'t">'+obj.text+'</span>\n' +
+                '</div>\n'
+            mainElement.innerHTML += timeCardHTML;
+          } else {
+            timeCardHTML =
+                '<div id='+obj.type+' class="seg-flexCol-center '+obj.activate+'Countdown'+'">\n' +
+                '<h2 id="seg-countdown-'+ obj.type +'n"></h2>\n' +
+                '<span id="seg-countdown-'+ obj.type +'t">'+obj.text+'</span>\n' +
+                '</div>\n' +
+                '<h2 class="seg-countdown-seperator '+obj.activate+'Countdown'+'"></h2>'
+            mainElement.innerHTML += timeCardHTML;
+          }
+        };
+
+
+        countdownRenderer(config.showOnWebsite)
+
+        function countdownRenderer(timeObj) {
+          timeObj.forEach(item => {
+            createCountDownItem(item);
+          });
+          mainElement.lastChild.style.display = 'none';
+        };
+
+        var currentYear = new Date().getFullYear();
+        var endDateTime = new Date(`January 01 ${currentYear +1} 00:00:00`);
+
+        function updateCountDown(){
+          var dayVal = document.querySelector('#seg-countdown-DAYn');
+          var hourVal = document.querySelector('#seg-countdown-HOURn');
+          var minVal = document.querySelector('#seg-countdown-MINUTEn');
+          var secVal = document.querySelector('#seg-countdown-SECONDn');
+
+          var currentTime = new Date();
+          var diff = endDateTime - currentTime;
+
+          var d = Math.floor(diff / 1000 / 60 / 60 / 24);
+          var h = Math.floor(diff / 1000 / 60 / 60 ) %24;
+          var m = Math.floor(diff / 1000 / 60 ) %60;
+          var s = Math.floor(diff / 1000 ) % 60;
+
+
+          if(h <10) {
+            hourVal.innerHTML = '0'+h+''
+          } else {
+            hourVal.innerHTML = h
+          }
+          if(m < 10) {
+            minVal.innerHTML ='0'+m+'';
+          } else {
+            minVal.innerHTML = m;
+          }
+          if(s < 10){
+            secVal.innerHTML = '0'+s+'';
+          } else {
+            secVal.innerHTML = s;
+          }
+          dayVal.innerHTML =d;
+        }
+        countdownSeperator.innerHTML = config.seperator;
+        setInterval(updateCountDown,1000);
+        // COUNT_DOWN_BNP IMPLEMENTATIONS FINISHES HERE
+      },
+      HERO_BANNER_COUNTDOWN: function (campaign) {
+        var config = {
+          targetUrl: campaign['targetUrl'],
+          name: campaign['name'],
+          title: campaign['title'],
+          description: campaign['description'],
+          seperator: campaign['seperator'],
+          showOnWebsite: campaign['showOnWebsite'],
+          bgColor: campaign['bgColor'],
+          textColor: campaign['textColor'],
+          image: campaign['image'],
+          showOverlayInBg: campaign['showOverlayInBg'],
+        };
+
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        _SgmntfY_._getJq()('body').prepend(renderedHtml);
+        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        try {
+          campaign['postJs'] && eval(campaign['postJs']);
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'FavoriteActivity appended to html body for campaign(' + campaign['instanceId'] + ')');
+
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+          _SgmntfY_._variables.segmentifyObj("event:interaction", {
+            type: 'close',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+        });
+        // bind click handler
+        _SgmntfY_._getJq()('.seg-banner-container img').bind('click', function () {
+          _SgmntfY_._variables.segmentifyObj('event:interaction', {
+            type: 'click',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+        });
+        // send impression
+        _SgmntfY_._variables.segmentifyObj('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+
+        // COUNT_DOWN_BNP IMPLEMENTATIONS STARTS HERE
+        var countdownSeperator = document.querySelectorAll('.seg-countdown-seperator');
+        var mainElement = document.querySelector('.seg-countdown-timeWrapper');
+
+        function createCountDownItem (obj) {
+          var count = 0;
+          count ++;
+          var timeCardHTML;
+          if(count > 1){
+            timeCardHTML =
+                '<div id='+obj.type+' class="seg-flexCol-center '+obj.activate+'Countdown'+'">\n' +
+                '<h2 id="seg-countdown-'+ obj.type +'n"></h2>\n' +
+                '<span id="seg-countdown-'+ obj.type +'t">'+obj.text+'</span>\n' +
+                '</div>\n'
+            mainElement.innerHTML += timeCardHTML;
+          } else {
+            timeCardHTML =
+                '<div id='+obj.type+' class="seg-flexCol-center '+obj.activate+'Countdown'+'">\n' +
+                '<h2 id="seg-countdown-'+ obj.type +'n"></h2>\n' +
+                '<span id="seg-countdown-'+ obj.type +'t">'+obj.text+'</span>\n' +
+                '</div>\n' +
+                '<h2 class="seg-countdown-seperator '+obj.activate+'Countdown'+'"></h2>'
+            mainElement.innerHTML += timeCardHTML;
+          }
+        };
+
+
+        countdownRenderer(config.showOnWebsite)
+
+        function countdownRenderer(timeObj) {
+          timeObj.forEach(item => {
+            createCountDownItem(item);
+          });
+          mainElement.lastChild.style.display = 'none';
+        };
+
+        var currentYear = new Date().getFullYear();
+        var endDateTime = new Date(`January 01 ${currentYear +1} 00:00:00`);
+
+        function updateCountDown(){
+          var dayVal = document.querySelector('#seg-countdown-DAYn');
+          var hourVal = document.querySelector('#seg-countdown-HOURn');
+          var minVal = document.querySelector('#seg-countdown-MINUTEn');
+          var secVal = document.querySelector('#seg-countdown-SECONDn');
+
+          var currentTime = new Date();
+          var diff = endDateTime - currentTime;
+
+          var d = Math.floor(diff / 1000 / 60 / 60 / 24);
+          var h = Math.floor(diff / 1000 / 60 / 60 ) %24;
+          var m = Math.floor(diff / 1000 / 60 ) %60;
+          var s = Math.floor(diff / 1000 ) % 60;
+
+
+          if(h <10) {
+            hourVal.innerHTML = '0'+h+''
+          } else {
+            hourVal.innerHTML = h
+          }
+          if(m < 10) {
+            minVal.innerHTML ='0'+m+'';
+          } else {
+            minVal.innerHTML = m;
+          }
+          if(s < 10){
+            secVal.innerHTML = '0'+s+'';
+          } else {
+            secVal.innerHTML = s;
+          }
+          dayVal.innerHTML =d;
+        }
+        countdownSeperator.innerHTML = config.seperator;
+        setInterval(updateCountDown,1000);
+        // COUNT_DOWN_BNP IMPLEMENTATIONS FINISHES HERE
+      },
+      NOTIFICATION_BAR_COUNTDOWN: function (campaign) {
+        var config = {
+          targetUrl: campaign['targetUrl'],
+          name: campaign['name'],
+          title: campaign['title'],
+          description: campaign['description'],
+          seperator: campaign['seperator'],
+          showOnWebsite: campaign['showOnWebsite'],
+          bgColor: campaign['bgColor'],
+          textColor: campaign['textColor'],
+          image: campaign['image'],
+          showOverlayInBg: campaign['showOverlayInBg'],
+        };
+
+        try {
+          if (campaign['preJs']) {
+            eval(campaign['preJs']);
+            var retVal = preRenderConf(config);
+            if (typeof retVal !== 'undefined' && !retVal) {
+              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
+              return;
+            }
+          }
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
+        }
+        // render campaign html
+        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
+        _SgmntfY_._getJq()('body').prepend(renderedHtml);
+        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
+        try {
+          campaign['postJs'] && eval(campaign['postJs']);
+        } catch (err) {
+          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
+        }
+        _SgmntfY_.LOG_MESSAGE('DEBUG', 'FavoriteActivity appended to html body for campaign(' + campaign['instanceId'] + ')');
+
+        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
+          var $this = _SgmntfY_._getJq()(this);
+          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
+          window.setTimeout(function () {
+            $this.parent('.seg-popup').remove();
+            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+          }, 1000);
+          _SgmntfY_._variables.segmentifyObj("event:interaction", {
+            type: 'close',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+        });
+        // bind click handler
+        _SgmntfY_._getJq()('.seg-banner-container img').bind('click', function () {
+          _SgmntfY_._variables.segmentifyObj('event:interaction', {
+            type: 'click',
+            instanceId: campaign['instanceId'],
+            interactionId: campaign['instanceId']
+          });
+        });
+
+        // send impression
+        _SgmntfY_._variables.segmentifyObj('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId']
+        });
+
+        // COUNT_DOWN_BNP IMPLEMENTATIONS STARTS HERE
+        var countdownSeperator = document.querySelectorAll('.seg-countdown-seperator');
+        var mainElement = document.querySelector('.seg-countdown-timeWrapper');
+
+        function createCountDownItem (obj) {
+          var count = 0;
+          count ++;
+          var timeCardHTML;
+          if(count > 1){
+            timeCardHTML =
+                '<div id='+obj.type+' class="seg-flexCol-center '+obj.activate+'Countdown'+'">\n' +
+                '<h2 id="seg-countdown-'+ obj.type +'n"></h2>\n' +
+                '<span id="seg-countdown-'+ obj.type +'t">'+obj.text+'</span>\n' +
+                '</div>\n'
+            mainElement.innerHTML += timeCardHTML;
+          } else {
+            timeCardHTML =
+                '<div id='+obj.type+' class="seg-flexCol-center '+obj.activate+'Countdown'+'">\n' +
+                '<h2 id="seg-countdown-'+ obj.type +'n"></h2>\n' +
+                '<span id="seg-countdown-'+ obj.type +'t">'+obj.text+'</span>\n' +
+                '</div>\n' +
+                '<h2 class="seg-countdown-seperator '+obj.activate+'Countdown'+'"></h2>'
+            mainElement.innerHTML += timeCardHTML;
+          }
+        };
+
+
+        countdownRenderer(config.showOnWebsite)
+
+        function countdownRenderer(timeObj) {
+          timeObj.forEach(item => {
+            createCountDownItem(item);
+          });
+          mainElement.lastChild.style.display = 'none';
+        };
+
+        var currentYear = new Date().getFullYear();
+        var endDateTime = new Date(`January 01 ${currentYear +1} 00:00:00`);
+
+        function updateCountDown(){
+          var dayVal = document.querySelector('#seg-countdown-DAYn');
+          var hourVal = document.querySelector('#seg-countdown-HOURn');
+          var minVal = document.querySelector('#seg-countdown-MINUTEn');
+          var secVal = document.querySelector('#seg-countdown-SECONDn');
+
+          var currentTime = new Date();
+          var diff = endDateTime - currentTime;
+
+          var d = Math.floor(diff / 1000 / 60 / 60 / 24);
+          var h = Math.floor(diff / 1000 / 60 / 60 ) %24;
+          var m = Math.floor(diff / 1000 / 60 ) %60;
+          var s = Math.floor(diff / 1000 ) % 60;
+
+
+          if(h <10) {
+            hourVal.innerHTML = '0'+h+''
+          } else {
+            hourVal.innerHTML = h
+          }
+          if(m < 10) {
+            minVal.innerHTML ='0'+m+'';
+          } else {
+            minVal.innerHTML = m;
+          }
+          if(s < 10){
+            secVal.innerHTML = '0'+s+'';
+          } else {
+            secVal.innerHTML = s;
+          }
+          dayVal.innerHTML =d;
+        }
+        countdownSeperator.innerHTML = config.seperator;
+        setInterval(updateCountDown,1000);
+        // COUNT_DOWN_BNP IMPLEMENTATIONS FINISHES HERE
       }
     },
     // Functions
@@ -5313,6 +6604,10 @@ function initializeMustache(mustache) {
             return _SgmntfY_._functions.favoriteDetail;
           case 'view:favorites':
             return _SgmntfY_._functions.favoritesView;
+          case 'select:persona':
+            return _SgmntfY_._functions.personaSelect;
+          case 'gamification:wof':
+            return _SgmntfY_._functions.wheelOfFortune;
           default:
             return function (params) {
               _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Command: ' + name);
@@ -5320,94 +6615,113 @@ function initializeMustache(mustache) {
         }
       },
       getDataLayerFunction: function (name, params) {
-        switch (name.toLowerCase()) {
-          case 'page':
-            return _SgmntfY_._functions.pageView;
-          case 'product':
-            return _SgmntfY_._functions.productView;
-          case 'basket':
-            switch (params['step'].toLowerCase()) {
-              case 'add':
-                return _SgmntfY_._functions.addToBasket;
-              case 'remove':
-                return _SgmntfY_._functions.removeFromBasket;
-              case 'clear':
-                return _SgmntfY_._functions.clearBasket;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Basket Operations Step: ' + params['step']);
-                }
-            }
-          case 'checkout':
-            switch (params['step'].toLowerCase()) {
-              case 'basket':
-                return _SgmntfY_._functions.checkoutViewBasket;
-              case 'customer':
-                return _SgmntfY_._functions.checkoutCustomerInfo;
-              case 'payment':
-                return _SgmntfY_._functions.checkoutPaymentInfo;
-              case 'purchase':
-                return _SgmntfY_._functions.checkoutPurchase;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Checkout Step: ' + params['step']);
-                }
-            }
-          case 'user':
-            switch (params['step'].toLowerCase()) {
-              case 'signin':
-                return _SgmntfY_._functions.userSignIn;
-              case 'signout':
-                return _SgmntfY_._functions.userSignOut;
-              case 'signup':
-                return _SgmntfY_._functions.userSignUp;
-              case 'subscribe':
-                return _SgmntfY_._functions.userSubscribe;
-              case 'unsubscribe':
-                return _SgmntfY_._functions.userUnsubscribe;
-              case 'update':
-                return _SgmntfY_._functions.userInfoUpdate;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected User Operations Step: ' + params['step']);
-                }
-            }
-          case 'interaction':
-            return _SgmntfY_._functions.interaction;
-          case 'form':
-            return _SgmntfY_._functions.userForm;
-          case 'banners':
-            return _SgmntfY_._functions.bannerGroupView;
-          case 'banner':
-            switch (params['type'].toLowerCase()) {
-              case 'impression':
-                return _SgmntfY_._functions.bannerImpression;
-              case 'click':
-                return _SgmntfY_._functions.bannerClick;
-              case 'update':
-                return _SgmntfY_._functions.bannerUpdate;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Banner Operations Type: ' + params['type']);
-                }
-            }
-          case 'custom':
-            return _SgmntfY_._functions.customEvent;
-          case 'promotion':
-            switch (params['type'].toLowerCase()) {
-              case 'impression':
-                return _SgmntfY_._functions.promotionImpression;
-              case 'view':
-                return _SgmntfY_._functions.promotionView;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Promotion Type: ' + params['type']);
-                }
-            }
-          default:
-            return function (params) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Command: ' + name);
-            };
+        try {
+          if (typeof name === 'undefined') {
+            name = '';
+          }
+          if (typeof params === 'undefined') {
+            params = {}
+          }
+          if (typeof params.step === 'undefined') {
+            params.step = '';
+          }
+          if (typeof params.type === 'undefined') {
+            params.type = '';
+          }
+      
+          switch (name.toLowerCase()) {
+            case 'page':
+              return _SgmntfY_._functions.pageView;
+            case 'product':
+              return _SgmntfY_._functions.productView;
+            case 'basket':
+              switch (params['step'].toLowerCase()) {
+                case 'add':
+                  return _SgmntfY_._functions.addToBasket;
+                case 'remove':
+                  return _SgmntfY_._functions.removeFromBasket;
+                case 'clear':
+                  return _SgmntfY_._functions.clearBasket;
+                default:
+                  return function (params) {
+                    _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Basket Operations Step: ' + params['step']);
+                  }
+              }
+            case 'checkout':
+              switch (params['step'].toLowerCase()) {
+                case 'basket':
+                  return _SgmntfY_._functions.checkoutViewBasket;
+                case 'customer':
+                  return _SgmntfY_._functions.checkoutCustomerInfo;
+                case 'payment':
+                  return _SgmntfY_._functions.checkoutPaymentInfo;
+                case 'purchase':
+                  return _SgmntfY_._functions.checkoutPurchase;
+                default:
+                  return function (params) {
+                    _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Checkout Step: ' + params['step']);
+                  }
+              }
+            case 'user':
+              switch (params['step'].toLowerCase()) {
+                case 'signin':
+                  return _SgmntfY_._functions.userSignIn;
+                case 'signout':
+                  return _SgmntfY_._functions.userSignOut;
+                case 'signup':
+                  return _SgmntfY_._functions.userSignUp;
+                case 'subscribe':
+                  return _SgmntfY_._functions.userSubscribe;
+                case 'unsubscribe':
+                  return _SgmntfY_._functions.userUnsubscribe;
+                case 'update':
+                  return _SgmntfY_._functions.userInfoUpdate;
+                default:
+                  return function (params) {
+                    _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected User Operations Step: ' + params['step']);
+                  }
+              }
+            case 'interaction':
+              return _SgmntfY_._functions.interaction;
+            case 'form':
+              return _SgmntfY_._functions.userForm;
+            case 'banners':
+              return _SgmntfY_._functions.bannerGroupView;
+            case 'banner':
+              switch (params['type'].toLowerCase()) {
+                case 'impression':
+                  return _SgmntfY_._functions.bannerImpression;
+                case 'click':
+                  return _SgmntfY_._functions.bannerClick;
+                case 'update':
+                  return _SgmntfY_._functions.bannerUpdate;
+                default:
+                  return function (params) {
+                    _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Banner Operations Type: ' + params['type']);
+                  }
+              }
+            case 'custom':
+              return _SgmntfY_._functions.customEvent;
+            case 'promotion':
+              switch (params['type'].toLowerCase()) {
+                case 'impression':
+                  return _SgmntfY_._functions.promotionImpression;
+                case 'view':
+                  return _SgmntfY_._functions.promotionView;
+                default:
+                  return function (params) {
+                    _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Promotion Type: ' + params['type']);
+                  }
+              }
+            default:
+              return function (params) {
+                _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Command: ' + name);
+              };
+          }
+        } catch (error) {
+          return function () {
+            _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Command: ' + error);
+          };
         }
       },
       callFunction: function (commands) {
@@ -5895,7 +7209,17 @@ function initializeMustache(mustache) {
         data['async'] = 'false';
         data['step'] = 'view-favorites';
         return _SgmntfY_._prepareRequest(data, "WISHLIST");
-      }
+      },
+      personaSelect: function (data) {
+        data = data || {};
+        return _SgmntfY_._prepareRequest(data, "PERSONA_QUIZ");
+      },
+      wheelOfFortune : function (data) {
+        data = data || {};
+        data['used'] = data.used;
+        data['record'] = data.gamification.record
+        return _SgmntfY_._prepareRequest(data, "GAMIFICATION");
+      },
     },
     _bindRecommendationTrackEvents: function(targetElement, recommendationSettings, instanceId, tryCount) {
       if (tryCount > 10) {
@@ -6170,7 +7494,7 @@ function initializeMustache(mustache) {
 
       if (_sgm_action === 'push') {
         var _interaction = _SgmntfY_._getPersistentData(_sgm_campaign);
-        if (_SgmntfY_._isEmpty(_interaction) || (_SgmntfY_._isNotEmpty(_interaction) && _interaction === '0')) {
+        if (_SgmntfY_._isEmpty(_interaction) || (_SgmntfY_._isNotEmpty(_interaction) && _interaction === '0') || (_sgm_campaign === 'REPLENISHMENT')) {
           _SgmntfY_.LOG_MESSAGE('DEBUG', 'Sending tracked event: ' + _sgm_action + ' - ' + _sgm_campaign + ' - ' + _sgm_source + ' - type: push-click');
           _SgmntfY_._variables.segmentifyObj("push:click:interaction", {
             type: "push-click",
@@ -7575,18 +8899,22 @@ function initializeMustache(mustache) {
       txt.innerHTML = html;
       return txt.value;
     },
-    _getControlGroup: function() {
-      // check control group active, if not don't return group
-      // so it will be ignored at sending event
-      if (_SgmntfY_._variables.controlGroup && _SgmntfY_._variables.controlGroup.source === 'OPTIMIZE') {
-        // get group
-        var group = google_optimize && google_optimize.get(_SgmntfY_._variables.controlGroup.experimentID);
-        if (group == _SgmntfY_._variables.controlGroup.controlValue) {
-          return 'CONTROL';
-        } else if (group == _SgmntfY_._variables.controlGroup.activeValue) {
-          return 'REAL';
+    _getControlGroup: function () {
+      var controlGroup = 'REAL';
+      try {
+        // check control group active, if not don't return group
+        // so it will be ignored at sending event
+        if (_SgmntfY_._variables.controlGroup && _SgmntfY_._variables.controlGroup.source === 'OPTIMIZE') {
+          // get group
+          var group = window.google_optimize && window.google_optimize.get(_SgmntfY_._variables.controlGroup.experimentID);
+          if (group && group == _SgmntfY_._variables.controlGroup.controlValue) {
+            controlGroup = 'CONTROL';
+          }
         }
+      } catch (error) {
+        _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing _getControlGroup: ' + error);
       }
+      return controlGroup;
     },
     // search campaign handler
     _getSearchCampaign: function (request, searchArray) {
@@ -7980,7 +9308,9 @@ function initializeMustache(mustache) {
       var brandProducts = searchArray['brandProducts'] || {};
       var categories = searchArray['categories'] || {};
       var categoryProducts = searchArray['categoryProducts'] || {};
+      var mostSearchedProducts = searchArray['mostSearchedProducts'] || {};
       var keywords = searchArray['keywords'] || {};
+      var meta = searchArray['meta'] || {};
       var additionalContents = searchArray['contents'] || [];
       var banners = searchArray['banners'] || [];
       var lastSearches = searchArray['lastSearches'] || [];
@@ -8134,8 +9464,10 @@ function initializeMustache(mustache) {
       sgmSearchSettings.data["brands"] = _SgmntfY_._getArrayOfMap(brands);
       sgmSearchSettings.data["keywords"] = _SgmntfY_._getArrayOfKeywordsMap(keywords);
       sgmSearchSettings.data["products"] = _SgmntfY_._getArrayOfProductMap(products);
+      sgmSearchSettings.data.meta = meta;
       sgmSearchSettings.data.keywordsProducts = keywords;
       sgmSearchSettings.data.categoryProducts = categoryProducts;
+      sgmSearchSettings.data.mostSearchedProducts = mostSearchedProducts;
       sgmSearchSettings.data.brandProducts = brandProducts;
       sgmSearchSettings.data.itemEnable = sgmSearchSettings.itemEnable;
       sgmSearchSettings.data.texts = sgmSearchSettings.texts;
@@ -8428,7 +9760,7 @@ function initializeMustache(mustache) {
       }
     },
     _searchResetAdditionalContents: function() {
-      _SgmntfY_._getJq()(".seg-search-wrapper div[data-sgm-ac-position^=searchbox").each(onIterateAdditionalContentEl);
+      _SgmntfY_._getJq()(".seg-search-wrapper div[data-sgm-ac-position^=searchbox]").each(onIterateAdditionalContentEl);
 
       //////
       function onIterateAdditionalContentEl(index, el) {
@@ -8720,15 +10052,34 @@ function initializeMustache(mustache) {
         _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("mobile");
         _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-mobile");
         _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-ios-device");
-        try {
-          clearInterval(searchBoxInterval);
-          clearTimeout(searchBoxTimeOut);
-        }
-        catch(err) {
-        }
+
+        var timestamp = Date.now() | 0;
+
         _SgmntfY_._setSearchPositionInterval();
-        searchBoxInterval = setInterval(_SgmntfY_._setSearchPositionInterval, 10);
-        searchBoxTimeOut = setTimeout(function() { clearInterval(searchBoxInterval);  }, 3000);
+        _SgmntfY_._renderOnNextTick(
+          _SgmntfY_._setSearchPositionInterval,
+          timestamp,
+          3000
+        );
+      }
+    },
+    /**
+     * This function is used to set the position of the search results.
+     * @param {function} callback - The callback function.
+     * @param {number} timestamp - The timestamp.
+     * @param {number} timeout - Callback methods run until timeout excited.
+     */
+    _renderOnNextTick: function (f, timestamp, timeout) {
+      var currentTimestamp = Date.now() | 0;
+      if (currentTimestamp - timestamp < timeout) {
+        // First frame
+        requestAnimationFrame(function(){
+          // Runs the callback function every 2 frame. (30fps)
+          requestAnimationFrame(f);
+          requestAnimationFrame(function(){
+            _SgmntfY_._renderOnNextTick(f, timestamp, timeout);
+          })
+        });
       }
     },
     _setSearchPositionInterval: function() { //TODO https://segmentify.atlassian.net/browse/DEV-72
@@ -9727,7 +11078,7 @@ function initializeMustache(mustache) {
               break;
           }
         }
-        if (!source.length) {
+        if (!source.length && _SgmntfY_._notNull(document.referrer)) {
           // extract domain from referrer
           var referrer = document.referrer.replace('https://', '').replace('http://', '');
           referrer = referrer.substring(0, referrer.indexOf('/'));
@@ -10002,8 +11353,16 @@ function initializeMustache(mustache) {
     // run - process messages in queue
     run: function () {
       try {
+        var paStatus;
+
+        if (_SgmntfY_._variables.pa.wait === true) {
+          paStatus = _SgmntfY_._variables.pa.loaded === true;
+        } else {
+          paStatus = true;
+        }
+
         // if jQuery not loaded or queue not created, wait for it
-        if (_SgmntfY_._variables.jq && ((_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) || _SgmntfY_._getDataLayer())) {
+        if (_SgmntfY_._variables.jq && paStatus && ((_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) || _SgmntfY_._getDataLayer())) {
           if (!_SgmntfY_._variables.waitingKeys && _SgmntfY_._variables.keysTryCount < 5) {
             // update user & session id if necessary
             var requiredKeyCount = 0;
