@@ -1,50 +1,26 @@
-if (window['SegmentifyTrackingObject']) {
-  throw new Error('Segmentify is already loaded!');
+if (window.SegmentifyTrackingObject)
+    throw new Error("Segmentify is already loaded!");
+var segNamespace = "Segmentify";
+function SegmentifyConfig() {
+    window[segNamespace].config = {
+        segmentifyApiUrl: "//gandalf-eu.segmentify.com",
+        domain: ".myvtex.com",
+        language: "EN"
+    },
+    window.Segmentify("apikey", "8d9f8afb-2044-4b16-85ff-7559bc5d49f0"),
+    getSegJquery()
 }
-var segNamespace = 'Segmentify';
-
-window['SegmentifyTrackingObject'] = segNamespace;
-
-window[segNamespace] = window[segNamespace] || function () {
-  (window[segNamespace].q = window[segNamespace].q || []).push(arguments);
+function getSegJquery() {
+    try {
+        window._SgmntfY_ && window._SgmntfY_._getJq() ? window.segJquery = window._SgmntfY_._getJq() : setTimeout(getSegJquery, 100)
+    } catch (e) {}
+}
+window.SegmentifyTrackingObject = segNamespace,
+window[segNamespace] = window[segNamespace] || function() {
+    (window[segNamespace].q = window[segNamespace].q || []).push(arguments)
 };
 
-function waitSegmentifyJquery() {
-  window[segNamespace].config = {
-    segmentifyApiUrl: '//gandalf-eu.segmentify.com',
-    storage: {
-      clickedBanners: {
-        local: true
-      }
-    },
-    domain: '.myvtex.com',
-    categoryHierarchy: true,
-    language: 'EN',
-    ga:{enabled: false},
-    constants: {
-      retryLimit: 0
-    },
-    trackGetKey: true
-  };
-  /* Initialize Segmentify with your Api Key */
-  window.Segmentify('apikey', '8d9f8afb-2044-4b16-85ff-7559bc5d49f0');
-  waitSegmentifyAndjQuery();
-}
-
-function waitSegmentifyAndjQuery() {
-  try {
-    if (window['_SgmntfY_'] && window['_SgmntfY_']._getJq()) {
-      window.segJquery = window['_SgmntfY_']._getJq();
-    } else {
-      setTimeout(waitSegmentifyAndjQuery, 100);
-    }
-  } catch (err) {
-    // Segmentify is not installed here, we are not used to do any logging system.
-  }
-}
-/* Call Wait Function at the bottom of the script */
-waitSegmentifyJquery();
-
+SegmentifyConfig();
 /*!
  * Bowser - a browser detector
  * https://github.com/ded/bowser
@@ -16409,3 +16385,4 @@ function initializeMustache(mustache) {
   // initialize Segmentify
   _SgmntfY_.init()
 })(window)
+
