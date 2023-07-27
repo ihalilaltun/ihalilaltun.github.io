@@ -66,24 +66,40 @@ function getSegJquery() {
       },
       'Checkout': (obj) => {
         //This function is for basket and checkout success page checkout events.
+        const reBuildedObj = {
+          sendEvent: false,
+          event: null,
+        };
 
         //if sendEvent is true, this return need to send Checkout events.
         return reBuildedObj;
       },
       'Basket': (obj) => {
         //This function is for basket operations events
+        const reBuildedObj = {
+          sendEvent: false,
+          event: null,
+        };
 
         //if sendEvent is true, this return need to send Basket Operations events.
         return reBuildedObj;
       },
       'Department': (obj) => {
         //This function is for main category page's custom events
+        const reBuildedObj = {
+          sendEvent: false,
+          event: null,
+        };
 
         //if sendEvent is true, this return need to send Custom event for main categories.
         return reBuildedObj;
       },
       'Category': (obj) => {
         //This function is for sub-category page's custom events
+        const reBuildedObj = {
+          sendEvent: false,
+          event: null,
+        };
 
         //if sendEvent is true, this return need to send Custom event for sub categories.
         return reBuildedObj;
