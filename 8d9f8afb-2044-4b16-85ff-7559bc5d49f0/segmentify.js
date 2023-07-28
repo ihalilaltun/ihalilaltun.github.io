@@ -61,6 +61,8 @@ function getSegJquery() {
           }
         };
 
+        reBuildedObj.event = _SgmntfY_._prepareRequest(reBuildedObj.event, "PRODUCT_VIEW");
+
         //if sendEvent is true, this return need to send Product View event
         return reBuildedObj;
       },
