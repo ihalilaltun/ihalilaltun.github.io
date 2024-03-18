@@ -1,7 +1,2 @@
-const url = 'https://ihalilaltun.github.io/SegmentifySw.js';
-
-self.addEventListener('error', function(e) {
-  console.log(e.filename, e.lineno, e.colno, e.message, JSON.stringify(e.error));
-});
-
-importScripts(url);
+importScripts('https://cdn.segmentify.com/v3/push/sw.js');
+updateRegistration('ae272bfb-214b-4cdd-b5c4-1dddde09e95e', 'https://gimli-dev.segmentify.com/');
