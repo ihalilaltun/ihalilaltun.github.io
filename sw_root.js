@@ -1,1 +1,0 @@
-importScripts('https://cdn.segmentify.com/v3/push/sw.js');
