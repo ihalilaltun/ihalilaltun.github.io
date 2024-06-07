@@ -15235,7 +15235,7 @@ function initializeMustache(mustache) {
           serviceWorkerRegistration:
             _SgmntfY_._variables.pushInfo.serviceWorkerReg,
         })
-        .then((currentToken) => {
+        .then(function (currentToken) {
           if (currentToken) {
             _SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager
               .getSubscription()
@@ -15250,16 +15250,41 @@ function initializeMustache(mustache) {
                 }
               });
           } else {
-            // Show permission request UI
-            console.log(
-              'No registration token available. Request permission to generate one.',
+            _SgmntfY_.LOG_MESSAGE(
+              'WARN',
+              'No registration token available. Request permission to generate one isFireBaseV2 [true]',
             );
-            // ...
           }
         })
-        .catch((err) => {
-          console.log('An error occurred while retrieving token. ', err);
-          // ...
+        .catch(function (e) {
+          if (e.code === 'messaging/permission-blocked') {
+            _SgmntfY_._variables.pushInfo.promptInteraction = 'denied';
+            _SgmntfY_.LOG_MESSAGE('WARN', 'Permission requested denied :' + e);
+            if (_SgmntfY_._variables.pushInfo.subscription !== 'DENIED') {
+              fetch(
+                _SgmntfY_._getPushUrl() +
+                  'subscription/deny?apiKey=' +
+                  _SgmntfY_._variables.apiKey +
+                  '&userId=' +
+                  _SgmntfY_._getUserId() +
+                  '&instanceId=' +
+                  _SgmntfY_._variables.pushInfo.instanceId +
+                  '&browser=' +
+                  _SgmntfY_._variables.pushInfo.agent +
+                  '&device=' +
+                  _SgmntfY_._variables.ua.type.toUpperCase(),
+              );
+            }
+          } else if (e.code === 'messaging/permission-default') {
+            _SgmntfY_._variables.pushInfo.promptInteraction = 'close';
+          } else {
+            _SgmntfY_.LOG_MESSAGE(
+              'ERROR',
+              'Error while getting subscription details at _pushRequestPermission() isFireBaseV2 [true]: ' +
+                e,
+            );
+            _SgmntfY_._pushFadeUp(1);
+          }
         });
     },
     _pushRequestPermissionVapid: function (isSilent) {
