@@ -1386,6 +1386,7 @@ function initializeMustache(mustache) {
         session: { key: '_sgf_session_id', local: false },
         qaMode: { key: '_sgf_qa_mode', local: true },
         searchNoCache: { key: '_sgf_search_no_cache', local: true },
+        userData: { key: '_sgf_ud', local: false },
       },
       logLevel: 'ERROR',
       segmentifyObj: null,
@@ -1507,6 +1508,13 @@ function initializeMustache(mustache) {
           'external',
           'userIysPermissions',
           'lastSearchDeletedKeywords',
+          'triggerType',
+          'channel',
+          'type',
+          'identity',
+          'source',
+          'pushToken',
+          'whatsappNtf',
         ],
         FORM: [],
         CUSTOM_EVENT: [],
@@ -2097,6 +2105,29 @@ function initializeMustache(mustache) {
               },
             };
 
+            var getProductCardPart = function (part) {
+              try {
+                var design = JSON.parse(params.productCardDesign);
+                switch (part) {
+                  case 'html':
+                    return design.html;
+                  case 'css':
+                    return design.css;
+                  case 'prejs':
+                    return design.prejs;
+                  case 'postjs':
+                    return design.postjs;
+                  default:
+                    return null;
+                }
+              } catch (err) {
+                _SgmntfY_.LOG_MESSAGE(
+                  'WARN',
+                  'Error in executing product card code: ' + err,
+                );
+              }
+            };
+
             try {
               if (params.preJsCode) {
                 eval(params.preJsCode);
@@ -2122,6 +2153,26 @@ function initializeMustache(mustache) {
               );
             }
 
+            var productCardPreJs = getProductCardPart('prejs');
+            try {
+              if (productCardPreJs) {
+                eval(productCardPreJs);
+                var retVal = preRenderConf(reConf);
+                if (typeof retVal !== 'undefined' && !retVal) {
+                  _SgmntfY_.LOG_MESSAGE(
+                    'WARN',
+                    'preRenderConf returned false exiting!',
+                  );
+                  return;
+                }
+              }
+            } catch (err) {
+              _SgmntfY_.LOG_MESSAGE(
+                'WARN',
+                'Error in executing product card pre js code: ' + err,
+              );
+            }
+
             // check if the account is freemium/brand is enabled
             if (reConf['brandingEnabled']) {
               // if branding is enabled add "recommended by Segmentify" into to recommendation title
@@ -2129,14 +2180,34 @@ function initializeMustache(mustache) {
                 '<a target="_blank" class="seg-rec-logo" href="//www.segmentify.com">Recommended by <img src="//cdn.segmentify.com/images/sgm-logo.svg" /></a>';
             }
 
+            var recoTemplate = params.recommendationTemplate;
+
+            // if product card design is defined, replace the product card part in the recommendation template
+            var productCardHtml = getProductCardPart('html');
+            if (productCardHtml) {
+              var productCardPattern =
+                /\[\[#products\]\](.*?)\[\[\/products\]\]/s;
+              recoTemplate = recoTemplate.replace(
+                productCardPattern,
+                `[[#products]]${productCardHtml}[[/products]]`,
+              );
+            }
+
             // render products with the given template
             var renderedHtml = _SgmntfY_
               ._getMustache()
-              .render(params.recommendationTemplate, reConf);
+              .render(recoTemplate, reConf);
+
             if (params['cssCode'])
               _SgmntfY_
                 ._getJq()('<style />')
                 .html(params['cssCode'])
+                .prependTo(_SgmntfY_._getJq()('body'));
+
+            if (getProductCardPart('css'))
+              _SgmntfY_
+                ._getJq()('<style />')
+                .html(getProductCardPart('css'))
                 .prependTo(_SgmntfY_._getJq()('body'));
 
             try {
@@ -2191,6 +2262,17 @@ function initializeMustache(mustache) {
                   err,
               );
             }
+
+            var productCardPostJs = getProductCardPart('postjs');
+            try {
+              if (productCardPostJs) eval(productCardPostJs);
+            } catch (err) {
+              _SgmntfY_.LOG_MESSAGE(
+                'WARN',
+                'Error in executing product card post js code: ' + err,
+              );
+            }
+
             _SgmntfY_._bindRecommendationTrackEvents(
               params.insertType === 'SELF' ? targetElement : $div,
               params.recommendationSettings,
@@ -2707,21 +2789,38 @@ function initializeMustache(mustache) {
             break;
           }
           case 'POPUP_RECO': {
+            var title = '';
+            var language = request['data']['lang'];
+
+            var isSingleLanguage =
+              params['notificationTitle'] && params['notificationTitle'] !== ''
+                ? params['notificationTitle']
+                : notificationTitle || '';
+            var isMultiLanguage =
+              params['notificationTitleMap'] &&
+              params['notificationTitleMap'] !== '';
+
+            if (isMultiLanguage) {
+              title = JSON.parse(params['notificationTitleMap'])[language];
+            } else {
+              title = isSingleLanguage;
+            }
+
             var config = {
-              title:
-                params['notificationTitle'] &&
-                params['notificationTitle'] !== ''
-                  ? params['notificationTitle']
-                  : notificationTitle || '',
+              title: title,
               vertical: params['verticalPosition'],
               horizontal: params['horizontalPosition'],
               button: _SgmntfY_._jbGetButtonText('DELIVERY'),
             };
+
             var isJourney =
               _SgmntfY_._jbOverFlowOperations._journeyFinished(request);
             if (isJourney === false && productList.length < 3) {
               return;
             }
+
+            var campaignType = params['type'];
+
             config['products'] = productList;
             try {
               if (params['preJsCode']) {
@@ -2753,7 +2852,11 @@ function initializeMustache(mustache) {
               _productId = request.originalParams['params']['productId'] || '';
             }
             for (var i = 0; i < config['products'].length; ++i) {
-              if (isJourney === false && _products.length === 3) {
+              if (
+                isJourney === false &&
+                _products.length === 3 &&
+                campaignType !== 'POPUP_BUILDER'
+              ) {
                 break;
               }
               var _product = config['products'][i];
@@ -2761,7 +2864,11 @@ function initializeMustache(mustache) {
                 _products.push(_product);
               }
             }
-            if (isJourney === false && _products.length !== 3) {
+            if (
+              isJourney === false &&
+              _products.length !== 3 &&
+              campaignType !== 'POPUP_BUILDER'
+            ) {
               return;
             }
             config['products'] = _products;
@@ -2769,13 +2876,41 @@ function initializeMustache(mustache) {
             var renderedHtml = _SgmntfY_
               ._getMustache()
               .render(params['recommendationTemplate'], config);
-            _SgmntfY_._getJq()('body').prepend(renderedHtml);
-            params['cssCode'] &&
+
+            if (campaignType === 'POPUP_BUILDER') {
+              //Popup Builder implementation
+              params.html = renderedHtml;
+              _SgmntfY_._campaigns.POPUP_BUILDER(params);
+            } else {
+              //Default Popup reco implementation
+              _SgmntfY_._getJq()('body').prepend(renderedHtml);
+              params['cssCode'] &&
+                _SgmntfY_
+                  ._getJq()('<style />')
+                  .html(params['cssCode'])
+                  .prependTo(_SgmntfY_._getJq()('body'));
+              _SgmntfY_._jbDeliveryOnBindEventHandler();
+
+              // overlay
+              if (params['overlay'] === 'true') {
+                _SgmntfY_._getJq()('.seg-popup-overlay').show();
+              }
+              // bind close handler
               _SgmntfY_
-                ._getJq()('<style />')
-                .html(params['cssCode'])
-                .prependTo(_SgmntfY_._getJq()('body'));
-            _SgmntfY_._jbDeliveryOnBindEventHandler();
+                ._getJq()('.seg-popup-close')
+                .bind('click', function () {
+                  var $this = _SgmntfY_._getJq()(this);
+                  $this
+                    .parent('.seg-popup')
+                    .removeClass('segFadeInUp')
+                    .addClass('segFadeOutDown');
+                  window.setTimeout(function () {
+                    _SgmntfY_._sgfPopupCloseHandler(true, request);
+                    $this.parent('.seg-popup').remove();
+                    _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+                  }, 1000);
+                });
+            }
 
             try {
               params['postJsCode'] && eval(params['postJsCode']);
@@ -2785,25 +2920,6 @@ function initializeMustache(mustache) {
                 'Error in executing campaign post js code: ' + err,
               );
             }
-            // overlay
-            if (params['overlay'] === 'true') {
-              _SgmntfY_._getJq()('.seg-popup-overlay').show();
-            }
-            // bind close handler
-            _SgmntfY_
-              ._getJq()('.seg-popup-close')
-              .bind('click', function () {
-                var $this = _SgmntfY_._getJq()(this);
-                $this
-                  .parent('.seg-popup')
-                  .removeClass('segFadeInUp')
-                  .addClass('segFadeOutDown');
-                window.setTimeout(function () {
-                  _SgmntfY_._sgfPopupCloseHandler(true, request);
-                  $this.parent('.seg-popup').remove();
-                  _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-                }, 1000);
-              });
             _SgmntfY_._variables.segmentifyObj('event:interaction', {
               type: 'widget-view',
               interactionId: params['interactionId'],
@@ -5191,6 +5307,7 @@ function initializeMustache(mustache) {
           buttonTextColor: campaign['buttonTextColor'],
           vertical: campaign['verticalPosition'],
           horizontal: campaign['horizontalPosition'],
+          overlay: campaign['overlay'] === 'true',
         };
         try {
           if (campaign['preJs']) {
@@ -5240,6 +5357,14 @@ function initializeMustache(mustache) {
           instanceId: campaign['instanceId'],
           interactionId: campaign['instanceId'],
         });
+        //show overlay if exists
+        if (config.overlay) {
+          _SgmntfY_
+            ._getJq()('<div class="seg-popup-overlay"></div>')
+            .prependTo(_SgmntfY_._getJq()('body'));
+          _SgmntfY_._getJq()('.seg-popup-overlay').show();
+        }
+
         // bind close handler
         _SgmntfY_
           ._getJq()('.seg-popup-close')
@@ -5251,6 +5376,9 @@ function initializeMustache(mustache) {
               .addClass('segFadeOutDown');
             window.setTimeout(function () {
               $this.parent('.seg-popup').remove();
+              if (config.overlay) {
+                _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+              }
             }, 1000);
           });
         // bind submit handler
@@ -5288,10 +5416,16 @@ function initializeMustache(mustache) {
               _SgmntfY_._getJq()(this).addClass('seg-sending');
               _SgmntfY_._getJq()(this).css({ 'pointer-events': 'none' });
               setTimeout(function () {
+                if (config.overlay) {
+                  _SgmntfY_._getJq()('.seg-popup-overlay').remove();
+                }
+
                 _SgmntfY_
                   ._getJq()('.seg-email-collection')
                   .addClass('seg-popup-thanks')
                   .removeClass('segFadeInUp');
+
+                _SgmntfY_._getJq()(this).parent('.seg-popup').remove();
               }, 1300);
               setTimeout(function () {
                 _SgmntfY_
@@ -5310,6 +5444,11 @@ function initializeMustache(mustache) {
                   params: {
                     instanceId: campaign['instanceId'],
                   },
+                });
+                // Contact Source Info
+                _SgmntfY_._variables.segmentifyObj('user:update', {
+                  email: $newsletterForm.sgmSerializeForm()['email'],
+                  source: 'email-collection',
                 });
                 // send iys event
                 _SgmntfY_._variables.segmentifyObj('user:iyspermissions', {
@@ -6175,44 +6314,8 @@ function initializeMustache(mustache) {
             _SgmntfY_._variables.pushInfo.isFirebaseCompatible
           ) {
             if (_SgmntfY_._variables.pushInfo.useV2) {
-              _SgmntfY_
-                ._getJq()
-                .getScript(
-                  _SgmntfY_._variables.pushInfo.fcm.scriptUrl,
-                  function () {
-                    if (_SgmntfY_._variables.pushInfo.isFirebaseCompatible) {
-                      if (!firebase.apps.length) {
-                        firebase.initializeApp({
-                          apiKey: _SgmntfY_._variables.pushInfo.fcm.apiKey,
-                          messagingSenderId:
-                            _SgmntfY_._variables.pushInfo.fcm.messagingSenderId,
-                          projectId:
-                            _SgmntfY_._variables.pushInfo.fcm.projectId,
-                          appId: _SgmntfY_._variables.pushInfo.fcm.appId,
-                        });
-                      }
-                      _SgmntfY_._variables.pushInfo.fcm.messaging =
-                        firebase.messaging();
-                    }
-                    if ('serviceWorker' in navigator) {
-                      navigator.serviceWorker
-                        .register(config.swPath, { updateViaCache: 'none' })
-                        .then(function (reg) {
-                          _SgmntfY_._variables.pushInfo.serviceWorkerReg = reg;
-                          _SgmntfY_._pushInitPermissionCampaign(
-                            campaign,
-                            config,
-                          );
-                        })
-                        .catch(function (e) {
-                          _SgmntfY_.LOG_MESSAGE(
-                            'ERROR',
-                            'Error while registering service worker ' + e,
-                          );
-                        });
-                    }
-                  },
-                );
+              _SgmntfY_._variables.pushInfo.fcm.getToken = {};
+              _SgmntfY_._pushInitFCM(campaign, config);
             } else {
               _SgmntfY_
                 ._getJq()
@@ -8119,6 +8222,7 @@ function initializeMustache(mustache) {
           bgImage: campaign['bgImage'],
           bgTextColor: campaign['bgTextColor'],
           campaignTitle: campaign['campaignTitle'],
+          description: campaign['description'],
           contentOfResultButton: campaign['contentOfResultButton'],
           contentButtonColor: campaign['scratchTextColor'],
           contentBgColor: campaign['scratchBgColor'],
@@ -8289,8 +8393,8 @@ function initializeMustache(mustache) {
           scratchOverlay.style['background-color'] =
             config.overlay === 'true' ? 'rgba(53,44,44,0.8)' : 'transparent';
           scratchHeader.innerHTML = config.campaignTitle;
-          scratchDescription.innerHTML =
-            'Scratch this area to see the coupon code.';
+
+          scratchDescription.innerHTML = config.description;
           scratchCoupon.innerHTML = config.reward.coupon;
 
           anchorButton.innerHTML = config.contentOfResultButton;
@@ -8316,10 +8420,8 @@ function initializeMustache(mustache) {
 
         function getMobileOffset(event) {
           var _rect = event.target.getBoundingClientRect();
-          var _offsetX =
-            event.touches[0].clientX - window.pageXOffset - _rect.left;
-          var _offsetY =
-            event.touches[0].clientY - window.pageYOffset - _rect.top;
+          var _offsetX = event.touches[0].clientX - _rect.left;
+          var _offsetY = event.touches[0].clientY - _rect.top;
           var _result = { offsetX: _offsetX, offsetY: _offsetY };
           return _result;
         }
@@ -9015,6 +9117,225 @@ function initializeMustache(mustache) {
         }, 1000);
         // COUNT_DOWN_BNP IMPLEMENTATIONS FINISHES HERE
       },
+      POPUP_BUILDER: function (campaign) {
+        var config = {
+          name: campaign['name'],
+          html: campaign['html'],
+          css: campaign['css'] || campaign['cssCode'],
+          subType: campaign['subType'],
+          instanceId: campaign['instanceId'],
+        };
+
+        var POPUP_BUILDER_SUBTYPES = Object.freeze({
+          CUSTOM: 'CUSTOM',
+          EMAIL_COLLECTION: 'EMAIL_COLLECTION',
+          SALES_POPUP: 'SALES_POPUP',
+        });
+
+        var OVERLAY_Z_INDEX = Object.freeze({
+          POPUP_CONTENT: 2147483647,
+          POPUP_OVERLAY: 2147483646,
+        });
+
+        var CLASS_LIST = Object.freeze({
+          UNIQUE_POPUP_ID: `segmentify-popup-builder_${config.instanceId}`,
+          POPUP_CONTAINER: 'u-popup-container',
+          POPUP_OVERLAY: 'u-popup-overlay',
+          CLOSE_BUTTON: 'u-close-button',
+          POPUP_CONTENT: 'u-popup-main',
+          SUBMIT_BUTTON: 'button[type="submit"]',
+        });
+
+        var CONTAINER_STYLE = Object.freeze({
+          POPUP_CONTAINER:
+            'position: fixed; z-index:' + OVERLAY_Z_INDEX.POPUP_CONTENT,
+        });
+
+        // Memoize initial body's overflow value
+        var bodyOverflow = document.body.style.overflow;
+
+        // Segmentify Event Queue
+        var queue = _SgmntfY_._variables.segmentifyObj;
+
+        // Create Popup Container & Overlay
+        var SegmentifyPopupBuilderContainer = document.createElement('div');
+        SegmentifyPopupBuilderContainer.classList.add(
+          CLASS_LIST.POPUP_CONTAINER,
+        );
+        SegmentifyPopupBuilderContainer.id = CLASS_LIST.UNIQUE_POPUP_ID;
+        SegmentifyPopupBuilderContainer.style.cssText =
+          CONTAINER_STYLE.POPUP_CONTAINER;
+
+        // Create Campaign Style Element
+        var campaignStyleElement;
+
+        // Create Style Element for Campaign CSS
+        if (config.css) {
+          var campaignStyle = document.createElement('style');
+
+          campaignStyle.id = `segmentify-popup-builder-css_${config.instanceId}`;
+
+          campaignStyle.innerHTML = config.css;
+
+          campaignStyleElement = campaignStyle;
+        }
+
+        // Create Email Overlay
+        var emailCollectionOverlay;
+        emailCollectionOverlay = document.createElement('div');
+        emailCollectionOverlay.classList.add(CLASS_LIST.POPUP_OVERLAY);
+        emailCollectionOverlay.style.zIndex = OVERLAY_Z_INDEX.POPUP_OVERLAY;
+
+        // Append Container into Body
+        document.body.appendChild(SegmentifyPopupBuilderContainer);
+
+        // Append Campaign HTML into Container
+        document.getElementById(CLASS_LIST.UNIQUE_POPUP_ID).innerHTML =
+          config.html;
+
+        // Append Overlay into Container
+        SegmentifyPopupBuilderContainer.append(emailCollectionOverlay);
+
+        // Set Popup Content Z-Index
+        SegmentifyPopupBuilderContainer.querySelector(
+          `.${CLASS_LIST.POPUP_CONTENT}`,
+        ).style.zIndex = OVERLAY_Z_INDEX.POPUP_CONTENT;
+
+        // Append Campaign Style into Container
+        if (campaignStyleElement && config.css) {
+          SegmentifyPopupBuilderContainer.appendChild(campaignStyleElement);
+        }
+
+        // Add Event Listener for Close Button Interaction
+        var closePopupButton = SegmentifyPopupBuilderContainer.querySelector(
+          `.${CLASS_LIST.CLOSE_BUTTON}`,
+        );
+
+        if (closePopupButton) {
+          closePopupButton.removeAttribute('href');
+
+          closePopupButton.addEventListener('click', function () {
+            queue('event:interaction', {
+              type: 'close',
+              instanceId: campaign['instanceId'],
+              interactionId: campaign['instanceId'],
+            });
+
+            // Remove Popup Container from Body & Remove Overflow Hidden
+            document.body.style.overflow = bodyOverflow;
+            SegmentifyPopupBuilderContainer.remove();
+          });
+        }
+
+        var form = SegmentifyPopupBuilderContainer.querySelector('form');
+
+        if (form) {
+          form.id = config['instanceId'];
+
+          const submitBtn = form.querySelector(CLASS_LIST.SUBMIT_BUTTON);
+          submitBtn.setAttribute('form', config['instanceId']);
+
+          ['method', 'action', 'target'].forEach((attr) =>
+            form.removeAttribute(attr),
+          );
+        }
+
+        // Send Impression Event
+        queue('event:interaction', {
+          type: 'impression',
+          instanceId: campaign['instanceId'],
+          interactionId: campaign['instanceId'],
+        });
+
+        function emailCollectionEvents(email) {
+          // Contact Source Info
+          queue('user:update', {
+            email,
+            source: 'email-collection',
+          });
+
+          // User Signup
+          queue('user:signup', {
+            email,
+            emailNtf: true,
+            isRegistered: true,
+          });
+
+          // Send iys event
+          queue('user:iyspermissions', {
+            email,
+            emailNtf: true,
+          });
+        }
+
+        function handleFormEvent(formValues) {
+          queue('user:form', {
+            formName: config['name'],
+            fields: formValues,
+            params: {
+              instanceId: config['instanceId'],
+            },
+          });
+        }
+
+        function handleFormSubmit(type, formObject) {
+          var formKeyValues = {};
+
+          if (formObject)
+            formObject.forEach((value, key) => {
+              formKeyValues[key] = value;
+            });
+
+          if (Object.keys(formKeyValues).length > 0)
+            handleFormEvent(formKeyValues);
+
+          if (
+            formKeyValues.email &&
+            type === POPUP_BUILDER_SUBTYPES.EMAIL_COLLECTION
+          )
+            emailCollectionEvents(formKeyValues['email']);
+
+          document.querySelector(`.u-close-button`).click();
+        }
+
+        function handleEmailCollectionPopup() {
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var formObject = new FormData(form);
+            handleFormSubmit(
+              POPUP_BUILDER_SUBTYPES.EMAIL_COLLECTION,
+              formObject,
+            );
+          });
+        }
+
+        function handleSalesPopup() {
+          // Handle sales popup
+        }
+
+        function handleCustomPopup() {
+          if (form) {
+            form.addEventListener('submit', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              var formObject = new FormData(form);
+              handleFormSubmit(POPUP_BUILDER_SUBTYPES.CUSTOM, formObject);
+            });
+          }
+        }
+
+        switch (config.subType) {
+          case POPUP_BUILDER_SUBTYPES.CUSTOM:
+            return handleCustomPopup();
+          case POPUP_BUILDER_SUBTYPES.EMAIL_COLLECTION:
+            return handleEmailCollectionPopup();
+          case POPUP_BUILDER_SUBTYPES.SALES_POPUP:
+            return handleSalesPopup();
+          default:
+            break;
+        }
+      },
     },
     // Functions
     _functions: {
@@ -9062,6 +9383,8 @@ function initializeMustache(mustache) {
             return _SgmntfY_._functions.userIysPermissions;
           case 'user:lastsearchdeletedkeywords':
             return _SgmntfY_._functions.lastSearchDeletedKeywords;
+          case 'user:identify':
+            return _SgmntfY_._functions.userIdentify;
           case 'event:custom':
             return _SgmntfY_._functions.customEvent;
           case 'event:interaction':
@@ -9206,6 +9529,8 @@ function initializeMustache(mustache) {
                   return _SgmntfY_._functions.userIysPermissions;
                 case 'lastsearchdeletedkeywords':
                   return _SgmntfY_._functions.lastSearchDeletedKeywords;
+                case 'identify':
+                  return _SgmntfY_._functions.userIdentify;
                 default:
                   return function (params) {
                     _SgmntfY_.LOG_MESSAGE(
@@ -9658,6 +9983,14 @@ function initializeMustache(mustache) {
           data['external'] = _SgmntfY_._variables.pa.data.output;
         }
 
+        if (data['source'] && data['source'] === 'email-collection') {
+          data['emailNtf'] = true;
+        }
+
+        if (data['source'] && data['source'] === 'whatsapp-collection') {
+          data['whatsappNtf'] = true;
+        }
+
         var dataStr = JSON.stringify(data);
         var localDataStr = _SgmntfY_._getPersistentData(
           'sgfUserUpdateData',
@@ -9695,6 +10028,29 @@ function initializeMustache(mustache) {
         data = data || {};
         data['step'] = 'delete_last_search';
         data['async'] = 'false';
+
+        return _SgmntfY_._prepareRequest(data, 'USER_OPERATIONS');
+      },
+      userIdentify: function (data) {
+        var utm_source = _SgmntfY_._getQueryParameter('utm_source');
+        var utm_medium = _SgmntfY_._getQueryParameter('utm_medium');
+        var _sgm_action = _SgmntfY_._getQueryParameter('_sgm_action');
+
+        data = data || {};
+
+        data['step'] = 'identify';
+        data['async'] = 'false';
+        data['channel'] =
+          utm_source === 'segmentify' ? utm_medium : _sgm_action;
+
+        if (data['triggerType'] === 'override') {
+          data['type'] = 'plain';
+        } else if (data['triggerType'] === 'withUtmCode') {
+          data['identity'] = _SgmntfY_._getQueryParameter('utm_code');
+          data['type'] = 'sgm-hash';
+        }
+
+        delete data.triggerType;
 
         return _SgmntfY_._prepareRequest(data, 'USER_OPERATIONS');
       },
@@ -10378,7 +10734,10 @@ function initializeMustache(mustache) {
         _sgm_pinned,
         _sgm_pin_position;
 
-      if (_SgmntfY_._getQueryParameter('utm_source', url) === 'segmentify') {
+      if (
+        _SgmntfY_._getQueryParameter('utm_source', url) === 'segmentify' &&
+        _SgmntfY_._getQueryParameter('_sgm_custom', url) !== 'true'
+      ) {
         // v2 checks
         _sgm_campaign = _SgmntfY_._getQueryParameter('utm_campaign', url);
         _sgm_action = _SgmntfY_._getQueryParameter('utm_medium', url);
@@ -11849,6 +12208,7 @@ function initializeMustache(mustache) {
                 _SgmntfY_._experiment.toString(experiments),
               );
             }
+            _SgmntfY_._setUserData(responseData['u'] || {});
 
             if (
               responses.length === requestDataArray.length &&
@@ -11868,6 +12228,14 @@ function initializeMustache(mustache) {
                   _SgmntfY_._getCampaign(request, campaignArray);
                   _SgmntfY_._getSearchCampaign(request, searchArray);
                   _SgmntfY_.initCoupon(couponArray);
+
+                  if (typeof request._cb === 'function' && searchArray) {
+                    if (searchArray) {
+                      request._cb(searchArray);
+                    } else {
+                      request._cb();
+                    }
+                  }
                 } else {
                   _SgmntfY_.LOG_MESSAGE(
                     'DEBUG',
@@ -11994,6 +12362,33 @@ function initializeMustache(mustache) {
             }
           }
         }
+      }
+    },
+    _setUserData: function (userData) {
+      try {
+        _SgmntfY_._storePersistentData(
+          _SgmntfY_._variables.storage.userData.key,
+          JSON.stringify(userData),
+          0,
+          _SgmntfY_._variables.storage.userData.local,
+        );
+      } catch (e) {
+        _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while setting user data: ' + e);
+      }
+    },
+    _getUserMode: function () {
+      try {
+        var _ud =
+          JSON.parse(
+            _SgmntfY_._getPersistentData(
+              _SgmntfY_._variables.storage.userData.key,
+              _SgmntfY_._variables.storage.userData.local,
+            ),
+          ) || {};
+        return _ud && _ud['gm'] ? _ud['gm'] : '';
+      } catch (e) {
+        _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting user data: ' + e);
+        return '';
       }
     },
     // Response Handlers
@@ -13961,15 +14356,29 @@ function initializeMustache(mustache) {
     },
     _prepareSearchAssetText: function (sidebarItemText) {
       if (sgmSearchSettings.categoryTreeView === false) {
-        sidebarItemText = sidebarItemText
-          .replace(/>/g, '/')
-          .toLocaleLowerCase(_SgmntfY_._variables.language)
-          .split('/');
-        sidebarItemText = sidebarItemText[sidebarItemText.length - 1];
+        try {
+          sidebarItemText = sidebarItemText
+            .replace(/>/g, '/')
+            .toLocaleLowerCase(_SgmntfY_._variables.language)
+            .split('/');
+          sidebarItemText = sidebarItemText[sidebarItemText.length - 1];
+        } catch (err) {
+          sidebarItemText = sidebarItemText
+            .replace(/>/g, '/')
+            .toLocaleLowerCase()
+            .split('/');
+          sidebarItemText = sidebarItemText[sidebarItemText.length - 1];
+        }
       } else {
-        sidebarItemText = sidebarItemText
-          .replace(/>/g, '/')
-          .toLocaleLowerCase(_SgmntfY_._variables.language);
+        try {
+          sidebarItemText = sidebarItemText
+            .replace(/>/g, '/')
+            .toLocaleLowerCase(_SgmntfY_._variables.language);
+        } catch (err) {
+          sidebarItemText = sidebarItemText
+            .replace(/>/g, '/')
+            .toLocaleLowerCase();
+        }
       }
       sidebarItemText = toCapitalize(sidebarItemText);
 
@@ -14011,10 +14420,16 @@ function initializeMustache(mustache) {
     },
     _highlight: function (focusedInputs, sideBarText) {
       focusedInputs.forEach(function (focusedInput) {
-        var searchQuery = focusedInput.toLocaleLowerCase(
-          _SgmntfY_._variables.language,
-        );
+        var searchQuery = focusedInput.toLocaleLowerCase();
         var regexp = new RegExp(searchQuery, 'ig');
+
+        try {
+          searchQuery = focusedInput.toLocaleLowerCase(
+            _SgmntfY_._variables.language,
+          );
+          regexp = new RegExp(searchQuery, 'ig');
+        } catch (err) {}
+
         sideBarText = sideBarText.replace(
           regexp,
           "<span class='sgm-search-keyword-highlight'>$&</span>",
@@ -14168,14 +14583,27 @@ function initializeMustache(mustache) {
         if (sgmSearchSettings.categoryTreeView === false) {
           var _replacedCategory = originalProduct.category[0]
             .replace(/>/g, '/')
-            .toLocaleLowerCase(_SgmntfY_._variables.language);
+            .toLocaleLowerCase();
+
+          try {
+            _replacedCategory = originalProduct.category[0]
+              .replace(/>/g, '/')
+              .toLocaleLowerCase(_SgmntfY_._variables.language);
+          } catch (err) {}
+
           _replacedCategory = _replacedCategory.split('/');
           _replacedCategory = _replacedCategory[_replacedCategory.length - 1];
           tempProduct['category'] = _replacedCategory;
         } else {
-          tempProduct['category'] = originalProduct.category[0]
-            .replace(/>/g, '/')
-            .toLocaleLowerCase(_SgmntfY_._variables.language);
+          try {
+            tempProduct['category'] = originalProduct.category[0]
+              .replace(/>/g, '/')
+              .toLocaleLowerCase(_SgmntfY_._variables.language);
+          } catch (err) {
+            tempProduct['category'] = originalProduct.category[0]
+              .replace(/>/g, '/')
+              .toLocaleLowerCase();
+          }
         }
         tempProduct['categories-original'] = originalProduct.category[0];
 
@@ -14206,9 +14634,13 @@ function initializeMustache(mustache) {
         _SgmntfY_._setSearchProductCategory(tempProduct, originalProduct);
 
         if (tempProduct.brand) {
-          tempProduct['brand'] = originalProduct.brand.toLocaleLowerCase(
-            _SgmntfY_._variables.language,
-          );
+          try {
+            tempProduct['brand'] = originalProduct.brand.toLocaleLowerCase(
+              _SgmntfY_._variables.language,
+            );
+          } catch (err) {
+            tempProduct['brand'] = originalProduct.brand.toLocaleLowerCase();
+          }
           tempProduct['brands-original'] = originalProduct.brand;
         }
         mappedProducts.push(tempProduct);
@@ -15229,8 +15661,8 @@ function initializeMustache(mustache) {
         });
     },
     _pushRequestPermissionV2: function (isSilent) {
-      _SgmntfY_._variables.pushInfo.fcm.messaging
-        .getToken({
+      _SgmntfY_._variables.pushInfo.fcm
+        .getToken(_SgmntfY_._variables.pushInfo.fcm.messaging, {
           vapidKey: _SgmntfY_._variables.pushInfo.fcm.vapidKey,
           serviceWorkerRegistration:
             _SgmntfY_._variables.pushInfo.serviceWorkerReg,
@@ -15423,6 +15855,44 @@ function initializeMustache(mustache) {
         } else if (Notification.permission === 'default') {
           _SgmntfY_._variables.pushInfo.promptInteraction = 'close';
         }
+      }
+    },
+    _pushInitFCM: function (campaign, config) {
+      const script = document.createElement('script');
+      script.type = 'module';
+      const firebaseConfig = {
+        apiKey: _SgmntfY_._variables.pushInfo.fcm.apiKey,
+        messagingSenderId: _SgmntfY_._variables.pushInfo.fcm.messagingSenderId,
+        projectId: _SgmntfY_._variables.pushInfo.fcm.projectId,
+        appId: _SgmntfY_._variables.pushInfo.fcm.appId,
+      };
+      script.textContent = `
+                import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+                import { getMessaging, getToken } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js';
+                const app = initializeApp(${JSON.stringify(firebaseConfig)});
+                const messaging = getMessaging(app);
+                _SgmntfY_._variables.pushInfo.fcm.messaging = messaging;
+                _SgmntfY_._variables.pushInfo.fcm.getToken = getToken;
+                _SgmntfY_._pushInitFCMCallBack(${JSON.stringify(
+                  campaign,
+                )},${JSON.stringify(config)});
+            `;
+      document.body.appendChild(script);
+    },
+    _pushInitFCMCallBack: function (campaign, config) {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register(config.swPath, { updateViaCache: 'none' })
+          .then(function (reg) {
+            _SgmntfY_._variables.pushInfo.serviceWorkerReg = reg;
+            _SgmntfY_._pushInitPermissionCampaign(campaign, config);
+          })
+          .catch(function (e) {
+            _SgmntfY_.LOG_MESSAGE(
+              'ERROR',
+              'Error while registering service worker ' + e,
+            );
+          });
       }
     },
     // GA methods
@@ -15816,7 +16286,7 @@ function initializeMustache(mustache) {
         }
 
         if (socialMediaChannelMatch(true)) {
-          return socialMediaReferrerChannel(document.referrer);
+          return socialMediaReferrerChannel(document.referrer || document.URL);
         }
 
         if (gclid.length) {
@@ -15843,6 +16313,10 @@ function initializeMustache(mustache) {
               break;
             case 'email':
               source = 'EMAIL';
+              break;
+            case 'push':
+            case 'webpush':
+              source = 'PUSH';
               break;
             default:
               break;
@@ -16023,6 +16497,7 @@ function initializeMustache(mustache) {
               _SgmntfY_._initializeDelayedCampaigns();
               _SgmntfY_._initializePageViewsCampaigns();
               _SgmntfY_._sendTrackedEvent();
+              _SgmntfY_._segmentifyIdentifyUser();
               _SgmntfY_._setTestMode();
               _SgmntfY_._setQaMode();
             },
@@ -16039,6 +16514,7 @@ function initializeMustache(mustache) {
           _SgmntfY_._initializeDelayedCampaigns();
           _SgmntfY_._initializePageViewsCampaigns();
           _SgmntfY_._sendTrackedEvent();
+          _SgmntfY_._segmentifyIdentifyUser();
           _SgmntfY_._setTestMode();
           _SgmntfY_._setQaMode();
         }
@@ -16087,6 +16563,7 @@ function initializeMustache(mustache) {
 
         // tell the whole world segmentify is inited
         _SgmntfY_._dispatchInitEvent();
+        // dispatch Identify
       }
     },
     _initializeDelayedActions: function () {
@@ -16157,6 +16634,18 @@ function initializeMustache(mustache) {
           );
         }
       } catch (err) {}
+    },
+    _segmentifyIdentifyUser: function () {
+      var utm_code = _SgmntfY_._getQueryParameter('utm_code');
+      if (utm_code) {
+        try {
+          _SgmntfY_._variables.segmentifyObj('user:identify', {
+            triggerType: 'withUtmCode',
+          });
+        } catch (e) {
+          console.log('Error Segmentify Cannot Identify User: ', e);
+        }
+      }
     },
     // Request Loggers
     _ajaxError: function (request, jqXHR, textStatus, errorThrown) {
