@@ -16320,7 +16320,7 @@ var SegmentifySearch;
             }
         }
           , w = {
-            languageCode: _SgmntfY_._variables.language ?? "PL",
+            languageCode: window._SgmntfY_._variables.language ?? "EN",
             PL: {
                 sizes: "Rozmiary"
             }
@@ -16341,7 +16341,7 @@ var SegmentifySearch;
                 breakpoint: 768,
                 segmentify: window.Segmentify,
                 dictionary: w
-            }) : setTimeout(n, 25)
+            }) : setTimeout(n, 150)
         }
         n()
     }
