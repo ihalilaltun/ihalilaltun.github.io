@@ -9,15 +9,14 @@
     <meta name="author" content="">
     <meta name="description" content="">
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-185125120-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-185125120-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'UA-185125120-1');
-</script>
+      gtag('config', 'UA-185125120-1');
+    </script>
     
     <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
     <link href='/style.css' rel='stylesheet' type='text/css'>
@@ -26,17 +25,83 @@
     <script src="/segmentify-integration.js" charset="UTF-8"></script>
     <link type="text/css" rel="stylesheet" media="screen" href="/segmentify.css">
 
+    <style>
+        /* --- DARK MODE STYLES --- */
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #121212; /* Koyu Arka Plan */
+            color: #e0e0e0; /* Açık Gri Yazı */
+            font-family: 'Inconsolata', monospace;
+        }
+
+        /* Resim Alanı */
+        .make-it-fit {
+            max-width: 100%;
+            border-radius: 10px;
+            /* Resim koyu temada net görünsün diye arkasına beyaz kart ekledim */
+            background-color: #fff; 
+            padding: 10px; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); /* Gölge */
+        }
+
+        /* Butonlar Genel */
+        button.basket {
+            display: block;
+            width: 200px;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: left;
+            transition: background 0.3s;
+            font-family: 'Inconsolata', monospace;
+        }
+        
+        /* Sepete Ekle Butonu - Mavi */
+        #addToBasket {
+            background-color: #2196F3;
+        }
+        #addToBasket:hover {
+            background-color: #0b7dda;
+        }
+
+        /* Sepetten Çıkar Butonu - Kırmızımsı (Uyarıcı olsun diye) */
+        #removeFromBasket {
+            background-color: #d32f2f;
+        }
+        #removeFromBasket:hover {
+            background-color: #b71c1c;
+        }
+
+        /* İkonlar için ufak boşluk */
+        .iconBasket {
+            margin-right: 10px;
+        }
+
+        /* Layout Düzenlemesi */
+        .fill-screen {
+            display: flex; /* Flexbox ile daha düzgün hizalama */
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+    </style>
+
 </head>
 <body>
-    <div class='fill-screen' style="display: contents">
-        <div style="float: left; margin-bottom: 15px">
-            <button class="basket" id="addToBasket" title="Sepete Ekle"><span class="icon iconBasket"></span>Sepete Ekle</button>
-            <button class="basket" id="removeFromBasket" title="Sepete Ekle"><span class="icon iconBasket"></span>Sepetten Çıkar</button>
+    <div class='fill-screen'>
+        <div style="margin-bottom: 15px">
+            <button class="basket" id="addToBasket" title="Sepete Ekle"><span class="icon iconBasket">🛒</span>Sepete Ekle</button>
+            <button class="basket" id="removeFromBasket" title="Sepetten Çıkar"><span class="icon iconBasket">❌</span>Sepetten Çıkar</button>
         </div>
+        
         <div>
             <img class='make-it-fit' src='https://cdn11.bigcommerce.com/s-5ylnei6or5/images/stencil/500x500/products/1992/5075/2939_SlinkyDog_TS4_34__25600.1559322214.jpg?c=2'>
         </div>
-</div>
+    </div>
 
 <script type="text/javascript">
     function waitSegmentifyAndjQuery() {
@@ -71,3 +136,4 @@
 
 </script>
 </body>
+</html>
