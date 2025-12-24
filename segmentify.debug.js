@@ -3241,12 +3241,12 @@ function initializeMustache(mustache) {
           TR: {
             copy: "Kopyala",
             next: "Sonraki",
-            previous: "Geri DÃ¶n",
+            previous: "Geri Dön",
             close: "Kapat",
             skip: "Atla",
             finish: "Bitir",
-            start: "Hadi BaÅŸlayalÄ±m",
-            customize: "Ã–zelleÅŸtir",
+            start: "Hadi Başlayalım",
+            customize: "Özelleştir",
             skipAndFinish: "Atla ve Bitir"
           }
         },
@@ -3262,7 +3262,7 @@ function initializeMustache(mustache) {
             separator: " of "
           },
           TR: {
-            label: "AdÄ±m ",
+            label: "Adım ",
             separator: " / "
           }
         }
@@ -7475,7 +7475,7 @@ function initializeMustache(mustache) {
         _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar");
         _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar");
       }
-      if (_SgmntfY_._getJq()("#sgm_current_search_box").length === 0) { // TODO jquery hide yÃ¶ntimi bak fehmi
+      if (_SgmntfY_._getJq()("#sgm_current_search_box").length === 0) { // TODO jquery hide yöntimi bak fehmi
         var siteSearchBoxSelector = _SgmntfY_._variables.search.activeRootElementForHide;
         if (_SgmntfY_._variables.search.activeRootElementForHide === document) {
           siteSearchBoxSelector = "head";
@@ -8170,14 +8170,14 @@ function initializeMustache(mustache) {
           return;
         }
 
-        // input'un top pozisyonu deÄŸiÅŸmiÅŸse
+        // input'un top pozisyonu değişmişse
         if (inputPosition.top !== lastInputPosition.top) {
           var inputHeight = _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput, _SgmntfY_._variables.search.activeRootElement).outerHeight();
           _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).css("top", inputPosition.top + inputHeight + 1);
           lastInputPosition.top = inputPosition.top;
         }
 
-        // input'un left pozisyonu deÄŸiÅŸmiÅŸse
+        // input'un left pozisyonu değişmişse
         if (inputPosition.left !== lastInputPosition.left) {
           var ww = _SgmntfY_._getJq()(window).width();
           var inputWidth = _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput, _SgmntfY_._variables.search.activeRootElement).parent().outerWidth();
@@ -8204,7 +8204,7 @@ function initializeMustache(mustache) {
           }
 
           if (css[direction] === css["center"]) {
-            // ortalayÄ±nca saÄŸ ya da sol kenar ekranÄ±n dÄ±ÅŸÄ±na taÅŸÄ±yorsa
+            // ortalayınca sağ ya da sol kenar ekranın dışına taşıyorsa
             if (css["center"] <= 0 || css["center"] + resultElWidth >= ww) {
               // ekrana ortala
               css[direction] = (ww / 2) - (resultElWidth / 2)
