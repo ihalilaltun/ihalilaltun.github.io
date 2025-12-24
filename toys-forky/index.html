@@ -32,6 +32,7 @@
         <div style="float: left; margin-bottom: 15px">
             <button class="basket" id="addToBasket" title="Sepete Ekle"><span class="icon iconBasket"></span>Sepete Ekle</button>
             <button class="basket" id="removeFromBasket" title="Sepete Ekle"><span class="icon iconBasket"></span>Sepetten Çıkar</button>
+            <button class="basket" id="purchase" title="Satın Al"><span class="icon iconBasket"></span>Satın Al</button>
         </div>
         <div>
             <img class='make-it-fit' src='https://cdn11.bigcommerce.com/s-5ylnei6or5/images/stencil/500x500/products/1982/5015/2929_Forky_TS4_23_wModel__61743.1559248389.jpg?c=2'>
@@ -54,7 +55,10 @@
                     Segmentify('basket:remove', {productId:"30000-1", nextPage:false});
 
                 });
+                window.segJquery("#purchase").click(function(){
+                    Segmentify('checkout:purchase', {productList: [{productId: '30000-9', quantity: 1, price: 45.75}],nextPage=false, totalPrice: 45.75});
 
+                });
             });
         } else {
             setTimeout(waitSegmentifyAndjQuery, 100);
