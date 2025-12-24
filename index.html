@@ -8,80 +8,91 @@
     <meta name="keywords" content="ihalilaltun, ibrahim halil altun">
     <meta name="author" content="">
     
-<!-- Global site tag (gtag.js) - Google Analytics
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-185125120-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-185125120-1');
-</script>
-<script src="https://www.googleoptimize.com/optimize.js?id=OPT-TNVVQLD"></script>-->
-
-    
-    
     <meta name="description" content="">
     <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
      <link href='/style.css' rel='stylesheet' type='text/css'>
     <link rel='shortcut icon' type='image/x-icon' href='https://ihalilaltun.github.io/favicon.ico' />
     
-    <!--<link rel="manifest" href="/manifest.json">-->
     <script src="segmentify-integration.js" charset="UTF-8"></script>
     <link type="text/css" rel="stylesheet" media="screen" href="/segmentify.css">
-    <!--<script src="search.js" charset="UTF-8"></script>
-    <link type="text/css" rel="stylesheet" media="screen" href="/search.css">-->
 
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/purecss@1.0.0/build/base-min.css,npm/purecss@1.0.0/build/grids-min.css,npm/purecss@1.0.0/build/grids-responsive-min.css">
+    
     <style>
-
+        /* --- DARK MODE BAŞLANGIÇ --- */
         body {
             margin: 50px;
-            color: gray;
+            /* Arka planı koyu, yazıyı açık gri yap */
+            background-color: #121212; 
+            color: #e0e0e0; 
             text-decoration: none;
+            font-family: 'Inconsolata', monospace; /* Fontu garantiye alalım */
         }
+
         .fill-screen {
             display: contents !important;
             position: relative !important;
         }
 
+        /* Kartların Dış Yapısı */
         .rec-product > div {
             padding: 30px;
-            background-color: blue;
-        }
-        .rec-product > div {
             margin: 30px;
-            background-color: white;
+            /* Kart arka planını koyu gri yap */
+            background-color: #1e1e1e; 
             display: block;
-            box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+            /* Gölgeyi biraz daha belirgin yap */
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.5); 
             border-radius: 15px;
+            /* Kart içi yazı rengi */
+            color: #ffffff; 
+            border: 1px solid #333; /* Hafif bir çerçeve ekleyerek ayrışmasını sağladım */
         }
+
         .product-images > img {
             width: 50px;
+            /* Resimlerin etrafına beyaz bir hale ekleyelim ki koyu temada kaybolmasınlar (İsteğe bağlı) */
+            background: #fff;
+            padding: 5px;
+            border-radius: 5px;
         }
+
         span.product-title {
             font-size: 22px;
             display: block;
             margin-top: 15px;
             margin-bottom: 6px;
+            color: #f5f5f5; /* Başlıklar parlak beyaz */
         }
+
         .old-price {
             text-decoration: line-through;
-            opacity: 0.3;
+            opacity: 0.5; /* Biraz daha görünür yaptım */
+            color: #aaa;
         }
+
         button {
             display: block;
-            background-color: rgba(0,0,0,0.6);
+            /* Buton rengini biraz daha modern bir mavi/gri yaptım */
+            background-color: #37474f; 
             color: white;
             padding: 10px 20px;
             border: none;
             cursor: pointer;
             margin-top: 15px;
+            border-radius: 4px; /* Köşeleri yumuşattım */
+            transition: background 0.3s;
         }
+        
+        button:hover {
+            background-color: #546e7a; /* Hover efekti */
+        }
+
         span.event-name {
             font-size: 18px;
         }
+
         .event-name-title {
             display: block;
             margin-top: 20px;
@@ -89,13 +100,23 @@
             opacity: 0.6;
             margin-top: 30px;
         }
+
+        /* --- ARAMA FORMU DARK MODE --- */
         form.searchForm input[type=text] {
             padding: 10px;
             font-size: 17px;
-            border: 1px solid grey;
+            /* Input arka planı koyu, yazı beyaz */
+            background: #333; 
+            color: white; 
+            border: 1px solid #555;
             float: left;
             width: 80%;
-            background: #f1f1f1;
+            box-sizing: border-box; /* Taşmayı önler */
+        }
+        
+        /* Placeholder rengini açalım */
+        form.searchForm input[type=text]::placeholder {
+            color: #bbb;
         }
 
         form.searchForm button {
@@ -105,10 +126,11 @@
             background: #2196F3;
             color: white;
             font-size: 17px;
-            border: 1px solid grey;
+            border: 1px solid #2196F3;
             border-left: none;
             cursor: pointer;
             margin-top:  0px !important;
+            box-sizing: border-box;
         }
 
         form.searchForm button:hover {
@@ -121,14 +143,29 @@
             display: table;
         }
 
+        /* --- FOOTER DARK MODE --- */
         .stickyFooter {
-          position: fixed;
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          background-color: grey;
-          color: white;
-          text-align: center;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            /* Footer arka planı */
+            background-color: #1a1a1a; 
+            color: #ccc;
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #333;
+        }
+        
+        .stickyFooter a {
+            color: #90caf9; /* Linkleri açık mavi yaptım okunur olsun diye */
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .stickyFooter a:hover {
+            color: #fff;
+            text-decoration: underline;
         }
 
     </style>
@@ -136,13 +173,6 @@
 </head>
 <body>
     <div class="homepage">
-    <!--<div class='fill-screen'><img class='make-it-fit' src='https://ihalilaltun.github.io/at.jpg'></div>
-    <div class='fill-screen'><img class='make-it-fit' src='https://ihalilaltun.github.io/at_2.jpg'></div>-->
-        <!--<form class="searchForm">
-            <input type="text" placeholder="Search.." name="search" id="searchText">
-            <button type="button" id="searchButton"><i class="fa fa-search"></i>Search</button>
-        </form>-->
-
 
         <form class="searchForm" action="/faceted" method="GET">    
             <input type="text" placeholder="Search.." name="keyword" id="searchText">
@@ -151,15 +181,6 @@
 
 <div class="pure-g" style="">
 
-<!--
-        <div class="rec-product seg-col-md-3 pure-u-1-1 pure-u-md-1-2 pure-u-lg-1-4">
-            <div href="https://ihalilaltun.github.io/1-l-le-parfait-jar/" target="_self" title="1 L Le Parfait Jar">
-                <span class="product-images"><img src="https://cdn11.bigcommerce.com/s-uqi8voq94p/images/stencil/500x659/products/93/313/leparfaitmedium1.1435948177.jpg?c=2" title="Orbit Terrarium - Small"></span>
-                <span class="product-title">1 L Le Parfait Jar</span>
-                <button onclick="window.location.href='https://ihalilaltun.github.io/tiered-wire-basket/'">Trigger</button>
-            </div>
-        </div>
--->
         <div class="rec-product seg-col-md-3 pure-u-1-1 pure-u-md-1-2 pure-u-lg-1-4">
             <div href="https://ihalilaltun.github.io/able-brewing-system/" target="_self" title="Able Brewing System">
                 <span class="product-images"><img src="https://m.media-amazon.com/images/I/71q2B3jQqIL._UF350,350_QL80_.jpg" title="Orbit Terrarium - Small"></span>
@@ -184,8 +205,6 @@
             </div>
         </div>
 
-
-
         <div class="rec-product seg-col-md-3 pure-u-1-1 pure-u-md-1-2 pure-u-lg-1-4">
             <div href="https://ihalilaltun.github.io/toys-mrprickle/" target="_self" title="Tiered Wire Basket">
                 <span class="product-images"><img src="https://cdn11.bigcommerce.com/s-5ylnei6or5/images/stencil/500x500/products/1991/5069/2938_MrPricklePants_TS4_40_BFDimensions__75582.1559322115.jpg?c=2" title="MrPrickle Pants"></span>
@@ -194,8 +213,6 @@
             </div>
         </div>
 
-
-
         <div class="rec-product seg-col-md-3 pure-u-1-1 pure-u-md-1-2 pure-u-lg-1-4">
             <div href="https://ihalilaltun.github.io/toys-woddy/" target="_self" title="Tiered Wire Basket">
                 <span class="product-images"><img src="https://cdn11.bigcommerce.com/s-5ylnei6or5/images/stencil/500x500/products/1976/4980/2923_Woddy_TS4_28_BFDimensions__39936.1559247552.jpg?c=2" title="Woddy"></span>
@@ -203,9 +220,6 @@
                 <button onclick="window.location.href='https://ihalilaltun.github.io/toys-woddy/'">Trigger</button>
             </div>
         </div>
-
-
-
 
         <div class="rec-product seg-col-md-3 pure-u-1-1 pure-u-md-1-2 pure-u-lg-1-4">
             <div href="https://ihalilaltun.github.io/toys-slinky/" target="_self" title="Tiered Wire Basket">
@@ -328,7 +342,6 @@
 
 </div>
 
-<!--<script type="text/javascript">var subscribersSiteId='b93570eb-c830-4f21-83bc-5360318795a2';</script><script type="text/javascript" src="https://cdn.subscribers.com/assets/subscribers.js"></script>-->
 <div id = "segmentify-integration-UI" class="segmentify-integration-UI"></div>
 
 <div class="stickyFooter">
@@ -354,3 +367,4 @@
         });
 </script>
 </body>
+</html>
