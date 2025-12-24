@@ -113,13 +113,14 @@
 
                 window.segJquery("#addToBasket").click(function(){
                     Segmentify('basket:add', {productId:"30000-4",quantity:1, price:63.75, nextPage:false});
-
                 });
                 window.segJquery("#removeFromBasket").click(function(){
                     Segmentify('basket:remove', {productId:"30000-4", nextPage:false});
-
                 });
-
+                window.segJquery("#purchase").click(function(){
+                         Segmentify('checkout:purchase', {productList: [{productId: '30000-4', quantity: 1, price: 63.75}],nextPage:false, totalPrice: 63.75});
+         
+                     });
             });
         } else {
             setTimeout(waitSegmentifyAndjQuery, 100);
@@ -129,7 +130,7 @@
 
 
     Segmentify('view:page', {
-          'category': 'Product Page > Toys'
+          'category': 'Product Page'
         });
 
     Segmentify('view:product', {productId:"30000-4",title:"SlinkyDog",url:"https://ihalilaltun.github.io/toys-slinky/",image:"https://cdn11.bigcommerce.com/s-5ylnei6or5/images/stencil/500x500/products/1992/5075/2939_SlinkyDog_TS4_34__25600.1559322214.jpg?c=2",price:63.75,oldPrice:65.50,categories:["Shop", "Toys"],category:"Shop > Toys",inStock:true,brand:"OFS"});
