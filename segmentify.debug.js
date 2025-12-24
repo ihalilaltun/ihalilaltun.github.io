@@ -4,19 +4,19 @@
  * MIT License | (c) Dustin Diaz 2015
  */
 
-!function (root, name, definition) {
+!(function (root, name, definition) {
   /*if (typeof module != 'undefined' && module.exports) module.exports = definition()
   else if (typeof define == 'function' && define.amd) define(name, definition)
-  else*/ root[name] = definition()
-}(this, 'bowser', function () {
+  else*/
+  root[name] = definition();
+})(this, 'bowser', function () {
   /**
    * See useragents.js for examples of navigator.userAgent
    */
 
-  var t = true
+  var t = true;
 
   function detect(ua) {
-
     function getFirstMatch(regex) {
       var match = ua.match(regex);
       return (match && match.length > 1 && match[1]) || '';
@@ -27,349 +27,356 @@
       return (match && match.length > 1 && match[2]) || '';
     }
 
-    var iosdevice = getFirstMatch(/(ipod|iphone|ipad)/i).toLowerCase()
-        , likeAndroid = /like android/i.test(ua)
-        , android = !likeAndroid && /android/i.test(ua)
-        , nexusMobile = /nexus\s*[0-6]\s*/i.test(ua)
-        , nexusTablet = !nexusMobile && /nexus\s*[0-9]+/i.test(ua)
-        , chromeos = /CrOS/.test(ua)
-        , silk = /silk/i.test(ua)
-        , sailfish = /sailfish/i.test(ua)
-        , tizen = /tizen/i.test(ua)
-        , webos = /(web|hpw)os/i.test(ua)
-        , windowsphone = /windows phone/i.test(ua)
-        , samsungBrowser = /SamsungBrowser/i.test(ua)
-        , windows = !windowsphone && /windows/i.test(ua)
-        , mac = !iosdevice && !silk && /macintosh/i.test(ua)
-        , linux = !android && !sailfish && !tizen && !webos && /linux/i.test(ua)
-        , edgeVersion = getSecondMatch(/edg([ea]|ios)\/(\d+(\.\d+)?)/i)
-        , versionIdentifier = getFirstMatch(/version\/(\d+(\.\d+)?)/i)
-        , tablet = /tablet/i.test(ua) && !/tablet pc/i.test(ua)
-        , mobile = !tablet && /[^-]mobi/i.test(ua)
-        , xbox = /xbox/i.test(ua)
-        , result
+    var iosdevice = getFirstMatch(/(ipod|iphone|ipad)/i).toLowerCase(),
+      likeAndroid = /like android/i.test(ua),
+      android = !likeAndroid && /android/i.test(ua),
+      nexusMobile = /nexus\s*[0-6]\s*/i.test(ua),
+      nexusTablet = !nexusMobile && /nexus\s*[0-9]+/i.test(ua),
+      chromeos = /CrOS/.test(ua),
+      silk = /silk/i.test(ua),
+      sailfish = /sailfish/i.test(ua),
+      tizen = /tizen/i.test(ua),
+      webos = /(web|hpw)os/i.test(ua),
+      windowsphone = /windows phone/i.test(ua),
+      samsungBrowser = /SamsungBrowser/i.test(ua),
+      windows = !windowsphone && /windows/i.test(ua),
+      mac = !iosdevice && !silk && /macintosh/i.test(ua),
+      linux = !android && !sailfish && !tizen && !webos && /linux/i.test(ua),
+      edgeVersion = getSecondMatch(/edg([ea]|ios)\/(\d+(\.\d+)?)/i),
+      versionIdentifier = getFirstMatch(/version\/(\d+(\.\d+)?)/i),
+      tablet = /tablet/i.test(ua) && !/tablet pc/i.test(ua),
+      mobile = !tablet && /[^-]mobi/i.test(ua),
+      xbox = /xbox/i.test(ua),
+      result;
 
     if (/opera/i.test(ua)) {
       //  an old Opera
       result = {
-        name: 'Opera'
-        , opera: t
-        , version: versionIdentifier || getFirstMatch(/(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i)
-      }
+        name: 'Opera',
+        opera: t,
+        version:
+          versionIdentifier ||
+          getFirstMatch(/(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i),
+      };
     } else if (/opr\/|opios/i.test(ua)) {
       // a new Opera
       result = {
-        name: 'Opera'
-        , opera: t
-        , version: getFirstMatch(/(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) || versionIdentifier
-      }
-    }
-    else if (/SamsungBrowser/i.test(ua)) {
+        name: 'Opera',
+        opera: t,
+        version:
+          getFirstMatch(/(?:opr|opios)[\s\/](\d+(\.\d+)?)/i) ||
+          versionIdentifier,
+      };
+    } else if (/SamsungBrowser/i.test(ua)) {
       result = {
-        name: 'Samsung Internet for Android'
-        , samsungBrowser: t
-        , version: versionIdentifier || getFirstMatch(/(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/coast/i.test(ua)) {
+        name: 'Samsung Internet for Android',
+        samsungBrowser: t,
+        version:
+          versionIdentifier ||
+          getFirstMatch(/(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i),
+      };
+    } else if (/coast/i.test(ua)) {
       result = {
-        name: 'Opera Coast'
-        , coast: t
-        , version: versionIdentifier || getFirstMatch(/(?:coast)[\s\/](\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/yabrowser/i.test(ua)) {
+        name: 'Opera Coast',
+        coast: t,
+        version:
+          versionIdentifier || getFirstMatch(/(?:coast)[\s\/](\d+(\.\d+)?)/i),
+      };
+    } else if (/yabrowser/i.test(ua)) {
       result = {
-        name: 'Yandex Browser'
-        , yandexbrowser: t
-        , version: versionIdentifier || getFirstMatch(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/ucbrowser/i.test(ua)) {
+        name: 'Yandex Browser',
+        yandexbrowser: t,
+        version:
+          versionIdentifier ||
+          getFirstMatch(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i),
+      };
+    } else if (/ucbrowser/i.test(ua)) {
       result = {
-        name: 'UC Browser'
-        , ucbrowser: t
-        , version: getFirstMatch(/(?:ucbrowser)[\s\/](\d+(?:\.\d+)+)/i)
-      }
-    }
-    else if (/mxios/i.test(ua)) {
+        name: 'UC Browser',
+        ucbrowser: t,
+        version: getFirstMatch(/(?:ucbrowser)[\s\/](\d+(?:\.\d+)+)/i),
+      };
+    } else if (/mxios/i.test(ua)) {
       result = {
-        name: 'Maxthon'
-        , maxthon: t
-        , version: getFirstMatch(/(?:mxios)[\s\/](\d+(?:\.\d+)+)/i)
-      }
-    }
-    else if (/epiphany/i.test(ua)) {
+        name: 'Maxthon',
+        maxthon: t,
+        version: getFirstMatch(/(?:mxios)[\s\/](\d+(?:\.\d+)+)/i),
+      };
+    } else if (/epiphany/i.test(ua)) {
       result = {
-        name: 'Epiphany'
-        , epiphany: t
-        , version: getFirstMatch(/(?:epiphany)[\s\/](\d+(?:\.\d+)+)/i)
-      }
-    }
-    else if (/puffin/i.test(ua)) {
+        name: 'Epiphany',
+        epiphany: t,
+        version: getFirstMatch(/(?:epiphany)[\s\/](\d+(?:\.\d+)+)/i),
+      };
+    } else if (/puffin/i.test(ua)) {
       result = {
-        name: 'Puffin'
-        , puffin: t
-        , version: getFirstMatch(/(?:puffin)[\s\/](\d+(?:\.\d+)?)/i)
-      }
-    }
-    else if (/sleipnir/i.test(ua)) {
+        name: 'Puffin',
+        puffin: t,
+        version: getFirstMatch(/(?:puffin)[\s\/](\d+(?:\.\d+)?)/i),
+      };
+    } else if (/sleipnir/i.test(ua)) {
       result = {
-        name: 'Sleipnir'
-        , sleipnir: t
-        , version: getFirstMatch(/(?:sleipnir)[\s\/](\d+(?:\.\d+)+)/i)
-      }
-    }
-    else if (/k-meleon/i.test(ua)) {
+        name: 'Sleipnir',
+        sleipnir: t,
+        version: getFirstMatch(/(?:sleipnir)[\s\/](\d+(?:\.\d+)+)/i),
+      };
+    } else if (/k-meleon/i.test(ua)) {
       result = {
-        name: 'K-Meleon'
-        , kMeleon: t
-        , version: getFirstMatch(/(?:k-meleon)[\s\/](\d+(?:\.\d+)+)/i)
-      }
-    }
-    else if (windowsphone) {
+        name: 'K-Meleon',
+        kMeleon: t,
+        version: getFirstMatch(/(?:k-meleon)[\s\/](\d+(?:\.\d+)+)/i),
+      };
+    } else if (windowsphone) {
       result = {
-        name: 'Windows Phone'
-        , osname: 'Windows Phone'
-        , windowsphone: t
-      }
+        name: 'Windows Phone',
+        osname: 'Windows Phone',
+        windowsphone: t,
+      };
       if (edgeVersion) {
-        result.msedge = t
-        result.version = edgeVersion
+        result.msedge = t;
+        result.version = edgeVersion;
+      } else {
+        result.msie = t;
+        result.version = getFirstMatch(/iemobile\/(\d+(\.\d+)?)/i);
       }
-      else {
-        result.msie = t
-        result.version = getFirstMatch(/iemobile\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/msie|trident/i.test(ua)) {
+    } else if (/msie|trident/i.test(ua)) {
       result = {
-        name: 'Internet Explorer'
-        , msie: t
-        , version: getFirstMatch(/(?:msie |rv:)(\d+(\.\d+)?)/i)
-      }
+        name: 'Internet Explorer',
+        msie: t,
+        version: getFirstMatch(/(?:msie |rv:)(\d+(\.\d+)?)/i),
+      };
     } else if (chromeos) {
       result = {
-        name: 'Chrome'
-        , osname: 'Chrome OS'
-        , chromeos: t
-        , chromeBook: t
-        , chrome: t
-        , version: getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)
-      }
+        name: 'Chrome',
+        osname: 'Chrome OS',
+        chromeos: t,
+        chromeBook: t,
+        chrome: t,
+        version: getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
+      };
     } else if (/edg([ea]|ios)/i.test(ua)) {
       result = {
-        name: 'Microsoft Edge'
-        , msedge: t
-        , version: edgeVersion
-      }
-    }
-    else if (/vivaldi/i.test(ua)) {
+        name: 'Microsoft Edge',
+        msedge: t,
+        version: edgeVersion,
+      };
+    } else if (/vivaldi/i.test(ua)) {
       result = {
-        name: 'Vivaldi'
-        , vivaldi: t
-        , version: getFirstMatch(/vivaldi\/(\d+(\.\d+)?)/i) || versionIdentifier
-      }
-    }
-    else if (sailfish) {
+        name: 'Vivaldi',
+        vivaldi: t,
+        version: getFirstMatch(/vivaldi\/(\d+(\.\d+)?)/i) || versionIdentifier,
+      };
+    } else if (sailfish) {
       result = {
-        name: 'Sailfish'
-        , osname: 'Sailfish OS'
-        , sailfish: t
-        , version: getFirstMatch(/sailfish\s?browser\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/seamonkey\//i.test(ua)) {
+        name: 'Sailfish',
+        osname: 'Sailfish OS',
+        sailfish: t,
+        version: getFirstMatch(/sailfish\s?browser\/(\d+(\.\d+)?)/i),
+      };
+    } else if (/seamonkey\//i.test(ua)) {
       result = {
-        name: 'SeaMonkey'
-        , seamonkey: t
-        , version: getFirstMatch(/seamonkey\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/firefox|iceweasel|fxios/i.test(ua)) {
+        name: 'SeaMonkey',
+        seamonkey: t,
+        version: getFirstMatch(/seamonkey\/(\d+(\.\d+)?)/i),
+      };
+    } else if (/firefox|iceweasel|fxios/i.test(ua)) {
       result = {
-        name: 'Firefox'
-        , firefox: t
-        , version: getFirstMatch(/(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i)
-      }
+        name: 'Firefox',
+        firefox: t,
+        version: getFirstMatch(
+          /(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i,
+        ),
+      };
       if (/\((mobile|tablet);[^\)]*rv:[\d\.]+\)/i.test(ua)) {
-        result.firefoxos = t
-        result.osname = 'Firefox OS'
+        result.firefoxos = t;
+        result.osname = 'Firefox OS';
       }
-    }
-    else if (silk) {
-      result =  {
-        name: 'Amazon Silk'
-        , silk: t
-        , version : getFirstMatch(/silk\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/phantom/i.test(ua)) {
+    } else if (silk) {
       result = {
-        name: 'PhantomJS'
-        , phantom: t
-        , version: getFirstMatch(/phantomjs\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/slimerjs/i.test(ua)) {
-      result = {
-        name: 'SlimerJS'
-        , slimer: t
-        , version: getFirstMatch(/slimerjs\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (/blackberry|\bbb\d+/i.test(ua) || /rim\stablet/i.test(ua)) {
-      result = {
-        name: 'BlackBerry'
-        , osname: 'BlackBerry OS'
-        , blackberry: t
-        , version: versionIdentifier || getFirstMatch(/blackberry[\d]+\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (webos) {
-      result = {
-        name: 'WebOS'
-        , osname: 'WebOS'
-        , webos: t
-        , version: versionIdentifier || getFirstMatch(/w(?:eb)?osbrowser\/(\d+(\.\d+)?)/i)
+        name: 'Amazon Silk',
+        silk: t,
+        version: getFirstMatch(/silk\/(\d+(\.\d+)?)/i),
       };
-      /touchpad\//i.test(ua) && (result.touchpad = t)
-    }
-    else if (/bada/i.test(ua)) {
+    } else if (/phantom/i.test(ua)) {
       result = {
-        name: 'Bada'
-        , osname: 'Bada'
-        , bada: t
-        , version: getFirstMatch(/dolfin\/(\d+(\.\d+)?)/i)
+        name: 'PhantomJS',
+        phantom: t,
+        version: getFirstMatch(/phantomjs\/(\d+(\.\d+)?)/i),
       };
-    }
-    else if (tizen) {
+    } else if (/slimerjs/i.test(ua)) {
       result = {
-        name: 'Tizen'
-        , osname: 'Tizen'
-        , tizen: t
-        , version: getFirstMatch(/(?:tizen\s?)?browser\/(\d+(\.\d+)?)/i) || versionIdentifier
+        name: 'SlimerJS',
+        slimer: t,
+        version: getFirstMatch(/slimerjs\/(\d+(\.\d+)?)/i),
       };
-    }
-    else if (/qupzilla/i.test(ua)) {
+    } else if (/blackberry|\bbb\d+/i.test(ua) || /rim\stablet/i.test(ua)) {
       result = {
-        name: 'QupZilla'
-        , qupzilla: t
-        , version: getFirstMatch(/(?:qupzilla)[\s\/](\d+(?:\.\d+)+)/i) || versionIdentifier
-      }
-    }
-    else if (/chromium/i.test(ua)) {
+        name: 'BlackBerry',
+        osname: 'BlackBerry OS',
+        blackberry: t,
+        version:
+          versionIdentifier || getFirstMatch(/blackberry[\d]+\/(\d+(\.\d+)?)/i),
+      };
+    } else if (webos) {
       result = {
-        name: 'Chromium'
-        , chromium: t
-        , version: getFirstMatch(/(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) || versionIdentifier
-      }
-    }
-    else if (/chrome|crios|crmo/i.test(ua)) {
+        name: 'WebOS',
+        osname: 'WebOS',
+        webos: t,
+        version:
+          versionIdentifier ||
+          getFirstMatch(/w(?:eb)?osbrowser\/(\d+(\.\d+)?)/i),
+      };
+      /touchpad\//i.test(ua) && (result.touchpad = t);
+    } else if (/bada/i.test(ua)) {
       result = {
-        name: 'Chrome'
-        , chrome: t
-        , version: getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)
-      }
-    }
-    else if (android) {
+        name: 'Bada',
+        osname: 'Bada',
+        bada: t,
+        version: getFirstMatch(/dolfin\/(\d+(\.\d+)?)/i),
+      };
+    } else if (tizen) {
       result = {
-        name: 'Android'
-        , version: versionIdentifier
-      }
-    }
-    else if (/safari|applewebkit/i.test(ua)) {
+        name: 'Tizen',
+        osname: 'Tizen',
+        tizen: t,
+        version:
+          getFirstMatch(/(?:tizen\s?)?browser\/(\d+(\.\d+)?)/i) ||
+          versionIdentifier,
+      };
+    } else if (/qupzilla/i.test(ua)) {
       result = {
-        name: 'Safari'
-        , safari: t
-      }
+        name: 'QupZilla',
+        qupzilla: t,
+        version:
+          getFirstMatch(/(?:qupzilla)[\s\/](\d+(?:\.\d+)+)/i) ||
+          versionIdentifier,
+      };
+    } else if (/chromium/i.test(ua)) {
+      result = {
+        name: 'Chromium',
+        chromium: t,
+        version:
+          getFirstMatch(/(?:chromium)[\s\/](\d+(?:\.\d+)?)/i) ||
+          versionIdentifier,
+      };
+    } else if (/chrome|crios|crmo/i.test(ua)) {
+      result = {
+        name: 'Chrome',
+        chrome: t,
+        version: getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i),
+      };
+    } else if (android) {
+      result = {
+        name: 'Android',
+        version: versionIdentifier,
+      };
+    } else if (/safari|applewebkit/i.test(ua)) {
+      result = {
+        name: 'Safari',
+        safari: t,
+      };
       if (versionIdentifier) {
-        result.version = versionIdentifier
+        result.version = versionIdentifier;
       }
-    }
-    else if (iosdevice) {
+    } else if (iosdevice) {
       result = {
-        name : iosdevice == 'iphone' ? 'iPhone' : iosdevice == 'ipad' ? 'iPad' : 'iPod'
-      }
+        name:
+          iosdevice == 'iphone'
+            ? 'iPhone'
+            : iosdevice == 'ipad'
+              ? 'iPad'
+              : 'iPod',
+      };
       // WTF: version is not part of user agent in web apps
       if (versionIdentifier) {
-        result.version = versionIdentifier
+        result.version = versionIdentifier;
       }
-    }
-    else if(/googlebot/i.test(ua)) {
+    } else if (/googlebot/i.test(ua)) {
       result = {
-        name: 'Googlebot'
-        , googlebot: t
-        , version: getFirstMatch(/googlebot\/(\d+(\.\d+))/i) || versionIdentifier
-      }
-    }
-    else {
+        name: 'Googlebot',
+        googlebot: t,
+        version: getFirstMatch(/googlebot\/(\d+(\.\d+))/i) || versionIdentifier,
+      };
+    } else {
       result = {
         name: getFirstMatch(/^(.*)\/(.*) /),
-        version: getSecondMatch(/^(.*)\/(.*) /)
+        version: getSecondMatch(/^(.*)\/(.*) /),
       };
     }
 
     // set webkit or gecko flag for browsers based on these engines
     if (!result.msedge && /(apple)?webkit/i.test(ua)) {
       if (/(apple)?webkit\/537\.36/i.test(ua)) {
-        result.name = result.name || "Blink"
-        result.blink = t
+        result.name = result.name || 'Blink';
+        result.blink = t;
       } else {
-        result.name = result.name || "Webkit"
-        result.webkit = t
+        result.name = result.name || 'Webkit';
+        result.webkit = t;
       }
       if (!result.version && versionIdentifier) {
-        result.version = versionIdentifier
+        result.version = versionIdentifier;
       }
     } else if (!result.opera && /gecko\//i.test(ua)) {
-      result.name = result.name || "Gecko"
-      result.gecko = t
-      result.version = result.version || getFirstMatch(/gecko\/(\d+(\.\d+)?)/i)
+      result.name = result.name || 'Gecko';
+      result.gecko = t;
+      result.version = result.version || getFirstMatch(/gecko\/(\d+(\.\d+)?)/i);
     }
 
     // set OS flags for platforms that have multiple browsers
     if (!result.windowsphone && (android || result.silk)) {
-      result.android = t
-      result.osname = 'Android'
+      result.android = t;
+      result.osname = 'Android';
     } else if (!result.windowsphone && iosdevice) {
-      result[iosdevice] = t
-      result.ios = t
-      result.osname = 'iOS'
+      result[iosdevice] = t;
+      result.ios = t;
+      result.osname = 'iOS';
     } else if (mac) {
-      result.mac = t
-      result.osname = 'macOS'
+      result.mac = t;
+      result.osname = 'macOS';
     } else if (xbox) {
-      result.xbox = t
-      result.osname = 'Xbox'
+      result.xbox = t;
+      result.osname = 'Xbox';
     } else if (windows) {
-      result.windows = t
-      result.osname = 'Windows'
+      result.windows = t;
+      result.osname = 'Windows';
     } else if (linux) {
-      result.linux = t
-      result.osname = 'Linux'
+      result.linux = t;
+      result.osname = 'Linux';
     }
 
-    function getWindowsVersion (s) {
+    function getWindowsVersion(s) {
       switch (s) {
-        case 'NT': return 'NT'
-        case 'XP': return 'XP'
-        case 'NT 5.0': return '2000'
-        case 'NT 5.1': return 'XP'
-        case 'NT 5.2': return '2003'
-        case 'NT 6.0': return 'Vista'
-        case 'NT 6.1': return '7'
-        case 'NT 6.2': return '8'
-        case 'NT 6.3': return '8.1'
-        case 'NT 10.0': return '10'
-        default: return undefined
+        case 'NT':
+          return 'NT';
+        case 'XP':
+          return 'XP';
+        case 'NT 5.0':
+          return '2000';
+        case 'NT 5.1':
+          return 'XP';
+        case 'NT 5.2':
+          return '2003';
+        case 'NT 6.0':
+          return 'Vista';
+        case 'NT 6.1':
+          return '7';
+        case 'NT 6.2':
+          return '8';
+        case 'NT 6.3':
+          return '8.1';
+        case 'NT 10.0':
+          return '10';
+        default:
+          return undefined;
       }
     }
 
     // OS version extraction
     var osVersion = '';
     if (result.windows) {
-      osVersion = getWindowsVersion(getFirstMatch(/Windows ((NT|XP)( \d\d?.\d)?)/i))
+      osVersion = getWindowsVersion(
+        getFirstMatch(/Windows ((NT|XP)( \d\d?.\d)?)/i),
+      );
     } else if (result.windowsphone) {
       osVersion = getFirstMatch(/windows phone (?:os)?\s?(\d+(\.\d+)*)/i);
     } else if (result.mac) {
@@ -396,70 +403,73 @@
     // device type extraction
     var osMajorVersion = !result.windows && osVersion.split('.')[0];
     if (
-        tablet
-        || nexusTablet
-        || iosdevice == 'ipad'
-        || (android && (osMajorVersion == 3 || (osMajorVersion >= 4 && !mobile)))
-        || result.silk
+      tablet ||
+      nexusTablet ||
+      iosdevice == 'ipad' ||
+      (android && (osMajorVersion == 3 || (osMajorVersion >= 4 && !mobile))) ||
+      result.silk
     ) {
-      result.tablet = t
+      result.tablet = t;
     } else if (
-        mobile
-        || iosdevice == 'iphone'
-        || iosdevice == 'ipod'
-        || android
-        || nexusMobile
-        || result.blackberry
-        || result.webos
-        || result.bada
+      mobile ||
+      iosdevice == 'iphone' ||
+      iosdevice == 'ipod' ||
+      android ||
+      nexusMobile ||
+      result.blackberry ||
+      result.webos ||
+      result.bada
     ) {
-      result.mobile = t
+      result.mobile = t;
     }
 
     // Graded Browser Support
     // http://developer.yahoo.com/yui/articles/gbs
-    if (result.msedge ||
-        (result.msie && result.version >= 10) ||
-        (result.yandexbrowser && result.version >= 15) ||
-        (result.vivaldi && result.version >= 1.0) ||
-        (result.chrome && result.version >= 20) ||
-        (result.samsungBrowser && result.version >= 4) ||
-        (result.firefox && result.version >= 20.0) ||
-        (result.safari && result.version >= 6) ||
-        (result.opera && result.version >= 10.0) ||
-        (result.ios && result.osversion && result.osversion.split(".")[0] >= 6) ||
-        (result.blackberry && result.version >= 10.1)
-        || (result.chromium && result.version >= 20)
+    if (
+      result.msedge ||
+      (result.msie && result.version >= 10) ||
+      (result.yandexbrowser && result.version >= 15) ||
+      (result.vivaldi && result.version >= 1.0) ||
+      (result.chrome && result.version >= 20) ||
+      (result.samsungBrowser && result.version >= 4) ||
+      (result.firefox && result.version >= 20.0) ||
+      (result.safari && result.version >= 6) ||
+      (result.opera && result.version >= 10.0) ||
+      (result.ios && result.osversion && result.osversion.split('.')[0] >= 6) ||
+      (result.blackberry && result.version >= 10.1) ||
+      (result.chromium && result.version >= 20)
     ) {
       result.a = t;
-    }
-    else if ((result.msie && result.version < 10) ||
-        (result.chrome && result.version < 20) ||
-        (result.firefox && result.version < 20.0) ||
-        (result.safari && result.version < 6) ||
-        (result.opera && result.version < 10.0) ||
-        (result.ios && result.osversion && result.osversion.split(".")[0] < 6)
-        || (result.chromium && result.version < 20)
+    } else if (
+      (result.msie && result.version < 10) ||
+      (result.chrome && result.version < 20) ||
+      (result.firefox && result.version < 20.0) ||
+      (result.safari && result.version < 6) ||
+      (result.opera && result.version < 10.0) ||
+      (result.ios && result.osversion && result.osversion.split('.')[0] < 6) ||
+      (result.chromium && result.version < 20)
     ) {
-      result.c = t
-    } else result.x = t
+      result.c = t;
+    } else result.x = t;
 
-    return result
+    return result;
   }
 
-  var bowser = detect(typeof navigator !== 'undefined' ? navigator.userAgent || '' : '')
+  var bowser = detect(
+    typeof navigator !== 'undefined' ? navigator.userAgent || '' : '',
+  );
 
   bowser.test = function (browserList) {
     for (var i = 0; i < browserList.length; ++i) {
       var browserItem = browserList[i];
-      if (typeof browserItem=== 'string') {
+      if (typeof browserItem === 'string') {
         if (browserItem in bowser) {
           return true;
         }
       }
     }
     return false;
-  }
+  };
 
   /**
    * Get version precisions count
@@ -471,7 +481,7 @@
    * @return {number}
    */
   function getVersionPrecision(version) {
-    return version.split(".").length;
+    return version.split('.').length;
   }
 
   /**
@@ -482,7 +492,8 @@
    * @return {Array}
    */
   function map(arr, iterator) {
-    var result = [], i;
+    var result = [],
+      i;
     if (Array.prototype.map) {
       return Array.prototype.map.call(arr, iterator);
     }
@@ -506,16 +517,19 @@
    */
   function compareVersions(versions) {
     // 1) get common precision for both versions, for example for "10.0" and "9" it should be 2
-    var precision = Math.max(getVersionPrecision(versions[0]), getVersionPrecision(versions[1]));
+    var precision = Math.max(
+      getVersionPrecision(versions[0]),
+      getVersionPrecision(versions[1]),
+    );
     var chunks = map(versions, function (version) {
       var delta = precision - getVersionPrecision(version);
 
       // 2) "9" -> "9.0" (for precision = 2)
-      version = version + new Array(delta + 1).join(".0");
+      version = version + new Array(delta + 1).join('.0');
 
       // 3) "9.0" -> ["000000000"", "000000009"]
-      return map(version.split("."), function (chunk) {
-        return new Array(20 - chunk.length).join("0") + chunk;
+      return map(version.split('.'), function (chunk) {
+        return new Array(20 - chunk.length).join('0') + chunk;
       }).reverse();
     });
 
@@ -524,14 +538,12 @@
       // 4) compare: "000000009" > "000000010" = false (but "9" > "10" = true)
       if (chunks[0][precision] > chunks[1][precision]) {
         return 1;
-      }
-      else if (chunks[0][precision] === chunks[1][precision]) {
+      } else if (chunks[0][precision] === chunks[1][precision]) {
         if (precision === 0) {
           // all version chunks are same
           return 0;
         }
-      }
-      else {
+      } else {
         return -1;
       }
     }
@@ -561,22 +573,27 @@
     // make strictMode param optional with ua param usage
     if (typeof strictMode === 'string') {
       ua = strictMode;
-      strictMode = void(0);
+      strictMode = void 0;
     }
 
-    if (strictMode === void(0)) {
+    if (strictMode === void 0) {
       strictMode = false;
     }
     if (ua) {
       _bowser = detect(ua);
     }
 
-    var version = "" + _bowser.version;
+    var version = '' + _bowser.version;
     for (var browser in minVersions) {
       if (minVersions.hasOwnProperty(browser)) {
         if (_bowser[browser]) {
           if (typeof minVersions[browser] !== 'string') {
-            throw new Error('Browser version in the minVersion map should be a string: ' + browser + ': ' + String(minVersions));
+            throw new Error(
+              'Browser version in the minVersion map should be a string: ' +
+                browser +
+                ': ' +
+                String(minVersions),
+            );
           }
 
           // browser version and min supported version.
@@ -611,7 +628,7 @@
    */
   bowser._detect = detect;
 
-  return bowser
+  return bowser;
 });
 
 /*!
@@ -620,11 +637,13 @@
  */
 function initializeMustache(mustache) {
   var objectToString = Object.prototype.toString;
-  var isArray = Array.isArray || function isArrayPolyfill (object) {
-    return objectToString.call(object) === '[object Array]';
-  };
+  var isArray =
+    Array.isArray ||
+    function isArrayPolyfill(object) {
+      return objectToString.call(object) === '[object Array]';
+    };
 
-  function isFunction (object) {
+  function isFunction(object) {
     return typeof object === 'function';
   }
 
@@ -632,11 +651,11 @@ function initializeMustache(mustache) {
    * More correct typeof string handling array
    * which normally returns typeof 'object'
    */
-  function typeStr (obj) {
+  function typeStr(obj) {
     return isArray(obj) ? 'array' : typeof obj;
   }
 
-  function escapeRegExp (string) {
+  function escapeRegExp(string) {
     return string.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
   }
 
@@ -644,19 +663,21 @@ function initializeMustache(mustache) {
    * Null safe way of checking whether or not an object,
    * including its prototype, has a given property
    */
-  function hasProperty (obj, propName) {
-    return obj != null && typeof obj === 'object' && (propName in obj);
+  function hasProperty(obj, propName) {
+    return obj != null && typeof obj === 'object' && propName in obj;
   }
 
   // Workaround for https://issues.apache.org/jira/browse/COUCHDB-577
   // See https://github.com/janl/mustache.js/issues/189
   var regExpTest = RegExp.prototype.test;
-  function testRegExp (re, string) {
+
+  function testRegExp(re, string) {
     return regExpTest.call(re, string);
   }
 
   var nonSpaceRe = /\S/;
-  function isWhitespace (string) {
+
+  function isWhitespace(string) {
     return !testRegExp(nonSpaceRe, string);
   }
 
@@ -668,11 +689,11 @@ function initializeMustache(mustache) {
     "'": '&#39;',
     '/': '&#x2F;',
     '`': '&#x60;',
-    '=': '&#x3D;'
+    '=': '&#x3D;',
   };
 
-  function escapeHtml (string) {
-    return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap (s) {
+  function escapeHtml(string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap(s) {
       return entityMap[s];
     });
   }
@@ -705,22 +726,20 @@ function initializeMustache(mustache) {
    * array of tokens in the subtree and 2) the index in the original template at
    * which the closing tag for that section begins.
    */
-  function parseTemplate (template, tags) {
-    if (!template)
-      return [];
+  function parseTemplate(template, tags) {
+    if (!template) return [];
 
-    var sections = [];     // Stack to hold section tokens
-    var tokens = [];       // Buffer to hold the tokens
-    var spaces = [];       // Indices of whitespace tokens on the current line
-    var hasTag = false;    // Is there a {{tag}} on the current line?
-    var nonSpace = false;  // Is there a non-space char on the current line?
+    var sections = []; // Stack to hold section tokens
+    var tokens = []; // Buffer to hold the tokens
+    var spaces = []; // Indices of whitespace tokens on the current line
+    var hasTag = false; // Is there a {{tag}} on the current line?
+    var nonSpace = false; // Is there a non-space char on the current line?
 
     // Strips all whitespace tokens array for the current line
     // if there was a {{#tag}} on it and otherwise only space.
-    function stripSpace () {
+    function stripSpace() {
       if (hasTag && !nonSpace) {
-        while (spaces.length)
-          delete tokens[spaces.pop()];
+        while (spaces.length) delete tokens[spaces.pop()];
       } else {
         spaces = [];
       }
@@ -730,7 +749,8 @@ function initializeMustache(mustache) {
     }
 
     var openingTagRe, closingTagRe, closingCurlyRe;
-    function compileTags (tagsToCompile) {
+
+    function compileTags(tagsToCompile) {
       if (typeof tagsToCompile === 'string')
         tagsToCompile = tagsToCompile.split(spaceRe, 2);
 
@@ -739,7 +759,9 @@ function initializeMustache(mustache) {
 
       openingTagRe = new RegExp(escapeRegExp(tagsToCompile[0]) + '\\s*');
       closingTagRe = new RegExp('\\s*' + escapeRegExp(tagsToCompile[1]));
-      closingCurlyRe = new RegExp('\\s*' + escapeRegExp('}' + tagsToCompile[1]));
+      closingCurlyRe = new RegExp(
+        '\\s*' + escapeRegExp('}' + tagsToCompile[1]),
+      );
     }
 
     compileTags(tags || mustache.tags);
@@ -763,18 +785,16 @@ function initializeMustache(mustache) {
             nonSpace = true;
           }
 
-          tokens.push([ 'text', chr, start, start + 1 ]);
+          tokens.push(['text', chr, start, start + 1]);
           start += 1;
 
           // Check for whitespace on the current line.
-          if (chr === '\n')
-            stripSpace();
+          if (chr === '\n') stripSpace();
         }
       }
 
       // Match the opening tag.
-      if (!scanner.scan(openingTagRe))
-        break;
+      if (!scanner.scan(openingTagRe)) break;
 
       hasTag = true;
 
@@ -800,7 +820,7 @@ function initializeMustache(mustache) {
       if (!scanner.scan(closingTagRe))
         throw new Error('Unclosed tag at ' + scanner.pos);
 
-      token = [ type, value, start, scanner.pos ];
+      token = [type, value, start, scanner.pos];
       tokens.push(token);
 
       if (type === '#' || type === '^') {
@@ -813,7 +833,9 @@ function initializeMustache(mustache) {
           throw new Error('Unopened section "' + value + '" at ' + start);
 
         if (openSection[1] !== value)
-          throw new Error('Unclosed section "' + openSection[1] + '" at ' + start);
+          throw new Error(
+            'Unclosed section "' + openSection[1] + '" at ' + start,
+          );
       } else if (type === 'name' || type === '{' || type === '&') {
         nonSpace = true;
       } else if (type === '=') {
@@ -826,7 +848,9 @@ function initializeMustache(mustache) {
     openSection = sections.pop();
 
     if (openSection)
-      throw new Error('Unclosed section "' + openSection[1] + '" at ' + scanner.pos);
+      throw new Error(
+        'Unclosed section "' + openSection[1] + '" at ' + scanner.pos,
+      );
 
     return nestTokens(squashTokens(tokens));
   }
@@ -835,7 +859,7 @@ function initializeMustache(mustache) {
    * Combines the values of consecutive text tokens in the given `tokens` array
    * to a single token.
    */
-  function squashTokens (tokens) {
+  function squashTokens(tokens) {
     var squashedTokens = [];
 
     var token, lastToken;
@@ -862,7 +886,7 @@ function initializeMustache(mustache) {
    * all tokens that appear in that section and 2) the index in the original
    * template that represents the end of that section.
    */
-  function nestTokens (tokens) {
+  function nestTokens(tokens) {
     var nestedTokens = [];
     var collector = nestedTokens;
     var sections = [];
@@ -881,7 +905,10 @@ function initializeMustache(mustache) {
         case '/':
           section = sections.pop();
           section[5] = token[2];
-          collector = sections.length > 0 ? sections[sections.length - 1][4] : nestedTokens;
+          collector =
+            sections.length > 0
+              ? sections[sections.length - 1][4]
+              : nestedTokens;
           break;
         default:
           collector.push(token);
@@ -895,7 +922,7 @@ function initializeMustache(mustache) {
    * A simple string scanner that is used by the template parser to find
    * tokens in template strings.
    */
-  function Scanner (string) {
+  function Scanner(string) {
     this.string = string;
     this.tail = string;
     this.pos = 0;
@@ -904,7 +931,7 @@ function initializeMustache(mustache) {
   /**
    * Returns `true` if the tail is empty (end of string).
    */
-  Scanner.prototype.eos = function eos () {
+  Scanner.prototype.eos = function eos() {
     return this.tail === '';
   };
 
@@ -912,11 +939,10 @@ function initializeMustache(mustache) {
    * Tries to match the given regular expression at the current position.
    * Returns the matched text if it can match, the empty string otherwise.
    */
-  Scanner.prototype.scan = function scan (re) {
+  Scanner.prototype.scan = function scan(re) {
     var match = this.tail.match(re);
 
-    if (!match || match.index !== 0)
-      return '';
+    if (!match || match.index !== 0) return '';
 
     var string = match[0];
 
@@ -930,8 +956,9 @@ function initializeMustache(mustache) {
    * Skips all text until the given regular expression can be matched. Returns
    * the skipped string, which is the entire tail if no match can be made.
    */
-  Scanner.prototype.scanUntil = function scanUntil (re) {
-    var index = this.tail.search(re), match;
+  Scanner.prototype.scanUntil = function scanUntil(re) {
+    var index = this.tail.search(re),
+      match;
 
     switch (index) {
       case -1:
@@ -955,7 +982,7 @@ function initializeMustache(mustache) {
    * Represents a rendering context by wrapping a view object and
    * maintaining a reference to the parent context.
    */
-  function Context (view, parentContext) {
+  function Context(view, parentContext) {
     this.view = view;
     this.cache = { '.': this.view };
     this.parent = parentContext;
@@ -965,7 +992,7 @@ function initializeMustache(mustache) {
    * Creates a new context using the given view with this context
    * as the parent.
    */
-  Context.prototype.push = function push (view) {
+  Context.prototype.push = function push(view) {
     return new Context(view, this);
   };
 
@@ -973,14 +1000,17 @@ function initializeMustache(mustache) {
    * Returns the value of the given name in this context, traversing
    * up the context hierarchy if the value is absent in this context's view.
    */
-  Context.prototype.lookup = function lookup (name) {
+  Context.prototype.lookup = function lookup(name) {
     var cache = this.cache;
 
     var value;
     if (cache.hasOwnProperty(name)) {
       value = cache[name];
     } else {
-      var context = this, names, index, lookupHit = false;
+      var context = this,
+        names,
+        index,
+        lookupHit = false;
 
       while (context) {
         if (name.indexOf('.') > 0) {
@@ -1010,8 +1040,7 @@ function initializeMustache(mustache) {
           lookupHit = hasProperty(context.view, name);
         }
 
-        if (lookupHit)
-          break;
+        if (lookupHit) break;
 
         context = context.parent;
       }
@@ -1019,8 +1048,7 @@ function initializeMustache(mustache) {
       cache[name] = value;
     }
 
-    if (isFunction(value))
-      value = value.call(this.view);
+    if (isFunction(value)) value = value.call(this.view);
 
     return value;
   };
@@ -1030,14 +1058,14 @@ function initializeMustache(mustache) {
    * string, given a context. It also maintains a cache of templates to
    * avoid the need to parse the same template twice.
    */
-  function Writer () {
+  function Writer() {
     this.cache = {};
   }
 
   /**
    * Clears all cached templates in this writer.
    */
-  Writer.prototype.clearCache = function clearCache () {
+  Writer.prototype.clearCache = function clearCache() {
     this.cache = {};
   };
 
@@ -1045,7 +1073,7 @@ function initializeMustache(mustache) {
    * Parses and caches the given `template` and returns the array of tokens
    * that is generated from the parse.
    */
-  Writer.prototype.parse = function parse (template, tags) {
+  Writer.prototype.parse = function parse(template, tags) {
     var cache = this.cache;
     var tokens = cache[template];
 
@@ -1064,9 +1092,9 @@ function initializeMustache(mustache) {
    * also be a function that is used to load partial templates on the fly
    * that takes a single argument: the name of the partial.
    */
-  Writer.prototype.render = function render (template, view, partials) {
+  Writer.prototype.render = function render(template, view, partials) {
     var tokens = this.parse(template);
-    var context = (view instanceof Context) ? view : new Context(view);
+    var context = view instanceof Context ? view : new Context(view);
     return this.renderTokens(tokens, context, partials, template);
   };
 
@@ -1079,7 +1107,12 @@ function initializeMustache(mustache) {
    * If the template doesn't use higher-order sections, this argument may
    * be omitted.
    */
-  Writer.prototype.renderTokens = function renderTokens (tokens, context, partials, originalTemplate) {
+  Writer.prototype.renderTokens = function renderTokens(
+    tokens,
+    context,
+    partials,
+    originalTemplate,
+  ) {
     var buffer = '';
 
     var token, symbol, value;
@@ -1088,28 +1121,35 @@ function initializeMustache(mustache) {
       token = tokens[i];
       symbol = token[0];
 
-      if (symbol === '#') value = this.renderSection(token, context, partials, originalTemplate);
-      else if (symbol === '^') value = this.renderInverted(token, context, partials, originalTemplate);
-      else if (symbol === '>') value = this.renderPartial(token, context, partials, originalTemplate);
+      if (symbol === '#')
+        value = this.renderSection(token, context, partials, originalTemplate);
+      else if (symbol === '^')
+        value = this.renderInverted(token, context, partials, originalTemplate);
+      else if (symbol === '>')
+        value = this.renderPartial(token, context, partials, originalTemplate);
       else if (symbol === '&') value = this.unescapedValue(token, context);
       else if (symbol === 'name') value = this.escapedValue(token, context);
       else if (symbol === 'text') value = this.rawValue(token);
 
-      if (value !== undefined)
-        buffer += value;
+      if (value !== undefined) buffer += value;
     }
 
     return buffer;
   };
 
-  Writer.prototype.renderSection = function renderSection (token, context, partials, originalTemplate) {
+  Writer.prototype.renderSection = function renderSection(
+    token,
+    context,
+    partials,
+    originalTemplate,
+  ) {
     var self = this;
     var buffer = '';
     var value = context.lookup(token[1]);
 
     // This function is used to render an arbitrary template
     // in the current context by higher-order sections.
-    function subRender (template) {
+    function subRender(template) {
       return self.render(template, context, partials);
     }
 
@@ -1117,26 +1157,55 @@ function initializeMustache(mustache) {
 
     if (isArray(value)) {
       for (var j = 0, valueLength = value.length; j < valueLength; ++j) {
-        buffer += this.renderTokens(token[4], context.push(value[j]), partials, originalTemplate);
+        buffer += this.renderTokens(
+          token[4],
+          context.push(value[j]),
+          partials,
+          originalTemplate,
+        );
       }
-    } else if (typeof value === 'object' || typeof value === 'string' || typeof value === 'number') {
-      buffer += this.renderTokens(token[4], context.push(value), partials, originalTemplate);
+    } else if (
+      typeof value === 'object' ||
+      typeof value === 'string' ||
+      typeof value === 'number'
+    ) {
+      buffer += this.renderTokens(
+        token[4],
+        context.push(value),
+        partials,
+        originalTemplate,
+      );
     } else if (isFunction(value)) {
       if (typeof originalTemplate !== 'string')
-        throw new Error('Cannot use higher-order sections without the original template');
+        throw new Error(
+          'Cannot use higher-order sections without the original template',
+        );
 
       // Extract the portion of the original template that the section contains.
-      value = value.call(context.view, originalTemplate.slice(token[3], token[5]), subRender);
+      value = value.call(
+        context.view,
+        originalTemplate.slice(token[3], token[5]),
+        subRender,
+      );
 
-      if (value != null)
-        buffer += value;
+      if (value != null) buffer += value;
     } else {
-      buffer += this.renderTokens(token[4], context, partials, originalTemplate);
+      buffer += this.renderTokens(
+        token[4],
+        context,
+        partials,
+        originalTemplate,
+      );
     }
     return buffer;
   };
 
-  Writer.prototype.renderInverted = function renderInverted (token, context, partials, originalTemplate) {
+  Writer.prototype.renderInverted = function renderInverted(
+    token,
+    context,
+    partials,
+    originalTemplate,
+  ) {
     var value = context.lookup(token[1]);
 
     // Use JavaScript's definition of falsy. Include empty arrays.
@@ -1145,7 +1214,11 @@ function initializeMustache(mustache) {
       return this.renderTokens(token[4], context, partials, originalTemplate);
   };
 
-  Writer.prototype.renderPartial = function renderPartial (token, context, partials) {
+  Writer.prototype.renderPartial = function renderPartial(
+    token,
+    context,
+    partials,
+  ) {
     if (!partials) return;
 
     var value = isFunction(partials) ? partials(token[1]) : partials[token[1]];
@@ -1153,25 +1226,23 @@ function initializeMustache(mustache) {
       return this.renderTokens(this.parse(value), context, partials, value);
   };
 
-  Writer.prototype.unescapedValue = function unescapedValue (token, context) {
+  Writer.prototype.unescapedValue = function unescapedValue(token, context) {
     var value = context.lookup(token[1]);
-    if (value != null)
-      return value;
+    if (value != null) return value;
   };
 
-  Writer.prototype.escapedValue = function escapedValue (token, context) {
+  Writer.prototype.escapedValue = function escapedValue(token, context) {
     var value = context.lookup(token[1]);
-    if (value != null)
-      return mustache.escape(value);
+    if (value != null) return mustache.escape(value);
   };
 
-  Writer.prototype.rawValue = function rawValue (token) {
+  Writer.prototype.rawValue = function rawValue(token) {
     return token[1];
   };
 
   mustache.name = 'mustache.js';
   mustache.version = '2.2.1';
-  mustache.tags = [ '{{', '}}' ];
+  mustache.tags = ['{{', '}}'];
 
   // All high-level mustache.* functions use this writer.
   var defaultWriter = new Writer();
@@ -1179,7 +1250,7 @@ function initializeMustache(mustache) {
   /**
    * Clears all cached templates in the default writer.
    */
-  mustache.clearCache = function clearCache () {
+  mustache.clearCache = function clearCache() {
     return defaultWriter.clearCache();
   };
 
@@ -1188,7 +1259,7 @@ function initializeMustache(mustache) {
    * array of tokens it contains. Doing this ahead of time avoids the need to
    * parse templates on the fly as they are rendered.
    */
-  mustache.parse = function parse (template, tags) {
+  mustache.parse = function parse(template, tags) {
     return defaultWriter.parse(template, tags);
   };
 
@@ -1196,11 +1267,15 @@ function initializeMustache(mustache) {
    * Renders the `template` with the given `view` and `partials` using the
    * default writer.
    */
-  mustache.render = function render (template, view, partials) {
+  mustache.render = function render(template, view, partials) {
     if (typeof template !== 'string') {
-      throw new TypeError('Invalid template! Template should be a "string" ' +
-          'but "' + typeStr(template) + '" was given as the first ' +
-          'argument for mustache#render(template, view, partials)');
+      throw new TypeError(
+        'Invalid template! Template should be a "string" ' +
+          'but "' +
+          typeStr(template) +
+          '" was given as the first ' +
+          'argument for mustache#render(template, view, partials)',
+      );
     }
 
     return defaultWriter.render(template, view, partials);
@@ -1208,7 +1283,7 @@ function initializeMustache(mustache) {
 
   // This is here for backwards compatibility with 0.4.x.,
   /*eslint-disable */ // eslint wants camel cased function name
-  mustache.to_html = function to_html (template, view, partials, send) {
+  mustache.to_html = function to_html(template, view, partials, send) {
     /*eslint-enable*/
 
     var result = mustache.render(template, view, partials);
@@ -1230,8317 +1305,50 @@ function initializeMustache(mustache) {
   mustache.Writer = Writer;
 }
 
-/* Segmentify Initializer */
-(function () {
-  var _SgmntfY_ = window['_SgmntfY_'] = {
-    // log levels
-    LOG_LEVELS: {
-      SILENT: 0,
-      ERROR: 1,
-      WARN: 2,
-      INFO: 3,
-      DEBUG: 4
-    },
-    // state variables
-    _variables: {
-      jq: window['SegmentifyjQuery'] || null,
-      mustache: null,
-      domain: window['SegmentifyDomain'] || window.location.hostname,
-      ua: {
-        agentString: window.navigator.userAgent,
-        type: null,
-        name: null,
-        version: null,
-        os: null,
-        osversion: null
-      },
-      controlGroup: {
-        type: undefined,
-        source: undefined,
-        experimentID: undefined,
-        controlValue: undefined,
-        activeValue: undefined
-      },
-      search: {
-        maxMobileWidth: 801,
-        searchMinChar: 0,
-        searchDelay: 50,
-        input: '',
-        manuelTrigger: '', // mobile input selector
-        manuelTriggerEnabledForDesktop: false,
-        manuelTriggerDesktop: '', // desktop input selector
-        cancelText: "Cancel",
-        showAll: "Show All",
-        notFound: "Sorry, there are no results for that search term. ",
-        initialCampaign: null,
-        isExecutable: false,
-        searchTimer: null,
-        isExecutableForAfter: false,
-        manuelTriggerClicked: false,
-        forceRemoveInputVal: false,
-        queryVerboseLog: false,
-        queryOverrideKey: "_sgf_search_override_query",
-        bannerTargets: {
-          "ASSETS_HEADER": ".sgm-search-sidebar",
-          "ASSETS_FOOTER": ".sgm-search-sidebar",
-          "RESULTS_HEADER": ".sgm-search-products",
-          "RESULTS_FOOTER": ".sgm-search-products"
-        }
-      },
-      journey: {},
-      userStorageKey: "_sgf_user_id",
-      sessionStorageKey: "_sgf_session_id",
-      pushPermissionKey: "_sgf_push_permission_asked",
-      testMode: '_sgf_test_mode',
-      tracking: '_sgf_tracking',
-      storage: {
-        delayedActions: {key: "_sgf_delayed_actions", local: true},
-        delayedCampaigns: {key: '_sgf_delayed_campaigns', local: true},
-        pageViewCampaigns: {key: '_sgf_pageview_campaigns', local: true},
-        retryQueue: {key: "_sgf_rq", local: true},
-        extensionStatus: {key: 'segmentifyExtension', local: true},
-        qaExtensionStatus: {key: '_sgf_qa_ext', local: true},
-        clickedBanners: {key: '_sgf_clicked_banners', local: false},
-        nextPageQueue: {key: '_sgf_npq', local: true},
-        user: {key: '_sgf_user_id', local: false},
-        session: {key: '_sgf_session_id', local: false},
-        qaMode: {key: '_sgf_qa_mode', local: true},
-        searchNoCache: {key: '_sgf_search_no_cache', local: true}
-      },
-      logLevel: 'ERROR',
-      segmentifyObj: null,
-      recommendedProducts: [],
-      recommendedPromotions: [],
-      waitingKeys: false,
-      keysTryCount: 0,
-      apiKey: null,
-      skipProductDetail: {
-        device: [] // if current device is member of given list, don't send product detail
-      },
-      offerRecommendedProducts: false,
-      offerRecommendedPromotions: false,
-      runTimer: null,
-      initTimer: null,
-      initTryCount: 0,
-      initTryLimit: 50,
-      isUnload: false,
-      cssPreload: false,
-      constants: {
-        frequency: 100, // check for new events for every 100 milliseconds
-        redirectDelay: 1000, // minimum amount of delay before redirect
-        retryLimit: 3, // number of tries for sending requests to engine, after limit is reached, event is discarded
-        eventTimeout: 10, // timeout in seconds for sending an event
-        clickedBannersLimit: 20, // number of clicked banners to store
-        recommendationSelectorFindLimit: 50 // number of tries for finding if recommendation-selector cannot be found
-      },
-      requiredParams: {
-        PAGE_VIEW: [],
-        PRODUCT_VIEW: ["productId"],
-        BASKET_OPERATIONS: ["productId", "basketId", "step"],
-        CHECKOUT: ["totalPrice", "basketId", "step"],
-        USER_OPERATIONS: ["step"],
-        FORM: ["formName", "fields"],
-        CUSTOM_EVENT: ["type"],
-        INTERACTION: ["type"],
-        BANNER_OPERATIONS: ['type', 'title', 'group', 'order'],
-        BANNER_GROUP_VIEW: ['group'],
-        INTERNAL_BANNER_GROUP: ['group'],
-        USER_CHANGE: ['oldUserId'],
-        PROMOTION: ['type', 'code'],
-        SEARCH: [],
-        FILTER: ['source'],
-        COUPON: ['type'],
-        JOURNEY: ['type'],
-        WISHLIST: ['step'],
-      },
-      optionalParams: {
-        PAGE_VIEW: ["category", "subCategory"],
-        PRODUCT_VIEW: ["title", "url", "mUrl", "image", "imageXS", "imageS", "imageM", "imageL", "imageXL", "additionalImages",
-          "mainCategory", "category", "categories", "price", "oldPrice", "specialPrice", "lastUpdateTime", "inStock", "stockCount", "stockRatio",
-          "stockStatus", "brand", "gender", "labels", "sizes", "allSizes", "colors", "publishTime", "source", "noUpdate", "activeBanners", "groupId"],
-        BASKET_OPERATIONS: ["price", "quantity", "size", "activeBanners"],
-        CHECKOUT: ["productList", "orderNo", "paymentType", "activeBanners", "cartUrl", "totalDiscount", "discounts", "shipment", "tax", "coupon"],
-        USER_OPERATIONS: ["username", "fullName", "phone", "gender", "birthDate", "segments", "memberSince", "service", "isRegistered", "isLogin", "location", "emailNtf", "mailTest", "pushTest", "custom"],
-        FORM: [],
-        CUSTOM_EVENT: [],
-        INTERACTION: ["interactionId", "instanceId"],
-        BANNER_OPERATIONS: ['productId', 'category', "brand", "label"],
-        BANNER_GROUP_VIEW: [],
-        INTERNAL_BANNER_GROUP: ['banners'],
-        USER_CHANGE: [],
-        PROMOTION: ['title', 'url', 'mUrl', 'image', 'mImage', 'startDate', 'endDate', 'categories', 'brands', 'labels', 'productIds', 'publishTime'],
-        SEARCH: ['query', 'type', 'ordering', 'filters', 'trigger', 'service', 'mode'],
-        FILTER: ['productId', 'categories', 'brands', 'sizes', 'prices'],
-        COUPON: [],
-        JOURNEY: ['step', 'answer', 'instanceId'],
-        WISHLIST: ['productId', 'favoritesList']
-      },
-      segmentifyApiUrl: "//gandalf.segmentify.com/",
-      segmentifyQaApiUrl: '//gandalf-qa.segmentify.com',
-      segmentifyCDNUrl: "//cdn.segmentify.com/",
-      jQueryUrl: "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js",
-      dataLayer: 'sgfLayer',
-      consumeDataLayer: true,
-      dataLayerConfig: {},
-      categoryHierarchy: false,
-      disableNextPage: false,
-      language: 'EN',
-      currency: '',
-      region: '',
-      pushInfo: {
-        dataCenter: '',
-        qaDataCenter: 'https://gimli-qa.segmentify.com/',
-        promptInteraction: ''
-      },
-      ga: {
-        groupCookie: '__SegmentifyGroup__',
-        group: undefined,
-        tracker: 'window.ga',
-        trackerName: undefined,
-        activated: false,
-        enabled: false,
-        activateTryCount: 100,
-        activateTriedCount: 0,
-
-        // current state
-        activeGroup: undefined,
-        activePage: undefined,
-
-        // groups
-        groups: {
-          control: 'SGM-CG',
-          groupA: 'SGM-GA',
-          groupB: 'SGM-GB',
-          unknown: 'SGM-UN'
-        },
-
-        // update dimension names for integration
-        dimensions: {
-          sgmGroup: undefined,
-          sgmUser: undefined,
-          sgmSession: undefined,
-          sgmPage: undefined,
-          sgmWidget: undefined,
-          sgmProduct: undefined,
-        },
-      }
-    },
-    // Data Loaders
-    _loadJavascript: function (url, async, onload) {
-      // Load the script
-      var script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.async = async;
-      if (onload && typeof onload === 'function') {
-        if (typeof script.onreadystatechange !== 'undefined') script.onreadystatechange = function () {
-          if (this.readyState === 'loaded' || this.readyState === 'complete') {
-            onload();
-            script.onreadystatechange = null;
-          }
-        };
-        else script.onload = onload;
-      }
-      script.src = url;
-      document.getElementsByTagName('head')[0].appendChild(script);
-      return script;
-    },
-    _loadCSS: function (url, onload) {
-      // Load css file
-      var link = document.createElement('link');
-      link.type = 'text/css';
-      if (_SgmntfY_._variables.cssPreload) {
-        link.rel = 'preload';
-        link.as = 'style';
-      } else {
-        link.rel = 'stylesheet';
-      }
-      link.media = 'screen';
-      if (onload && typeof onload === 'function') {
-        if (typeof link.onreadystatechange !== 'undefined') link.onreadystatechange = function () {
-          if (this.readyState === 'loaded' || this.readyState === 'complete') {
-            onload();
-            link.onreadystatechange = null;
-          }
-        };
-        else link.onload = onload;
-      }
-      link.href = url;
-      document.getElementsByTagName('head')[0].appendChild(link);
-      return link;
-    },
-    _sgfPopupCloseHandler: function(isPopupClose, requestData) {
-      if (isPopupClose === false || _SgmntfY_._jbOverFlowOperations._journeyFinished(requestData)) {
-        // the function runs after popup closed that has "seg-popup-close" class
-        _SgmntfY_._jbOverFlowOperations._enableBodyOverFlowForJBWrapper();
-        _SgmntfY_._jbTriggerButtonReEnable();
-        window.setTimeout(function() {
-          var jbWrapperEl = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);
-          if (jbWrapperEl) {
-            jbWrapperEl.parentNode.removeChild(jbWrapperEl);
-          }
-        }, 500);
-      }
-    },
-    // response actions
-    _actions: {
-      _notificationWindow: function (params) {
-        // vertical top middle bottom
-        // horizontal left center right
-        var config = {
-          title: params['notificationTitle'],
-          vertical: 'middle',
-          horizontal: 'center'
-        };
-        var title = params.notificationTitle;
-        switch (params["windowPosition"]) {
-          case 'top':
-            config['vertical'] = 'top';
-            break;
-          case 'bottom':
-            config['vertical'] = 'bottom';
-            break;
-          case 'left':
-            config['horizontal'] = 'left';
-            break;
-          case 'right':
-            config['horizontal'] = 'right';
-            break;
-          case 'top-left':
-            config['vertical'] = 'top';
-            config['horizontal'] = 'left';
-            break;
-          case 'top-right':
-            config['vertical'] = 'top';
-            config['horizontal'] = 'right';
-            break;
-          case 'bottom-left':
-            config['vertical'] = 'bottom';
-            config['horizontal'] = 'left';
-            break;
-          case 'bottom-right':
-            config['vertical'] = 'bottom';
-            config['horizontal'] = 'right';
-            break;
-        }
-
-        var outerHtml = _SgmntfY_._getJq()('<div class="seg-popup seg-[[vertical]]-[[horizontal]] segFadeInUp fancybox-segmentify"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>');
-        var notificationBody = _SgmntfY_._getJq()('<div class="fancybox-body" />').appendTo(outerHtml.find('.fancybox-inner'));
-        if (params.html instanceof _SgmntfY_._getJq()) notificationBody.append(params.html);
-        else notificationBody.html(params.html);
-        var button_overlay = _SgmntfY_._getJq()('<div />').appendTo(notificationBody);
-        var buttons = params.buttons || [];
-        for (var i = 0; i < buttons.length; i++) {
-          _SgmntfY_._getJq()('<button data-newWindow="' + buttons[i].newWindow + '" data-target="' + buttons[i].buttonUrl + '" class="fancybox-button ' + buttons[i].buttonColor + '">' + buttons[i].buttonTitle + '</button>').appendTo(button_overlay);
-        }
-        if (params.windowStyle === 'seamless') {
-          if (title) _SgmntfY_._getJq()('<div class="overlay-area-title" ><span>' + title + '</span></div>').appendTo(notificationBody);
-          button_overlay.addClass("overlay-area-buttons").addClass("right");
-          title = null;
-        }
-        if (params.isModal === 'false') {
-          _SgmntfY_._getJq()('<span class="seg-popup-close"></span>').appendTo(outerHtml);
-        }
-        // render campaign html
-        var renderedHtml = _SgmntfY_._getMustache().render(outerHtml.prop('outerHTML'), config);
-        _SgmntfY_._getJq()('body').prepend(renderedHtml);
-        if (params.overlay === 'true') {
-          _SgmntfY_._getJq()('<div class="seg-popup-overlay"></div>').prependTo(_SgmntfY_._getJq()('body'));
-          _SgmntfY_._getJq()('.seg-popup-overlay').show();
-        }
-        if (params.isModal === 'false') {
-          // bind close handler
-          _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
-            var $this = _SgmntfY_._getJq()(this);
-            $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-            window.setTimeout(function () {
-              $this.parent('.seg-popup').remove();
-              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-            }, 1000);
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: 'close',
-              instanceId: params['instanceId'],
-              interactionId: params['instanceId']
-            });
-          });
-        }
-        params.cssCode && _SgmntfY_._getJq()('<style />').html(params.cssCode).prependTo(_SgmntfY_._getJq()('body'));
-        try {
-          params.javascriptCode && eval(params.javascriptCode);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing javascript code: ' + err);
-        }
-        if (_SgmntfY_._getJq()('.seg-popup').find('form')) {
-          var $inner = _SgmntfY_._getJq()('.seg-popup .fancybox-body');
-          var $form = $inner.find('form').eq(0);
-          $form.bind('submit', function (event) {
-            event.preventDefault();
-            _SgmntfY_.LOG_MESSAGE('DEBUG', 'Popup Form button click for actionId: ' + params["actionId"]);
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: "submit",
-              interactionId: params["formName"],
-              instanceId: params["instanceId"]
-            });
-            _SgmntfY_._variables.segmentifyObj("user:form", {
-              formName: params["formName"],
-              fields: $form.sgmSerializeForm()
-            });
-            $inner.html(params["successHtml"]);
-            setTimeout(function () {
-              $inner.parents('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-              $inner.parents('.seg-popup').remove();
-              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-            }, 1000);
-          });
-        }
-        // bind buttons
-        var redirectFn = function (buttonObj) {
-          var actualRedirectFn = function (buttonObj, target) {
-            window.open(buttonObj.data('target'), target);
-            buttonObj.parents('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-            window.setTimeout(function () {
-              buttonObj.parent('.seg-popup').remove();
-              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-            }, 1000);
-          };
-          if (buttonObj.data('newwindow') === 'true' || buttonObj.data('newwindow') === true) actualRedirectFn(buttonObj, "_blank");
-          else setTimeout(function () {
-            actualRedirectFn(buttonObj, "_self");
-          }, _SgmntfY_._variables.constants.redirectDelay)
-        };
-        _SgmntfY_._getJq()('.seg-popup .fancybox-button').click(function () {
-          _SgmntfY_.LOG_MESSAGE('DEBUG', 'Notification Window button click for actionId: ' + params["actionId"]);
-          _SgmntfY_._variables.segmentifyObj("event:interaction", {
-            type: "click",
-            interactionId: _SgmntfY_._getJq()(this).text(),
-            instanceId: params["instanceId"]
-          });
-          redirectFn(_SgmntfY_._getJq()(this));
-        });
-        // bind click handler
-        _SgmntfY_._getJq()('.seg-popup a img').bind('click', function () {
-          _SgmntfY_._variables.segmentifyObj('event:interaction', {
-            type: 'click',
-            instanceId: params['instanceId'],
-            interactionId: params['instanceId']
-          });
-        });
-        // send impression
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'impression',
-          instanceId: params['instanceId'],
-          interactionId: params['instanceId']
-        });
-      },
-      notificationBanner: function (params) {
-        // initialize buttons by parsing json string
-        var buttons = [];
-        try {
-          if (params["buttons"]) buttons = JSON.parse(params["buttons"])
-        } catch (exception) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Cannot parse buttons json, str: ' + params["buttons"]);
-          buttons = [];
-        }
-        params.buttons = buttons;
-        params.html = _SgmntfY_._getJq()('<div><a href="' + params.redirectUrl + '"><img id="sgm_img" src="' + params.imageUrl + '"></a></div>');
-        _SgmntfY_._actions._notificationWindow(params);
-      },
-      notificationMessage: function (params) {
-        // initialize buttons by parsing json string
-        var buttons = [];
-        try {
-          if (params["buttons"]) buttons = JSON.parse(params["buttons"])
-        } catch (exception) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Cannot parse buttons json, str: ' + params["buttons"]);
-          buttons = [];
-        }
-        params.html = params.notificationText;
-        params.buttons = buttons;
-        _SgmntfY_._actions._notificationWindow(params);
-      },
-      visitorForm: function (params) {
-        function checkSelectorAndRender() {
-          var params = this.params;
-          var selectorCount = this.selectorCount;
-          // get target selector into a variable
-          var targetElement = params.selector;
-
-          // if target selector is not defined or does not exist in the page, retry
-          if (!targetElement || !_SgmntfY_._getJq()(targetElement).length) {
-            // insert log
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in finding target element[' + target + '], element does not exist');
-            if (selectorCount < _SgmntfY_._variables.constants.recommendationSelectorFindLimit) {
-              ++this.selectorCount;
-              var binded = checkSelectorAndRender.bind(this);
-              setTimeout(binded, 100);
-            }
-          }
-          else {
-            try {
-              targetElement.addClass("sgm-recommendation sgm-clearcss").html(params.formHtml);
-              var $form = targetElement.find("form").eq(0);
-              $form.submit(function (event) {
-                event.preventDefault();
-                _SgmntfY_.LOG_MESSAGE('DEBUG', 'In-page Form button click for actionId: ' + params["actionId"]);
-                _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                  type: "submit",
-                  interactionId: params["formName"],
-                  instanceId: params["instanceId"]
-                });
-                _SgmntfY_._variables.segmentifyObj("user:form", {
-                  formName: params["formName"],
-                  fields: $form.sgmSerializeForm()
-                });
-                setTimeout(function () {
-                  targetElement.html(params["successHtml"]);
-                }, 1000);
-              });
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('ERROR', 'Error in filling target element[' + params.selector + '] with visitor form: ' + err);
-            }
-          }
-        }
-        switch (params.actionType) {
-          case 'INPAGE_WIDGET':
-          {
-            var binded_context = checkSelectorAndRender.bind({params:params,selectorCount:1});
-            binded_context();
-            break;
-          }
-          case 'POPUP_WINDOW':
-          default:
-          {
-            params.html = params.formHtml;
-            _SgmntfY_._actions._notificationWindow(params);
-            break;
-          }
-        }
-      },
-      recommendProducts: function (params, request) {
-        var previousMetadata = {
-          productId: request.originalParams.productId,
-          productUrl: request.originalParams.productUrl,
-          instanceId: params.instanceId
-        };
-
-        function dynamicItemKey(item) {
-          var key = item['recommendationSource'];
-          if (typeof item['timeFrame'] !== 'undefined' && _SgmntfY_._isNotEmpty(item['timeFrame'])) {
-            key += '|' + item['timeFrame'];
-            if (typeof item['score'] !== 'undefined' && _SgmntfY_._isNotEmpty(item['score'])) {
-              key += '|' + item['score'];
-            }
-          }
-          return key;
-        }
-
-        function checkDynamicItemCount(items, itemKey) {
-          for (var i = 0; i < items.length; ++i) {
-            if (dynamicItemKey(items[i]) === itemKey) {
-              return items[i].itemCount;
-            }
-          }
-          return null;
-        }
-
-        //check product function.
-        //return true is product exists
-        function checkProductInList(list, id) {
-          for (var innerProd = 0; innerProd < list.length; innerProd++) {
-            if (list[innerProd].productId == id) return true;
-          }
-          return false;
-        }
-
-        function checkSelectorAndRender() {
-          var params = this.params;
-          var selectorCount = this.selectorCount;
-          // get target selector into a variable
-          var target = params.selector;
-
-          // if target selector is not defined or does not exist in the page, retry
-          if (!target || !_SgmntfY_._getJq()(target).length) {
-            // insert log
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in finding target element[' + target + '], element does not exist');
-            if (selectorCount < _SgmntfY_._variables.constants.recommendationSelectorFindLimit) {
-              ++this.selectorCount;
-              var binded = checkSelectorAndRender.bind(this);
-              setTimeout(binded, 100);
-            }
-          }
-          else {
-            var renderIdx = 0;
-            var reConf = {
-              "title": notificationTitle,
-              "products": productList,
-              "index": function () {
-                return ++renderIdx;
-              },
-              "discount": function () {
-                try {
-                  var price = this.price;
-                  var oldPrice = this.oldPrice;
-
-                  if (!price || !oldPrice || price == oldPrice) return null;
-
-                  var discountRatio = 100 - ((price * 100) / oldPrice);
-
-                  return discountRatio > 0 && Math.round(discountRatio);
-                } catch (err) {
-                  // if any error occurs return null
-                  return null;
-                }
-              },
-              "commaFormatPrice": function () {
-                return this.toFixed(2).toString().replace(/\./g, ",");
-              },
-              "dotFormatPrice": function () {
-                return this.toFixed(2).toString();
-              }
-            };
-
-            try {
-              if (params.preJsCode) {
-                eval(params.preJsCode);
-                  var retVal = preRenderConf(reConf);
-                if (typeof retVal !== 'undefined' && !retVal) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-                  return;
-                }
-                _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                    type: "impression",
-                    interactionId: params["actionId"],
-                    instanceId: params["instanceId"]
-                });
-                _SgmntfY_.GA.sendWidgetImpression(params["instanceId"]);
-              }
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation pre js code: ' + err);
-            }
-
-            // check if the account is freemium/brand is enabled
-            if (reConf['brandingEnabled']) {
-              // if branding is enabled add "recommended by Segmentify" into to recommendation title
-              reConf.title += "<a target=\"_blank\" class=\"seg-rec-logo\" href=\"\/\/www.segmentify.com\">Recommended by <img src=\"\/\/cdn.segmentify.com/images/sgm-logo.svg\" /></a>";
-            }
-
-            // render products with the given template
-            var renderedHtml = _SgmntfY_._getMustache().render(params.recommendationTemplate, reConf);
-
-            try {
-              // get target element as jQuery object
-              var targetElement = _SgmntfY_._getJq()(target).first();
-
-              // put rendered recommendation HTML into the target
-              if (params.insertType === 'SELF') {
-                targetElement.html(renderedHtml);
-                if (wvCB) {
-                  wvCB(targetElement);
-                }
-              } else {
-                var $div = _SgmntfY_._getJq()('<div/>', {'class': 'seg-reco-wrapper seg-clear'});
-                if (params.insertType === 'AFTER' || params.insertType === 'BEFORE') {
-                  params.insertType === 'AFTER' ? $div.html(renderedHtml).insertAfter(targetElement) : $div.html(renderedHtml).insertBefore(targetElement);
-                } else if (params.insertType === 'APPEND' || params.insertType === 'PREPEND') {
-                  params.insertType === 'APPEND' ? $div.html(renderedHtml).appendTo(targetElement) : $div.html(renderedHtml).prependTo(targetElement);
-                }
-                if (wvCB) {
-                  wvCB($div);
-                }
-              }
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in filling target element[' + target + '] with product recommendations: ' + err);
-            }
-
-            try {
-              params.postJsCode && eval(params.postJsCode);
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation post js code: ' + err);
-            }
-            _SgmntfY_._bindRecommendationTrackEvents(params.insertType === "SELF" ? targetElement : $div, params.recommendationSettings, params.instanceId, 0);
-          }
-        }
-
-        // calculate product list from response
-        var productList = [];
-        var recommendedProducts = params.recommendedProducts || {};
-        var dynamicItems = JSON.parse(params.dynamicItems) || [];
-
-        var recoVersion = params['version'] || 'v1';
-        if (recoVersion === 'v1') {
-          if (params.ordering === 'SHUFFLE') {
-            function allNull(arr) {
-              for (var i in arr) {
-                if (arr.hasOwnProperty(i)) {
-                  if (arr[i] !== undefined || arr[i] !== null) {
-                    return false;
-                  }
-                }
-              }
-              return true;
-            }
-
-            function arrayRandom() {
-              return parseInt(Math.random() * 100);
-            }
-
-            function randomInt(min, max) {
-              return Math.floor(Math.random() * (max - min)) + min;
-            }
-
-            var itemCounts = [];
-            var dynamicLengths = [];
-            for (var idx in dynamicItems) {
-              if (dynamicItems.hasOwnProperty(idx)) {
-                itemCounts.push(parseInt(dynamicItems[idx]['itemCount'] || 0));
-                var source = dynamicItemKey(dynamicItems[idx]);
-                if (recommendedProducts.hasOwnProperty(source)) dynamicLengths.push(recommendedProducts[source].length);
-                else dynamicLengths.push(0);
-              }
-            }
-            var firstLevel = [];
-            var firstLevelTotal = itemCounts.reduce(function (a, b) {
-              return a + b;
-            }, 0);
-            for (idx in itemCounts) {
-              if (itemCounts.hasOwnProperty(idx)) {
-                var _idx = parseInt(idx);
-                if (_idx === itemCounts.length - 1) {
-                  firstLevel.push(100);
-                } else {
-                  var pct = parseInt(itemCounts[idx] / firstLevelTotal * 100);
-                  if (_idx === 0) firstLevel.push(pct);
-                  else firstLevel.push(firstLevel[firstLevel.length - 1] + pct);
-                }
-              }
-            }
-            var secondLevel = [];
-            for (var dl in dynamicLengths) {
-              if (dynamicLengths.hasOwnProperty(dl)) {
-                var len = dynamicLengths[dl];
-                var sumOfSquares = len * (len + 1) * (2 * len + 1) / 6;
-                var tmpArr = [];
-                for (var l = len; l > 0; --l) {
-                  if (l === 1) {
-                    tmpArr.push(100);
-                  } else {
-                    pct = parseInt(Math.pow(l, 2) / sumOfSquares * 100);
-                    if (l === len) tmpArr.push(pct);
-                    else tmpArr.push(tmpArr[tmpArr.length - 1] + pct);
-                  }
-                }
-                secondLevel.push(tmpArr);
-              }
-            }
-            var dynamicProducts = [];
-            var iteration = 0;
-            while (true) {
-              // break under these conditions
-              if (++iteration > 10000) {
-                break;
-              }
-              if (dynamicProducts.length >= firstLevelTotal) {
-                break;
-              }
-              var allNullCheck = true;
-              for (idx in dynamicItems) {
-                if (dynamicItems.hasOwnProperty(idx)) {
-                  source = dynamicItemKey(dynamicItems[idx]);
-                  var tmpCheck = true;
-                  if (recommendedProducts.hasOwnProperty(source)) {
-                    tmpCheck = allNull(recommendedProducts[source]);
-                  }
-                  if (!tmpCheck) {
-                    allNullCheck = false;
-                    break;
-                  }
-                }
-              }
-              if (allNullCheck) {
-                break;
-              }
-              // search for products
-              var rand = arrayRandom();
-              var firstLevelIndex = -1;
-              for (var fl in firstLevel) {
-                if (firstLevel.hasOwnProperty(fl)) {
-                  if (rand < firstLevel[fl]) {
-                    firstLevelIndex = parseInt(fl);
-                    break;
-                  }
-                }
-              }
-              if (firstLevelIndex === -1 || !dynamicItems.hasOwnProperty(firstLevelIndex.toString())) {
-                continue;
-              }
-              source = dynamicItemKey(dynamicItems[firstLevelIndex]);
-              rand = arrayRandom();
-              var secondLevelIndex = -1;
-              for (var sl in secondLevel[firstLevelIndex]) {
-                if (secondLevel[firstLevelIndex].hasOwnProperty(sl)) {
-                  if (rand < secondLevel[firstLevelIndex][sl]) {
-                    secondLevelIndex = parseInt(sl);
-                    break;
-                  }
-                }
-              }
-              if (secondLevelIndex === -1 || !recommendedProducts[source].hasOwnProperty(secondLevelIndex.toString())) {
-                continue;
-              }
-              var candidate = recommendedProducts[source].splice(secondLevelIndex, 1)[0];
-              if (candidate == null) {
-                continue;
-              }
-              recommendedProducts[source].splice(secondLevelIndex, 0, null);
-
-              var eliminationFuncRetVal = false;
-              if (params.eliminationFunction) {
-                var func = _SgmntfY_._getObjectByString(window, params.eliminationFunction);
-                if (typeof func === 'function') {
-                  try {
-                    eliminationFuncRetVal = func.call(null, candidate);
-                  } catch (err) {
-                    _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation elimination js function: ' + err);
-                  }
-                }
-              }
-              // if eliminated, continue loop
-              if (eliminationFuncRetVal) {
-                continue;
-              }
-
-                candidate.name = _SgmntfY_._decodeHtml(candidate.name);
-
-              var sourceLastVisited = 'RECOMMENDATION_SOURCE_LAST_VISITED' === dynamicItems[firstLevelIndex]['recommendationSource']
-                  || 'RECOMMENDATION_EVENT_DATA' === dynamicItems[firstLevelIndex]['recommendationSource'];
-              switch (params.elimination) {
-                case 'ELIMINATE_DUPLICATES':
-                case 'ELIMINATE_PREVIOUS':
-                  if (!checkProductInList(productList, candidate.productId)) {
-                    if (sourceLastVisited || !_SgmntfY_._containsRecommendedProduct(candidate.productId) || _SgmntfY_._variables.offerRecommendedProducts) {
-                      productList.push(candidate);
-                      dynamicProducts.push(candidate);
-                      if (!sourceLastVisited) {
-                        _SgmntfY_._addRecommendedProduct(candidate.productId);
-                      }
-                    }
-                  }
-                  break;
-                case 'NO_ELIMINATION':
-                default:
-                  productList.push(candidate);
-                  dynamicProducts.push(candidate);
-                  if (!sourceLastVisited) {
-                    _SgmntfY_._addRecommendedProduct(candidate.productId);
-                  }
-                  break;
-              }
-            }
-            //add static items randomly
-            for (var i = 0; i < recommendedProducts['RECOMMENDATION_SOURCE_STATIC_ITEMS'].length; ++i) {
-              var elm = recommendedProducts['RECOMMENDATION_SOURCE_STATIC_ITEMS'][i];
-              if (!checkProductInList(productList, elm.productId)) {
-                productList.splice(randomInt(0, productList.length), 0, elm);
-              }
-            }
-
-          } else {
-            var missingCount = 0;
-            /* add static items */
-            for (var i = 0; i < recommendedProducts['RECOMMENDATION_SOURCE_STATIC_ITEMS'].length; ++i) {
-              var elm = recommendedProducts['RECOMMENDATION_SOURCE_STATIC_ITEMS'][i];
-              if (!checkProductInList(productList, elm.productId)) {
-                productList.push(elm);
-              }
-            }
-            /* add dynamic items */
-            for (var ri = 0; ri < dynamicItems.length; ++ri) {
-              var curRecommendationSource = dynamicItemKey(dynamicItems[ri]);
-              var curCatItemCount = parseInt(checkDynamicItemCount(dynamicItems, curRecommendationSource));
-              if (isNaN(curCatItemCount)) {
-                curCatItemCount = 0;
-              }
-
-              if (recommendedProducts.hasOwnProperty(curRecommendationSource) && curCatItemCount) {
-                missingCount += curCatItemCount;
-                var index = 0;
-                for (var i = 0; i < recommendedProducts[curRecommendationSource].length; ++i) {
-                  var elm = recommendedProducts[curRecommendationSource][i];
-
-                    elm.name = _SgmntfY_._decodeHtml(elm.name);
-
-                  if ((index >= curCatItemCount) && (missingCount === 0)) {
-                    break;
-                  }
-
-                  var eliminationFnRetVal = false;
-                  if (params.eliminationFunction) {
-                    var fx = _SgmntfY_._getObjectByString(window, params.eliminationFunction);
-                    if (typeof fx === 'function') {
-                      try {
-                        eliminationFnRetVal = fx.call(null, elm);
-                      } catch (err) {
-                        _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation elimination js function: ' + err);
-                      }
-                    }
-                  }
-
-                  // if eliminated, continue loop
-                  if (eliminationFnRetVal) {
-                    continue;
-                  }
-
-                  var sourceLastVisited = 'RECOMMENDATION_SOURCE_LAST_VISITED' === dynamicItems[ri].recommendationSource
-                      || 'RECOMMENDATION_EVENT_DATA' === dynamicItems[ri].recommendationSource;
-                  switch (params.elimination) {
-                    case 'ELIMINATE_DUPLICATES':
-                    case 'ELIMINATE_PREVIOUS':
-                      if (!checkProductInList(productList, elm.productId)) {
-                        if (sourceLastVisited || !_SgmntfY_._containsRecommendedProduct(elm.productId) || _SgmntfY_._variables.offerRecommendedProducts) {
-                          productList.push(elm);
-                          if (!sourceLastVisited) {
-                            _SgmntfY_._addRecommendedProduct(elm.productId);
-                          }
-                          ++index;
-                          --missingCount;
-                        }
-                      }
-                      break;
-                    case 'NO_ELIMINATION':
-                    default:
-                      productList.push(elm);
-                      if (!sourceLastVisited) {
-                        _SgmntfY_._addRecommendedProduct(elm.productId);
-                      }
-                      ++index;
-                      --missingCount;
-                      break;
-                  }
-                }
-              }
-            }
-          }
-        } else if (recoVersion === 'v3') {
-          if (recommendedProducts.length) {
-            // static products
-            var staticProducts = recommendedProducts[0] || [];
-            for (var i = 0; i < staticProducts.length; ++i) {
-              var elm = staticProducts[i];
-              if (!checkProductInList(productList, elm.productId)) {
-                productList.push(elm);
-              }
-            }
-            // dynamic products
-            var missingCount = 0;
-            for (var ri = 1; ri < recommendedProducts.length; ++ri) {
-              var dynamicItem = dynamicItems[ri - 1];
-              var curCatItemCount = parseInt(dynamicItem['itemCount']);
-              if (isNaN(curCatItemCount)) {
-                curCatItemCount = 0;
-              }
-              if (curCatItemCount) {
-                missingCount += curCatItemCount;
-                var index = 0;
-                for (var i = 0; i < recommendedProducts[ri].length; ++i) {
-                  var elm = recommendedProducts[ri][i];
-
-                    elm.name = _SgmntfY_._decodeHtml(elm.name);
-
-                  if ((index >= curCatItemCount) && (missingCount === 0)) {
-                    break;
-                  }
-
-                  var sourceLastVisited = 'RECOMMENDATION_SOURCE_LAST_VISITED' === dynamicItem['recommendationSource']
-                      || 'RECOMMENDATION_EVENT_DATA' === dynamicItem['recommendationSource'];
-                  switch (params['elimination']) {
-                    case 'ELIMINATE_DUPLICATES':
-                    case 'ELIMINATE_PREVIOUS':
-                      if (!checkProductInList(productList, elm.productId)) {
-                        if (sourceLastVisited || !_SgmntfY_._containsRecommendedProduct(elm.productId) || _SgmntfY_._variables.offerRecommendedProducts) {
-                          productList.push(elm);
-                          if (!sourceLastVisited) {
-                            _SgmntfY_._addRecommendedProduct(elm.productId);
-                          }
-                          ++index;
-                          --missingCount;
-                        }
-                      }
-                      break;
-                    case 'NO_ELIMINATION':
-                    default:
-                      productList.push(elm);
-                      if (!sourceLastVisited) {
-                        _SgmntfY_._addRecommendedProduct(elm.productId);
-                      }
-                      ++index;
-                      --missingCount;
-                      break;
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        var notificationTitleMap = JSON.parse(params['notificationTitleMap'] || '{}');
-        var notificationTitle = notificationTitleMap[request.data.lang] || params.notificationTitle;
-        if (productList.length === 0) {
-          if (params['actionType'] === 'CALLBACK' && request.recommendationCallback) {
-            request.recommendationCallback(notificationTitle, [], previousMetadata, null);
-          }
-          return;
-        }/* else if (params.ordering == 'SHUFFLE') {
-          productList = _SgmntfY_._shuffle(productList);
-        }*/
-
-        if (params['actionType'] !== 'INPAGE_WIDGET' && params['actionType'] !== 'POPUP_RECO') {
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                type: "impression",
-                interactionId: params["actionId"],
-                instanceId: params["instanceId"]
-            });
-          _SgmntfY_.GA.sendWidgetImpression(params["instanceId"]);
-        }
-        var wvInteractionId = params["interactionId"];
-        var wvInstanceId = params["instanceId"];
-        var wvCB = function ($elem) {
-          var eventSent = false;
-          if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: "widget-view",
-              interactionId: wvInteractionId,
-              instanceId: wvInstanceId
-            });
-            _SgmntfY_.GA.sendWidgetView(params["instanceId"]);
-            eventSent = true;
-          } else {
-            if (!eventSent) {
-              var widgetViewInterval = setInterval(function() {
-                if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-                  _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                    type: "widget-view",
-                    interactionId: wvInteractionId,
-                    instanceId: wvInstanceId
-                  });
-                  _SgmntfY_.GA.sendWidgetView(params["instanceId"]);
-                  eventSent = true;
-                  window.clearInterval(widgetViewInterval);
-                }
-              }, 100);
-            }
-          }
-        };
-        switch (params.actionType) {
-          case 'CALLBACK': {
-            if (request.recommendationCallback) {
-              request.recommendationCallback(notificationTitle, productList, previousMetadata, wvCB);
-            }
-            break;
-          }
-          case 'INPAGE_WIDGET': {
-            var binded_context = checkSelectorAndRender.bind({params:params,selectorCount:1});
-            binded_context();
-            break;
-          }
-          case 'JAVASCRIPT_FUNCTION': {
-            // call javascript function
-            var fx = _SgmntfY_._getObjectByString(window, params.jsFunction);
-            if (typeof fx === 'function') {
-              try {
-                fx.call(null, notificationTitle, productList, previousMetadata, wvCB);
-              } catch (err) {
-                _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation js function: ' + err);
-              }
-            } else {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Product Recommendation javascript function(' + params.jsFunction + ') does not exist');
-            }
-
-            break;
-          }
-          case 'POPUP_RECO': {
-            var config = {
-              title: params['notificationTitle'] && params['notificationTitle'] !== "" ? params['notificationTitle'] : (notificationTitle || ""),
-              vertical: params['verticalPosition'],
-              horizontal: params['horizontalPosition'],
-              button: _SgmntfY_._jbGetButtonText("DELIVERY")
-            };
-            var isJourney = _SgmntfY_._jbOverFlowOperations._journeyFinished(request);
-            if (isJourney === false && productList.length < 3) {
-              return;
-            }
-            config['products'] = productList;
-            try {
-              if (params['preJsCode']) {
-                eval(params['preJsCode']);
-                var retVal = preRenderConf(config);
-                if (typeof retVal !== 'undefined' && !retVal) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-                  return;
-                }
-                _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                    type: "impression",
-                    interactionId: params["actionId"],
-                    instanceId: params["instanceId"]
-                });
-                _SgmntfY_.GA.sendWidgetImpression(params["instanceId"]);
-              }
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
-            }
-            var _products = [];
-            var _productId = '';
-            if (request.originalParams && request.originalParams['params']) {
-              _productId = request.originalParams['params']['productId'] || '';
-            }
-            for (var i = 0; i < config['products'].length; ++i) {
-              if (isJourney === false && _products.length === 3) {
-                break;
-              }
-              var _product = config['products'][i];
-              if (_product['productId'] !== _productId) {
-                _products.push(_product);
-              }
-            }
-            if (isJourney === false && _products.length !== 3) {
-              return;
-            }
-            config['products'] = _products;
-            // render campaign html
-            var renderedHtml = _SgmntfY_._getMustache().render(params['recommendationTemplate'], config);
-            _SgmntfY_._getJq()('body').prepend(renderedHtml);
-            params['cssCode'] && _SgmntfY_._getJq()('<style />').html(params['cssCode']).prependTo(_SgmntfY_._getJq()('body'));
-            _SgmntfY_._jbDeliveryOnBindEventHandler();
-
-            try {
-              params['postJsCode'] && eval(params['postJsCode']);
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
-            }
-            // overlay
-            if (params['overlay'] === 'true') {
-              _SgmntfY_._getJq()('.seg-popup-overlay').show();
-            }
-            // bind close handler
-            _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
-              var $this = _SgmntfY_._getJq()(this);
-              $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-              window.setTimeout(function () {
-                _SgmntfY_._sgfPopupCloseHandler(true, request);
-                $this.parent('.seg-popup').remove();
-                _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-              }, 1000);
-            });
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: "widget-view",
-              interactionId: params["interactionId"],
-              instanceId: params["instanceId"]
-            });
-            _SgmntfY_.GA.sendWidgetView(params["instanceId"]);
-            break;
-          }
-          case 'WEB_NOTIFICATION':
-          case 'SEND_MAIL':
-            // server side action
-            break;
-          case 'POPUP_WINDOW':
-          default:
-          {
-            break;
-          }
-        }
-      },
-      recommendPromotion: function (params, request) {
-        var metadata = {
-          title: params['notificationTitle']
-        };
-        function checkDynamicItemCount(items, item) {
-          for (var i = 0; i < items.length; ++i) {
-            if ((items[i].recommendationSource + '|' + items[i].timeFrame + '|' + items[i].score) === item) {
-              return items[i].itemCount;
-            }
-          }
-          return null;
-        }
-
-        //return true if promotion exists
-        function checkPromotionInList(list, code) {
-          for (var innerProm = 0; innerProm < list.length; innerProm++) {
-            if (list[innerProm]['code'] === code) return true;
-          }
-          return false;
-        }
-
-        function checkSelectorAndRender() {
-          var params = this.params;
-          var selectorCount = this.selectorCount;
-          // get target selector into a variable
-          var target = params.selector;
-
-          // if target selector is not defined or does not exist in the page, retry
-          if (!target || !_SgmntfY_._getJq()(target).length) {
-            // insert log
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in finding target element[' + target + '], element does not exist');
-            if (selectorCount < _SgmntfY_._variables.constants.recommendationSelectorFindLimit) {
-              ++this.selectorCount;
-              var binded = checkSelectorAndRender.bind(this);
-              setTimeout(binded, 100);
-            }
-          }
-          else {
-            var renderIdx = 0;
-            var reConf = {
-              "title": params['notificationTitle'],
-              "promotionList": promotionList,
-              "index": function() {
-                return ++renderIdx;
-              }
-            };
-
-            try {
-              if (params.preJsCode) {
-                eval(params.preJsCode);
-                var retVal = preRenderConf(reConf);
-                if (typeof retVal !== 'undefined' && !retVal) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-                  return;
-                }
-              }
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing promotion recommendation pre js code: ' + err);
-            }
-
-            // check if the account is freemium/brand is enabled
-            if (reConf['brandingEnabled']) {
-              // if branding is enabled add "recommended by Segmentify" into to recommendation title
-              reConf.title += "<a target=\"_blank\" class=\"seg-rec-logo\" href=\"\/\/www.segmentify.com\">Recommended by <img src=\"\/\/cdn.segmentify.com/images/sgm-logo.svg\" /></a>";
-            }
-
-            // render promotions with the given template
-            var renderedHtml = _SgmntfY_._getMustache().render(params.recommendationTemplate, reConf);
-
-            try {
-              // get target element as jQuery object
-              var targetElement = _SgmntfY_._getJq()(target).first();
-
-              // put rendered recommendation HTML into the target
-              if (params.insertType === 'SELF') {
-                targetElement.addClass('seg-promotion-wrapper').html(renderedHtml);
-                targetElement.attr("data-sgf-scenario-id", params.instanceId);
-                if (wvCB) {
-                  wvCB(targetElement);
-                }
-              } else {
-                var $div = _SgmntfY_._getJq()('<div/>', {'class': 'seg-promotion-wrapper'});
-                $div.attr("data-sgf-scenario-id", params.instanceId);
-                if (params.insertType === 'AFTER' || params.insertType === 'BEFORE') {
-                  params.insertType === 'AFTER' ? $div.html(renderedHtml).insertAfter(targetElement) : $div.html(renderedHtml).insertBefore(targetElement);
-                } else if (params.insertType === 'APPEND' || params.insertType === 'PREPEND') {
-                  params.insertType === 'APPEND' ? $div.html(renderedHtml).appendTo(targetElement) : $div.html(renderedHtml).prependTo(targetElement);
-                }
-                if (wvCB) {
-                  wvCB($div);
-                }
-              }
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in filling target element[' + target + '] with promotion recommendations: ' + err);
-            }
-
-            try {
-              params.postJsCode && eval(params.postJsCode);
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing promotion recommendation post js code: ' + err);
-            }
-            _SgmntfY_._bindRecommendationTrackEvents(params.insertType === "SELF" ? targetElement : $div, params.recommendationSettings, params.instanceId, 0);
-          }
-        }
-
-        // calculate promotion list from response
-        var promotionList = [];
-        var recommendedPromotions = params['recommendedPromotions'] || {};
-        var dynamicItems = JSON.parse(params['dynamicItems']) || [];
-
-        //put static items first
-        for (var i = 0; i < recommendedPromotions['RECOMMENDATION_SOURCE_STATIC_ITEMS'].length; ++i) {
-          var elm = recommendedPromotions['RECOMMENDATION_SOURCE_STATIC_ITEMS'][i];
-          if (!checkPromotionInList(promotionList, elm.code)) {
-            promotionList.push(elm);
-          }
-        }
-
-        var missingCount = 0;
-        /* add dynamic items */
-        for (var ri = 0; ri < dynamicItems.length; ++ri) {
-          if (typeof dynamicItems[ri].timeFrame === 'undefined') {
-            dynamicItems[ri].timeFrame = 'null';
-          }
-          var curRecommendationSource = dynamicItems[ri].recommendationSource + '|' + dynamicItems[ri].timeFrame + '|' + dynamicItems[ri].score;
-          var curCatItemCount = parseInt(checkDynamicItemCount(dynamicItems, curRecommendationSource));
-          if (isNaN(curCatItemCount)) {
-            curCatItemCount = 0;
-          }
-
-          if (recommendedPromotions.hasOwnProperty(curRecommendationSource) && curCatItemCount) {
-            missingCount += curCatItemCount;
-            var index = 0;
-            for (var i = 0; i < recommendedPromotions[curRecommendationSource].length; ++i) {
-              var elm = recommendedPromotions[curRecommendationSource][i];
-              elm.name = _SgmntfY_._decodeHtml(elm.name);
-
-              if ((index >= curCatItemCount) && (missingCount == 0)) {
-                break;
-              }
-
-              var eliminationFnRetVal = false;
-              if (params.eliminationFunction) {
-                var fx = _SgmntfY_._getObjectByString(window, params.eliminationFunction);
-                if (typeof fx === 'function') {
-                  try {
-                    eliminationFnRetVal = fx.call(null, elm);
-                  } catch (err) {
-                    _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing promotion recommendation elimination js function: ' + err);
-                  }
-                }
-              }
-
-              // if eliminated, continue loop
-              if (eliminationFnRetVal) {
-                continue;
-              }
-
-              switch (params.elimination) {
-                case 'ELIMINATE_DUPLICATES':
-                case 'ELIMINATE_PREVIOUS':
-                  if (!checkPromotionInList(promotionList, elm.code)) {
-                    if (!_SgmntfY_._containsRecommendedPromotion(elm.code) || _SgmntfY_._variables.offerRecommendedPromotions) {
-                      promotionList.push(elm);
-                      _SgmntfY_._addRecommendedPromotion(elm.code);
-                      ++index;
-                      --missingCount;
-                    }
-                  }
-                  break;
-                case 'NO_ELIMINATION':
-                default:
-                  promotionList.push(elm);
-                  _SgmntfY_._addRecommendedPromotion(elm.code);
-                  ++index;
-                  --missingCount;
-                  break;
-              }
-            }
-          }
-        }
-
-        if (promotionList.length === 0) { // params.actionType == CALLBACK
-          if (params['actionType'] === 'CALLBACK' && request.recommendationCallback) {
-            request.recommendationCallback([], metadata, null);
-          }
-          return;
-        } else if (params.ordering === 'SHUFFLE') {
-          promotionList = _SgmntfY_._shuffle(promotionList);
-        }
-
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'impression',
-          interactionId: params['actionId'],
-          instanceId: params['instanceId']
-        });
-
-        var wvInteractionId = params["interactionId"];
-        var wvInstanceId = params["instanceId"];
-        var wvCB = function ($elem) {
-          var eventSent = false;
-          if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: "widget-view",
-              interactionId: wvInteractionId,
-              instanceId: wvInstanceId
-            });
-            eventSent = true;
-          } else {
-            if (!eventSent) {
-              var widgetViewInterval = setInterval(function() {
-                if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-                  _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                    type: "widget-view",
-                    interactionId: wvInteractionId,
-                    instanceId: wvInstanceId
-                  });
-                  eventSent = true;
-                  window.clearInterval(widgetViewInterval);
-                }
-              }, 100);
-            }
-          }
-        };
-
-        switch (params['actionType']) {
-          case 'CALLBACK': {
-            if (request.recommendationCallback) {  // params.actionType == CALLBACK
-              request.recommendationCallback(promotionList, metadata, wvCB);
-            }
-            break;
-          }
-          case 'INPAGE_WIDGET': {
-            var binded_context = checkSelectorAndRender.bind({params:params,selectorCount:1});
-            binded_context();
-            break;
-          }
-          default:
-            break;
-        }
-      },
-      recommendKeyword: function (params, request) {
-        var metadata = {
-          title: params['notificationTitle']
-        };
-        function checkDynamicItemCount(items, item) {
-          for (var i = 0; i < items.length; ++i) {
-            if ((items[i].recommendationSource + '|' + items[i].timeFrame) == item) {
-              return items[i].itemCount;
-            }
-          }
-          return null;
-        }
-
-        //return true if promotion exists
-        function checkKeywordInList(list, item) {
-          for (var key = 0; key < list.length; key++) {
-            if (list[key] == item) return true;
-          }
-          return false;
-        }
-
-        function checkSelectorAndRender() {
-          var params = this.params;
-          var keywordList = this.keywordList;
-          var selectorCount = this.selectorCount;
-          // get target selector into a variable
-          var target = params.selector;
-
-          // if target selector is not defined or does not exist in the page, retry
-          if (!target || !_SgmntfY_._getJq()(target).length) {
-            // insert log
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in finding target element[' + target + '], element does not exist');
-            if (selectorCount < _SgmntfY_._variables.constants.recommendationSelectorFindLimit) {
-              ++this.selectorCount;
-              var binded = checkSelectorAndRender.bind(this);
-              setTimeout(binded, 100);
-            }
-          }
-          else {
-            var keywords = [];
-            for (var k = 0; k < keywordList.length; ++k) {
-              keywords.push({name: keywordList[k], url: ''});
-            }
-
-            // declare recommendation title variable
-            var recoTitle = params.notificationTitle;
-
-            var renderIdx = 0;
-            var reConf = {
-              "title": recoTitle,
-              "keywords": keywords,
-              "index": function() {
-                return ++renderIdx;
-              }
-            };
-
-            try {
-              if (params.preJsCode) {
-                eval(params.preJsCode);
-                var retVal = preRenderConf(reConf);
-                if (typeof retVal !== 'undefined' && !retVal) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-                  return;
-                }
-              }
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation pre js code: ' + err);
-            }
-
-            // check if the account is freemium/brand is enabled
-            //if (reConf['brandingEnabled']) {
-            // if branding is enabled add "recommended by Segmentify" into to recommendation title
-            //reConf.title += "<a target=\"_blank\" class=\"seg-rec-logo\" href=\"\/\/www.segmentify.com\">Recommended by <img src=\"\/\/cdn.segmentify.com/images/sgm-logo.svg\" /></a>";
-            //}
-
-            // render products with the given template
-            var renderedHtml = _SgmntfY_._getMustache().render(params.recommendationTemplate, reConf);
-
-            try {
-              // get target element as jQuery object
-              var targetElement = _SgmntfY_._getJq()(target).first();
-
-              // put rendered recommendation HTML into the target
-              if (params.insertType === 'SELF') {
-                targetElement.html(renderedHtml);
-                targetElement.attr("data-sgf-scenario-id", params.instanceId);
-                if (wvCB) {
-                  wvCB(targetElement);
-                }
-              } else {
-                var $div = _SgmntfY_._getJq()('<div/>', {'class': 'seg-reco-wrapper seg-clear'});
-                $div.attr("data-sgf-scenario-id", params.instanceId);
-                if (params.insertType === 'AFTER' || params.insertType === 'BEFORE') {
-                  params.insertType === 'AFTER' ? $div.html(renderedHtml).insertAfter(targetElement) : $div.html(renderedHtml).insertBefore(targetElement);
-                } else if (params.insertType === 'APPEND' || params.insertType === 'PREPEND') {
-                  params.insertType === 'APPEND' ? $div.html(renderedHtml).appendTo(targetElement) : $div.html(renderedHtml).prependTo(targetElement);
-                }
-                if (wvCB) {
-                  wvCB($div);
-                }
-              }
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in filling target element[' + target + '] with product recommendations: ' + err);
-            }
-
-            try {
-              params.postJsCode && eval(params.postJsCode);
-            } catch (err) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation post js code: ' + err);
-            }
-            _SgmntfY_._bindRecommendationTrackEvents(params.insertType === "SELF" ? targetElement : $div, params.recommendationSettings, params.instanceId, 0);
-
-            // bind click handler
-            _SgmntfY_._getJq()('.seg-label a').on('click', function () {
-              _SgmntfY_._variables.segmentifyObj('event:interaction', {
-                type: 'click',
-                interactionId: params['actionId'],
-                instanceId: params['instanceId']
-              });
-            });
-          }
-        }
-
-        // calculate promotion list from response
-        var keywordList = [];
-        var recommendedKeywords = params['recommendedKeywords'] || {};
-        var dynamicItems = JSON.parse(params['dynamicItems']) || [];
-
-        //put static items first
-        for (var i = 0; i < recommendedKeywords['RECOMMENDATION_SOURCE_STATIC_ITEMS'].length; ++i) {
-          var elm = recommendedKeywords['RECOMMENDATION_SOURCE_STATIC_ITEMS'][i];
-          if (!checkKeywordInList(keywordList, elm)) {
-            keywordList.push(elm);
-          }
-        }
-
-        var missingCount = 0;
-        /* add dynamic items */
-        for (var ri = 0; ri < dynamicItems.length; ++ri) {
-          if (typeof dynamicItems[ri].timeFrame === 'undefined') {
-            dynamicItems[ri].timeFrame = 'null';
-          }
-          var curRecommendationSource = dynamicItems[ri].recommendationSource + '|' + dynamicItems[ri].timeFrame;
-          var curCatItemCount = parseInt(checkDynamicItemCount(dynamicItems, curRecommendationSource));
-          if (isNaN(curCatItemCount)) {
-            curCatItemCount = 0;
-          }
-
-          if (recommendedKeywords.hasOwnProperty(curRecommendationSource) && curCatItemCount) {
-            missingCount += curCatItemCount;
-            var index = 0;
-            for (var i = 0; i < recommendedKeywords[curRecommendationSource].length; ++i) {
-              var elm = recommendedKeywords[curRecommendationSource][i];
-
-                elm.name = _SgmntfY_._decodeHtml(elm.name);
-
-              if ((index >= curCatItemCount) && (missingCount == 0)) {
-                break;
-              }
-
-              keywordList.push(elm);
-              ++index;
-              --missingCount;
-            }
-          }
-        }
-
-        if (keywordList.length === 0) { // params.actionType == CALLBACK
-          if (request.recommendationCallback) {
-            request.recommendationCallback([], metadata, null);
-          }
-          return;
-        } else if (params.ordering === 'SHUFFLE') {
-          keywordList = _SgmntfY_._shuffle(keywordList);
-        }
-
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'impression',
-          interactionId: params['actionId'],
-          instanceId: params['instanceId']
-        });
-
-        var wvInteractionId = params["interactionId"];
-        var wvInstanceId = params["instanceId"];
-        var wvCB = function ($elem) {
-          var eventSent = false;
-          if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: "widget-view",
-              interactionId: wvInteractionId,
-              instanceId: wvInstanceId
-            });
-            eventSent = true;
-          } else {
-            if (!eventSent) {
-              var widgetViewInterval = setInterval(function() {
-                if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-                  _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                    type: "widget-view",
-                    interactionId: wvInteractionId,
-                    instanceId: wvInstanceId
-                  });
-                  eventSent = true;
-                  window.clearInterval(widgetViewInterval);
-                }
-              }, 100);
-            }
-          }
-        };
-
-        switch (params['actionType']) {
-          case 'CALLBACK': {
-            if (request.recommendationCallback) {
-              request.recommendationCallback(keywordList, metadata, wvCB);
-            }
-            break;
-          }
-          case 'INPAGE_WIDGET':{
-            var binded_context = checkSelectorAndRender.bind({params:params,keywordList:keywordList,selectorCount:1});
-            binded_context();
-            break;
-          }
-          default:
-            break;
-        }
-      },
-      webNotification: function (params) {
-        // server side action
-      },
-      redirectUrl: function (params) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Redirecting action to url: ' + params.redirectUrl);
-        window.location = params.redirectUrl;
-      },
-      jsFunctionCall: function (params) {
-        params['actionType'] = 'JAVASCRIPT_FUNCTION';
-        _SgmntfY_._actions.jsAction(params);
-      },
-      jsAction: function (params) {
-        // get action type;
-        var actionType = params['actionType'];
-        switch(actionType) {
-          case 'JAVASCRIPT_EVENT': {
-            var event = params['event'], parameters = [];
-            // initialize parameters by parsing json string
-            try {
-              if (params["parameters"]) parameters = JSON.parse(params["parameters"])
-            } catch (exception) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Js Action (Event Trigger) - Cannot parse parameters json, str: ' + params["parameters"]);
-              parameters = [];
-            }
-            parameters.push(function () {
-              _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                type: "js_success",
-                interactionId: params["actionId"],
-                instanceId: params["instanceId"]
-              });
-            });
-            parameters.push(function () {
-              _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                type: "js_reject",
-                interactionId: params["actionId"],
-                instanceId: params["instanceId"]
-              });
-            });
-            // trigger event on document with parameters
-            _SgmntfY_._getJq()(document).trigger(event, parameters);
-            _SgmntfY_.LOG_MESSAGE('DEBUG', 'Js Action (Event Trigger) - Triggered Event: ' + event);
-            break;
-          }
-          case 'JAVASCRIPT_CODE': {
-            try {
-              eval(params['javascriptCode']);
-              _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                type: "js_success",
-                interactionId: params["actionId"],
-                instanceId: params["instanceId"]
-              });
-              _SgmntfY_.LOG_MESSAGE('DEBUG', 'Js Action (Execute Code) successfully executed');
-            } catch (err) {
-              _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                type: "js_reject",
-                interactionId: params["actionId"],
-                instanceId: params["instanceId"]
-              });
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Error in JS Action (Execute Code): ' + err);
-            }
-            break;
-          }
-          case 'JAVASCRIPT_FUNCTION':
-          default: {
-            var fx = window[params['function']], parameters = [];
-            // call function
-            if (typeof fx === 'function') {
-              // initialize parameters by parsing json string
-              try {
-                if (params["parameters"]) parameters = JSON.parse(params["parameters"])
-              } catch (exception) {
-                _SgmntfY_.LOG_MESSAGE('WARN', 'Js Action (Function Call) - Cannot parse parameters json, str: ' + params["parameters"]);
-                parameters = [];
-              }
-              parameters.push(function () {
-                _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                  type: "js_success",
-                  interactionId: params["actionId"],
-                  instanceId: params["instanceId"]
-                });
-              });
-              parameters.push(function () {
-                _SgmntfY_._variables.segmentifyObj("event:interaction", {
-                  type: "js_reject",
-                  interactionId: params["actionId"],
-                  instanceId: params["instanceId"]
-                });
-              });
-              // actual call
-              fx.apply(null, parameters);
-              _SgmntfY_.LOG_MESSAGE('DEBUG', 'Js Action (Function Call) successfully run for function: ' + params['function']);
-            }
-            else _SgmntfY_.LOG_MESSAGE('WARN', 'Js Action (Function Call) failed, non existing function: ' + params['function']);
-            break;
-          }
-        }
-      },
-      jsCountdownTimer: function (params) {
-        var timeout = params['timeout'];
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Starting countdown timer with ' + (timeout || 0) * 1000 + ' second(s)');
-        setTimeout(function () {
-          _SgmntfY_.LOG_MESSAGE('DEBUG', 'Countdown timer finished after ' + (timeout || 0) * 1000 + ' second(s)');
-          _SgmntfY_._variables.segmentifyObj("event:interaction", {
-            type: "timeout",
-            interactionId: params["actionId"],
-            instanceId: params["instanceId"]
-          });
-        }, (timeout || 0) * 1000);
-      },
-      sendBannerDetails: function (params, request) {
-        var data = request.originalParams;
-        data.group = params.group;
-        // send back
-        var requestDatas = [];
-        var requestData = _SgmntfY_._functions.bannerGroupDetail(data);
-        if (requestData) {
-          requestDatas.push(requestData);
-        }
-        _SgmntfY_._sendRequestToServer(requestDatas);
-      },
-      showPopup: function (params, request) {
-        var config = {
-          instanceId: params['instanceId'],
-          title: params['notificationTitle'],
-          vertical: params['verticalPosition'],
-          horizontal: params['horizontalPosition'],
-        };
-        try {
-          if (params['preJsCode'] && params['preJsCode'] != "") {
-            eval(params['preJsCode']);
-            var retVal = preRenderConf(config);
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing jb trigger pre js code: ' + err);
-        }
-        var renderedHtml = _SgmntfY_._getMustache().render(params.recommendationTemplate, config);
-        _SgmntfY_._getJq()('body').prepend(renderedHtml);
-
-        var styleDataId = _SgmntfY_._variables.journey.instanceId + "_trigger";
-        params['cssCode'] && _SgmntfY_._getJq()('<style data-id=' + styleDataId + '/>').html(params['cssCode']).prependTo(_SgmntfY_._getJq()('body'));
-
-        if (params['overlay'] === 'true') {
-          _SgmntfY_._getJq()('<div class="seg-popup-overlay"></div>').prependTo(_SgmntfY_._getJq()('body'));
-          _SgmntfY_._getJq()('.seg-popup-overlay').show();
-        }
-        // bind click event for jb trigger
-        document.getElementById("sgm-journey-trigger-" + config.instanceId).addEventListener('click', _SgmntfY_._jbTriggerClickHandler.bind(this, config.instanceId));
-
-        try {
-          params['postJsCode'] && eval(params['postJsCode']);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing jb trigger post js code: ' + err);
-        }
-      },
-      buildJourney: function (params, request) {
-        var jbDiscoverySteps;
-        if (params['discovery']) {
-          jbDiscoverySteps = JSON.parse(params['discovery']) || [];
-        }
-        if (jbDiscoverySteps.length > 0 && jbDiscoverySteps[0].type) {
-          _SgmntfY_._jbOnInitJourneyFlowExecution(params.instanceId, jbDiscoverySteps);
-          _SgmntfY_._variables.journey.isCategoryTree = params['isCategoryTree'] ? params['isCategoryTree'] : 'true';
-
-          var eventParams = {
-            step: _SgmntfY_._variables.journey.currentStep,
-            instanceId: _SgmntfY_._variables.journey.instanceId,
-            answer: JSON.stringify(_SgmntfY_._variables.journey.answer)
-          };
-          _SgmntfY_._variables.segmentifyObj("journey:start", eventParams);
-
-          var jbDiscoveryData = {
-            steps: jbDiscoverySteps,
-            tree: params['tree']
-          }
-          //calculate jb discovery pages count
-          _SgmntfY_._jbCalculatePagesCount(jbDiscoveryData);
-          // start to view from first step
-          _SgmntfY_._jbOnStepViewHandler(jbDiscoveryData);
-        }
-      },
-      giveCoupon: function (params, request) {
-        if (params && params.coupon) {
-          var notificationTitleMap = JSON.parse(params['notificationTitleMap'] || '{}');
-          var notificationTitle = notificationTitleMap[request.data.lang] || params.notificationTitle;
-
-          var config = {
-            coupon: params.coupon,
-            button: _SgmntfY_._jbGetButtonText("DELIVERY"),
-            couponTitle: notificationTitle,
-            instanceId: params.instanceId
-          }
-
-          try {
-            if (params['preJsCode'] && params['preJsCode'] !== "") {
-              eval(params['preJsCode']);
-              if (preRenderConf) {
-                var retVal = preRenderConf(config);
-              }
-              if (typeof retVal !== 'undefined' && !retVal) {
-                _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-                return;
-              }
-            }
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing jb trigger pre js code: ' + err);
-          }
-
-          var domparser = new DOMParser();
-          var hasPopupRecoTemplate = false;
-          try {
-            if (_SgmntfY_._getJq()('#sgm-journey-coupon-template').length === 0) {
-              var renderedHtml = _SgmntfY_._getMustache().render(params.recommendationTemplate, config);
-              _SgmntfY_._getJq()('body').prepend(renderedHtml);
-            } else {
-              hasPopupRecoTemplate = true;
-            }
-
-            var couponWrapperTemplate = domparser.parseFromString(params.recommendationTemplate, "text/html").getElementById('sgm-journey-coupon-template');
-
-            var renderedHtml = _SgmntfY_._getMustache().render(couponWrapperTemplate.innerHTML, config);
-            _SgmntfY_._getJq()('#sgm-journey-coupon-template').html(renderedHtml);
-            _SgmntfY_._getJq()('#sgm-journey-coupon-wrapper').removeClass("sgm-journey-none");
-            var copyButton = document.querySelector(".sgm-journey-discovery-action.sgm-journey-discovery-action-copy");
-            if (copyButton) {
-              copyButton.classList.remove("sgm-journey-none");
-            }
-            _SgmntfY_._jbDeliveryOnBindEventHandler(hasPopupRecoTemplate);
-
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: "widget-view",
-              interactionId: params['actionId'],
-              instanceId: _SgmntfY_._variables.journey.instanceId
-            });
-
-            var styleDataId = _SgmntfY_._variables.journey.instanceId + "_delivery";
-            params['cssCode'] && _SgmntfY_._getJq()('<style data-id=' + styleDataId + '/>').html(params['cssCode']).prependTo(_SgmntfY_._getJq()('.sgm-journey-delivery.seg-popup'));
-
-
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in rendering jb coupon: ' + err);
-          }
-
-          try {
-            if (params['postJsCode'] && params['postJsCode'] !== "") {
-              eval(params['postJsCode']);
-            }
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing jb trigger post js code: ' + err);
-          }
-        }
-
-      },
-      landingPage: function (params, request) {
-        if (params && params.landingPageUrl) {
-          var notificationTitleMap = JSON.parse(params['notificationTitleMap'] || '{}');
-          var notificationTitle = notificationTitleMap[request.data.lang] || params.notificationTitle;
-          _SgmntfY_._variables.journey.landingPageUrl = params.landingPageUrl;
-
-          var config = {
-            button: _SgmntfY_._jbGetButtonText("DELIVERY"),
-          }
-          config.button['redirect'] = notificationTitle;
-
-          try {
-            if (params['preJsCode'] && params['preJsCode'] !== "") {
-              eval(params['preJsCode']);
-              if (preRenderConf) {
-                var retVal = preRenderConf(config);
-              }
-              if (typeof retVal !== 'undefined' && !retVal) {
-                _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-                return;
-              }
-            }
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing jb trigger pre js code: ' + err);
-          }
-
-          var domparser = new DOMParser();
-          try {
-            var redirectButtonTemplate = domparser.parseFromString(params.recommendationTemplate, "text/html").getElementById('sgm-journey-action-redirect');
-
-            var renderedHtml = _SgmntfY_._getMustache().render(redirectButtonTemplate.innerHTML, config);
-            _SgmntfY_._getJq()('#sgm-journey-action-redirect').html(renderedHtml);
-
-            params['cssCode'] && _SgmntfY_._getJq()('<style />').html(params['cssCode']).prependTo(_SgmntfY_._getJq()('.sgm-journey-delivery.seg-popup'));
-
-            var redirectButton = document.getElementById('sgm-journey-action-redirect');
-            if (redirectButton) {
-              redirectButton.classList.remove("sgm-journey-none");
-            }
-            _SgmntfY_._jbDeliveryOnBindEventHandler(true);
-
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in rendering jb landing Page: ' + err);
-          }
-
-          try {
-            if (params['postJsCode'] && params['postJsCode'] !== "") {
-              eval(params['postJsCode']);
-            }
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing jb trigger post js code: ' + err);
-          }
-        }
-      },
-    },
-    _jbOverFlowOperations: {
-      _disableBodyOverFlowForJBWrapper: function() {
-        _SgmntfY_._evalSearchBodyScrollLockPreJs();
-        // in some event handler after showing the target element...disable body scroll
-        var targetElement = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);
-        if(targetElement) {
-          bodyScrollLock.disableBodyScroll(targetElement);
-        }
-      },
-      _enableBodyOverFlowForJBWrapper: function() {
-        // the method runs after finish to view journey pages
-        var journeyWrapper = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);
-        if (journeyWrapper) {
-          window.setTimeout(function () {
-            bodyScrollLock.enableBodyScroll(journeyWrapper);
-          }, 100);
-        }
-      },
-      _journeyFinished: function(request) {
-        return request && request.originalParams
-            && (request.originalParams.type === "SUCCESS" || request.originalParams.type === "sfy-jb-finish")
-      }
-    },
-    _jbCalculatePagesCount: function (jbDiscoveryData) {
-      _SgmntfY_._variables.journey.allPageCount =  jbDiscoveryData.steps.length;
-      _SgmntfY_._variables.journey.barRatio = 0;
-
-      if(_SgmntfY_._variables.journey.allPageCount > 0) {
-        _SgmntfY_._variables.journey.barRatio =  100 / _SgmntfY_._variables.journey.allPageCount;
-      }
-    },
-    _jbTriggerClickHandler: function (instanceId) {
-      // the method runs after clicked the trigger button
-      _SgmntfY_._variables.segmentifyObj('journey:init', {
-        instanceId: instanceId
-      });
-    },
-    _jbOnInitJourneyFlowExecution: function(instanceId, steps) {
-      // the method runs before start to view journey pages
-
-      _SgmntfY_._jbSetInitialVariables(instanceId, steps);
-      _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-
-      var deviceClass = _SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.journey.maxMobileWidth ? "sgm-journey-mobile" : "sgm-journey-desktop";
-      if (!document.getElementById("sgm-journey-main-wrapper")) {
-        _SgmntfY_._getJq()('<div id="sgm-journey-main-wrapper" class="' + deviceClass + '" ></div>').prependTo(_SgmntfY_._getJq()('body'));
-      }
-      _SgmntfY_._jbOverFlowOperations._disableBodyOverFlowForJBWrapper();
-
-      // before journey start set invisible the trigger buttons
-      var triggerButtons = document.querySelectorAll(".sgm-journey-trigger");
-      if (triggerButtons && triggerButtons.length > 0) {
-        triggerButtons.forEach(function(tButton) {
-          tButton.classList.add("sgm-journey-none");
-        })
-      }
-    },
-    _jbOnDestroyJourneyFlowExecution: function(hasDelivery) {
-      var params = {
-        step: _SgmntfY_._variables.journey.currentStep,
-        instanceId: _SgmntfY_._variables.journey.instanceId,
-        answer: JSON.stringify(_SgmntfY_._variables.journey.answer)
-      };
-
-      try {
-        var journeyWrapper = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);
-        if (hasDelivery === false) {
-          _SgmntfY_._jbOverFlowOperations._enableBodyOverFlowForJBWrapper();
-          _SgmntfY_._jbTriggerButtonReEnable();
-          journeyWrapper && journeyWrapper.parentNode.removeChild(journeyWrapper);
-        } else {
-          _SgmntfY_._variables.segmentifyObj("journey:finish", params);
-          journeyWrapper && journeyWrapper.classList.add("sgm-journey-none");
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Error in destroying jb flow: ' + err);
-      }
-    },
-    _jbTriggerButtonReEnable: function() {
-      // after journey finish(request) set visible the trigger buttons
-      var triggerButtons = document.querySelectorAll(".sgm-journey-trigger");
-      if (triggerButtons && triggerButtons.length > 0) {
-        triggerButtons.forEach(function(tButton) {
-          tButton.classList.remove("sgm-journey-none");
-        })
-      }
-    },
-    _jbSetInitialVariables: function(instanceId, steps) {
-      // initial journey variable after trigger
-      // first step will be set to show
-      _SgmntfY_._variables.journey = {
-        answer: {},
-        closed: false,
-        instanceId: instanceId,
-        currentStep: null,
-        nextStep: steps[0].type,
-        previousStep: undefined,
-        allSteps: steps.map(function(s) {return s.type}),
-        maxMobileWidth: 801,
-        priceRange: {min: undefined, max: undefined},
-        buttonTextMap: _SgmntfY_._variables.journey.buttonTextMap || {
-          EN: {
-            copy: "Copy",
-            next: "Next",
-            previous: "Go Back",
-            close: "Close",
-            skip: "Skip",
-            finish: "Finish",
-            start: "Let's Start",
-            customize: "Customize",
-            skipAndFinish: "Skip & Finish"
-          },
-          TR: {
-            copy: "Kopyala",
-            next: "Sonraki",
-            previous: "Geri Dön",
-            close: "Kapat",
-            skip: "Atla",
-            finish: "Bitir",
-            start: "Hadi Başlayalım",
-            customize: "Özelleştir",
-            skipAndFinish: "Atla ve Bitir"
-          }
-        },
-        wrapperSelector: "#sgm-journey-main-wrapper",
-        pageCount: 0,
-        allPageCount: 0,
-        barRatio: 0,
-        barWidth: 0,
-        isTriggeredBackButton: false,
-        progressBar: {
-          EN: {
-            label: "Step ",
-            separator: " of "
-          },
-          TR: {
-            label: "Adım ",
-            separator: " / "
-          }
-        }
-      };
-    },
-    _jbTransformStepItems: function(stepName, data) {
-      return data;
-    },
-    _jbTransformCategoryStepItems: function (stepName, data) {
-      var _isCategoryTree = _SgmntfY_._variables.journey.isCategoryTree;
-      return data.map(function (treeMember) {
-        var item = {};
-        item.originalData = treeMember;
-        item.lastChild = treeMember;
-        if (_isCategoryTree && _isCategoryTree === 'false') {
-          var categoryTree = treeMember.split(">");
-          item.lastChild = categoryTree[categoryTree.length - 1].trim();
-        }
-        return item;
-      });
-    },
-    _jbGetStepItems: function(stepName, stepItems, jbDiscoveryDataTree) {
-      // prepare the data that will show on the journey step
-      try {
-        var answer = _SgmntfY_._variables.journey.answer;
-        if (stepName === "MAIN_CATEGORY") {
-          return _SgmntfY_._jbTransformStepItems(stepName, Object.keys(jbDiscoveryDataTree));
-        } else if (stepName === "CATEGORY") {
-          return _SgmntfY_._jbTransformCategoryStepItems(stepName, Object.keys(jbDiscoveryDataTree[answer.mainCategory]));
-        } else if (stepName === "BRAND") {
-          return _SgmntfY_._jbTransformStepItems(stepName, Object.keys(jbDiscoveryDataTree[answer.mainCategory][answer.category]));
-        } else if (stepName === "SIZE" || stepName === "COLOR" || stepName === "PRICE_RANGE" || stepName === "CUSTOM_PRICE_RANGE") {
-          var stepDataMap = {SIZE: "s", COLOR: "c", PRICE_RANGE: "p", CUSTOM_PRICE_RANGE: "p"};
-          var items = [];
-          if (_SgmntfY_._variables.journey.allSteps.indexOf("BRAND") > -1) {
-            var selectedBrandNames = Object.keys(jbDiscoveryDataTree[answer.mainCategory][answer.category]);
-            if (answer.brand && answer.brand.length > 0) {
-              selectedBrandNames = answer.brand;
-            }
-            selectedBrandNames.forEach(function(brandName) {
-              var brandData = jbDiscoveryDataTree[answer.mainCategory][answer.category][brandName];
-              items.push.apply(items, brandData[stepDataMap[stepName]] || []);
-            });
-          } else {
-            var categoryData = jbDiscoveryDataTree[answer.mainCategory][answer.category];
-            items.push.apply(items, categoryData[stepDataMap[stepName]] || []);
-          }
-          if (stepName === "PRICE_RANGE" || stepName === "CUSTOM_PRICE_RANGE") {
-            var possiblePriceRangesMin = items.map(onMapPriceRange.bind(null, false)).sort(onSortPriceRange);
-            var possiblePriceRangesMax = items.map(onMapPriceRange.bind(null, true)).sort(onSortPriceRange);
-            if (possiblePriceRangesMin && possiblePriceRangesMin.length > 0 && possiblePriceRangesMax && possiblePriceRangesMax.length > 0) {
-              if (stepName === "CUSTOM_PRICE_RANGE") {
-                return [possiblePriceRangesMin[0], possiblePriceRangesMax[possiblePriceRangesMax.length - 1]];
-              } else {
-                return _SgmntfY_._jbGetPriceRangeData(possiblePriceRangesMin[0], possiblePriceRangesMax[possiblePriceRangesMax.length - 1])
-              }
-            } else {
-              return [];
-            }
-          } else {
-            // visible only
-            var dataCount = 0;
-            stepItems.forEach(function(item){
-              if (item && item.itemCount) {
-                dataCount = dataCount + item.itemCount;
-              }
-            });
-            return _SgmntfY_._getDistinctArray(items.sort(onSortObject).map(onMapObject)).slice(0, dataCount);
-          }
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Error occurred while preparing journey items');
-      }
-
-      return [];
-
-      ////////
-
-      function onSortObject(item1, item2) {
-        return Object.entries(item2)[0][1] - Object.entries(item1)[0][1];
-      }
-
-      function onMapObject(item) {
-        var entry = Object.entries(item);
-        return entry && entry[0] && entry[0][0] ? entry[0][0] : undefined;
-      }
-
-      function onMapPriceRange(isMax, item) {
-        var index = isMax === true ? 1 : 0;
-        if (item && item.split("-") && item.split("-")[index]) {
-          var rangeData = item.split("-")[index].trim();
-          if (rangeData === "") {
-            return 0;
-          }
-          return parseFloat(rangeData);
-        }
-      }
-
-      function onSortPriceRange(val1, val2) {
-        return val1 - val2;
-      }
-    },
-    _jbGetPriceRangeData: function(minValue, maxValue) {
-      if (minValue === 0 && maxValue === 0) {
-        return [];
-      }
-      var normalizedMin = nearest(minValue, true);
-      var normalizedMax = nearest(maxValue, false);
-
-      if (normalizedMin == normalizedMax) {
-        if (minValue === maxValue) {
-          return [minValue.toString()]
-        } else {
-          return [minValue + " - " + maxValue];
-        }
-      }
-      var difference = normalizedMax - normalizedMin;
-      var range = difference / 6;
-      var firstPoint = normalizedMin + range;
-      var thirdPoint = normalizedMax - range;
-      var secondPoint = (firstPoint + thirdPoint) / 2;
-      var nearestFirstPoint = nearestFive(firstPoint);
-      var nearestSecondPoint = nearestFive(secondPoint);
-      var nearestThirdPoint = nearestFive(thirdPoint);
-      if (nearestFirstPoint < minValue) {
-        nearestFirstPoint = Math.ceil(minValue);
-      }
-      if (nearestThirdPoint > maxValue) {
-        nearestThirdPoint = Math.floor(maxValue);
-      }
-      var firstRange = "0 - " + nearestFirstPoint;
-      var secondRange = nearestFirstPoint + " - " + nearestSecondPoint;
-      var thirdRange = nearestSecondPoint + " - " + nearestThirdPoint;
-      var fourthRange = nearestThirdPoint + "+";
-      return [firstRange, secondRange, thirdRange, fourthRange];
-
-      /////////
-
-      function nearest(value, isMin) {
-        var normalized;
-        if (value > 100000) {
-          var remaining = value % 1000;
-          if (isMin === true) {
-            value += 1000;
-          }
-          normalized = value - remaining;
-        } else if (value > 10000) {
-          var remaining = value % 500;
-          if (isMin === true) {
-            value += 500;
-          }
-          normalized = value - remaining;
-        } else if (value > 1000) {
-          var remaining = value % 100;
-          if (isMin === true) {
-            value += 100;
-          }
-          normalized = value - remaining;
-        } else if (value > 100) {
-          var remaining = value % 10;
-          if (isMin === true) {
-            value += 10;
-          }
-          normalized = value - remaining;
-        } else if (value > 50) {
-          var remaining = value % 5;
-          if (isMin === true) {
-            value += 5;
-          }
-          normalized = value - remaining;
-        } else {
-          normalized = nearestFive(value);
-        }
-        return normalized;
-      }
-
-      function nearestFive(value) {
-        var remaining = value % 5;
-        if (remaining >= 2.5) {
-          value += 5;
-        }
-        return Math.floor(value - remaining);
-      }
-    },
-    _jbGetButtonText: function(stepName, stepButtonTextMap) {
-      var buttonData = {};
-
-      if (_SgmntfY_._variables.journey && _SgmntfY_._variables.journey.buttonTextMap) {
-        var defaultButtonTextLanguage = _SgmntfY_._variables.journey.buttonTextMap[_SgmntfY_._variables.language] ? _SgmntfY_._variables.language : "EN";
-
-        if (stepButtonTextMap && stepButtonTextMap[_SgmntfY_._variables.language]) {
-          buttonData['next'] = stepButtonTextMap[_SgmntfY_._variables.language];
-        } else {
-          if (stepName === "WELCOME") {
-            buttonData['next'] =  _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].start;
-          } else {
-            buttonData['next'] =  _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].next;
-          }
-        }
-        buttonData['skip'] = _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].skip;
-        buttonData['skipAndFinish'] = _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].skipAndFinish;
-        buttonData['finish'] = _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].finish;
-        buttonData['copy'] = _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].copy;
-        buttonData['close'] = _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].close;
-        buttonData['customize'] = _SgmntfY_._variables.journey.buttonTextMap[defaultButtonTextLanguage].customize;
-      }
-
-      return buttonData;
-    },
-    _jbOnStepViewHandler: function(jbDiscoveryData) {
-      // the method runs when start to step viewing
-      var currentStep;
-      if (_SgmntfY_._variables.journey.isTriggeredBackButton) {
-        // if came from previous button we set currentStep with previous step
-        currentStep = _SgmntfY_._jbGetPrevStepData(jbDiscoveryData);
-      } else {
-        // it shows the step that defined in _SgmntfY_._variables.journey.nextStep
-        // if nextStep is undefined then the flow execution will finish
-        currentStep = _SgmntfY_._jbGetCurrentStepData(jbDiscoveryData, true);
-      }
-
-      if (currentStep) {
-        shiftStep(currentStep);
-
-        var config = {
-          title: currentStep.titleMap[_SgmntfY_._variables.language],
-          step: currentStep.type.toLowerCase(),
-          button: _SgmntfY_._jbGetButtonText(currentStep.type, currentStep.buttonTextMap),
-          items: _SgmntfY_._jbGetStepItems(currentStep.type, currentStep.items, jbDiscoveryData.tree),
-          currencyCode: _SgmntfY_._variables.currency
-        }
-
-        var params = {
-          step: _SgmntfY_._variables.journey.currentStep,
-          instanceId: _SgmntfY_._variables.journey.instanceId,
-        };
-        _SgmntfY_._variables.segmentifyObj("journey:view", params);
-
-        try {
-          if (currentStep['preJsCode'] && currentStep['preJsCode'] != "") {
-            eval(currentStep['preJsCode']);
-            if (preRenderConf) {
-              var retVal = preRenderConf(config);
-            }
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing jb trigger pre js code: ' + err);
-        }
-        // set progress bar current page and width
-        _SgmntfY_._jbSetPageCountAndProgressBarWidth();
-
-        if (_SgmntfY_._variables.journey.currentStep !== "WELCOME" && config.items.length === 0) { // skip the step if data is empty
-          _SgmntfY_._jbOnStepViewHandler(jbDiscoveryData);
-        } else {
-          var renderedHtml = _SgmntfY_._getMustache().render(currentStep.recommendationTemplate, config);
-          _SgmntfY_._getJq()('#sgm-journey-main-wrapper').html(renderedHtml);
-          _SgmntfY_._jbOnBindEventHandler(jbDiscoveryData, config.items);
-
-          var styleDataId = _SgmntfY_._variables.journey.instanceId + "_" + currentStep.type;
-          currentStep['cssCode'] && _SgmntfY_._getJq()('<style data-id=' + styleDataId + '/>').html(currentStep['cssCode']).prependTo(_SgmntfY_._getJq()(_SgmntfY_._variables.journey.wrapperSelector));
-
-          //set progress bar and label
-          _SgmntfY_._jbSetProgressBar();
-
-          if (!_SgmntfY_._variables.journey.nextStep) { // if next step does not exists
-            _SgmntfY_._jbActionButtonHandler("skipAndFinish", currentStep, true);
-          } else {
-            if (_SgmntfY_._variables.journey.currentStep === "WELCOME") {
-              _SgmntfY_._jbActionButtonHandler("next", currentStep, true);
-            } else {
-              _SgmntfY_._jbActionButtonHandler("skip", currentStep, true);
-            }
-          }
-          if(_SgmntfY_._variables.journey.isTriggeredBackButton){
-            if(_SgmntfY_._jbIsSingleDataSelect() === false){
-              reselectItems(_SgmntfY_._variables.journey.currentStep.toLowerCase());
-              _SgmntfY_._jbActionButtonHandler("next", currentStep, true);
-            }
-          }
-          // we set deafult previous button to false after set step and page count
-          _SgmntfY_._variables.journey.isTriggeredBackButton = false;
-          // previous step handler
-          _SgmntfY_._jbActionButtonHandler("previous", currentStep, !!_SgmntfY_._variables.journey.previousStep);
-
-          try {
-            currentStep.postJsCode && eval(currentStep.postJsCode);
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product recommendation post js code: ' + err);
-          }
-        }
-
-      } else {
-        _SgmntfY_._variables.segmentifyObj('journey:success', {
-          instanceId: _SgmntfY_._variables.journey.instanceId,
-          answer: JSON.stringify(_SgmntfY_._variables.journey.answer)
-        });
-      }
-
-      function shiftStep(currentStep) {
-        _SgmntfY_._variables.journey.currentStep = currentStep.type;
-        for (var index = 0; index < jbDiscoveryData.steps.length; index++) {
-          if (jbDiscoveryData.steps[index] && jbDiscoveryData.steps[index].type === currentStep.type) {
-            //set previous step
-            if (!!jbDiscoveryData.steps[index - 1]) {
-              _SgmntfY_._variables.journey.previousStep = jbDiscoveryData.steps[index - 1].type;
-            } else {
-              _SgmntfY_._variables.journey.previousStep = undefined;
-            }
-            if (!!jbDiscoveryData.steps[index + 1]) {
-              _SgmntfY_._variables.journey.nextStep = jbDiscoveryData.steps[index + 1].type;
-            } else {
-              _SgmntfY_._variables.journey.nextStep = undefined;
-            }
-            break;
-          }
-          if (index === jbDiscoveryData.steps.length - 1) {
-            _SgmntfY_._variables.journey.nextStep = undefined;
-          }
-        }
-      }
-      function reselectItems(currentStep){
-        var selectedClassName = _SgmntfY_._jbIsCheckMarkDataSelect() ? "sgm-journey-checkmark" : "sgm-journey-content-selected";
-        var currentElements = document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector + " ." + "sgm-journey-content-item");
-        var values = _SgmntfY_._variables.journey.answer[currentStep];
-        if (currentElements && currentElements.length > 0 && values && values.length > 0) {
-          currentElements.forEach(function(el) {
-            values.forEach(function(val){
-              if (el.hasAttribute("data-original-value") && val) {
-                if(el.getAttribute("data-original-value") === val){
-                  el.classList.add(selectedClassName);
-                }
-              }
-            })
-          })
-        }
-      }
-    },
-    _jbSetPageCountAndProgressBarWidth: function () {
-      if (_SgmntfY_._variables.journey.isTriggeredBackButton) {
-        if (_SgmntfY_._variables.journey.pageCount > 0) {
-          _SgmntfY_._variables.journey.pageCount -= 1;
-          _SgmntfY_._variables.journey.barWidth -= _SgmntfY_._variables.journey.barRatio;
-        }
-      } else {
-        if (_SgmntfY_._variables.journey.pageCount < _SgmntfY_._variables.journey.allPageCount) {
-          _SgmntfY_._variables.journey.pageCount += 1;
-          _SgmntfY_._variables.journey.barWidth += _SgmntfY_._variables.journey.barRatio;
-        }
-      }
-    },
-    _jbSetProgressBar: function () {
-      var barElem = document.getElementById("sgm-journey-bar");
-      if (barElem) {
-        var width = _SgmntfY_._variables.journey.barWidth;
-        // control if last child not fill bar because of decimal fix to 100
-        if (width + _SgmntfY_._variables.journey.barRatio > 100) {
-          barElem.style.width = "100%";
-        } else {
-          barElem.style.width = width + "%";
-        }
-        var language = 'EN';
-        if(_SgmntfY_._variables.language === 'TR'){
-          language = _SgmntfY_._variables.language;
-        }
-
-        var progressBar = _SgmntfY_._variables.journey.progressBar[language];
-        document.getElementById('sgm-journey-progress-label').innerHTML =
-            progressBar.label + _SgmntfY_._variables.journey.pageCount + progressBar.separator + _SgmntfY_._variables.journey.allPageCount;
-      }
-    },
-    _jbGetPrevStepData: function (jbDiscoveryData) {
-      var currentStep = jbDiscoveryData.steps.filter(onFilterStep);
-      if (currentStep) {
-        return currentStep[0];
-      }
-
-      function onFilterStep(step) {
-        return step.type === _SgmntfY_._variables.journey.previousStep;
-      }
-    },
-    _jbGetCurrentStepData: function(jbDiscoveryData, forNext) {
-      var currentStep = jbDiscoveryData.steps.filter(onFilterStep);
-      if (currentStep) {
-        return currentStep[0];
-      }
-
-      /////
-
-      function onFilterStep(step) {
-        return step.type === (forNext === true ? _SgmntfY_._variables.journey.nextStep : _SgmntfY_._variables.journey.currentStep);
-      }
-    },
-    _jbOnBindEventHandler: function(jbDiscoveryData, contentItems) {
-      // events will bind that we need on the journey step
-
-      var closeButton = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-topbar span.sgm-journey-close");
-      if (closeButton) {
-        closeButton.addEventListener("click", _SgmntfY_._jbExitHandler)
-      }
-
-      var actionButton = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-action .sgm-journey-discovery-action");
-      if (actionButton) {
-        actionButton.addEventListener("click", _SgmntfY_._jbOnStepChangeHandler.bind(this, jbDiscoveryData));
-      }
-
-      var prevActionButton = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-action .sgm-journey-discovery-prev-action");
-      if (prevActionButton) {
-        prevActionButton.addEventListener("click", _SgmntfY_._jbOnPrevStepChangeHandler.bind(this, jbDiscoveryData));
-      }
-
-      var customizePriceRangeButton = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-content .sgm-journey-price-range-customize-button");
-      if (customizePriceRangeButton) {
-        customizePriceRangeButton.addEventListener("click", _SgmntfY_._jbOnPriceRangeCustomizeHandler.bind(this, contentItems, jbDiscoveryData));
-      }
-
-      var itemElements = document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-content .sgm-journey-content-item");
-      if (itemElements && itemElements.length > 0) {
-        itemElements.forEach(onIterateItemElementBindClick);
-      }
-
-      //////
-
-      function onIterateItemElementBindClick(itemElement) {
-        itemElement.addEventListener("click", _SgmntfY_._jbOnDataSelectHandler.bind(this, jbDiscoveryData), false);
-      }
-    },
-    _jbDeliveryOnBindEventHandler: function(hasPopupRecoTemplate) {
-      var deliveryActions = document.querySelectorAll(".sgm-journey-delivery .sgm-journey-discovery-action");
-      if (deliveryActions && deliveryActions.length > 0) {
-        deliveryActions.forEach(onBindAction);
-
-        if (hasPopupRecoTemplate === false) {
-          // bind close handler
-          _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
-            var $this = _SgmntfY_._getJq()(this);
-            $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-            window.setTimeout(function () {
-              _SgmntfY_._sgfPopupCloseHandler(false);
-              $this.parent('.seg-popup').remove();
-              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-            }, 1000);
-          });
-        }
-      }
-
-      ///////
-
-      function onBindAction(actionButton) {
-        if (actionButton.getAttribute("data-type") === "copy") {
-          actionButton.addEventListener("click", _SgmntfY_._textCopyToClipBoard.bind(this, "sgm-journey-delivery-coupon"));
-        } else if (actionButton.getAttribute("data-type") === "close") {
-          actionButton.addEventListener("click", _SgmntfY_._jbOnCloseDelivery);
-        } else if (actionButton.getAttribute("data-type") === "redirect") {
-          actionButton.addEventListener("click", _SgmntfY_._jbOnLandingPage);
-        }
-      }
-    },
-    _jbOnLandingPage: function() {
-      window.location = _SgmntfY_._variables.journey.landingPageUrl;
-    },
-    _jbOnCloseDelivery: function() {
-      var deliveryWrapper = document.querySelector(".sgm-journey-delivery.seg-popup");
-      if (deliveryWrapper) {
-        deliveryWrapper.classList.remove("segFadeInUp");
-        deliveryWrapper.classList.add("segFadeOutDown");
-        window.setTimeout(function () {
-          _SgmntfY_._sgfPopupCloseHandler(false);
-          deliveryWrapper.parentNode.removeChild(deliveryWrapper);
-        }, 1000);
-      }
-    },
-    _jbOnPriceRangeCustomizeHandler: function(contentItems, jbDiscoveryData) {
-      // initialization of price range selection
-      var rangeSelectEl = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-content-price-range-select");
-      var customizeEl = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-content-price-range-custom");
-      if (rangeSelectEl && customizeEl) {
-        rangeSelectEl.classList.add("sgm-journey-none");
-        customizeEl.classList.remove("sgm-journey-none");
-
-        var currentStepData = _SgmntfY_._jbGetCurrentStepData(jbDiscoveryData, false);
-        _SgmntfY_._jbActionButtonHandler("finish", currentStepData, true);
-
-        // remove selection in price list
-        var currentSelectedElements = document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector + ".sgm-journey-content-selected");
-        if (currentSelectedElements && currentSelectedElements.length > 0) {
-          currentSelectedElements.forEach(function(selectedEl) {
-            selectedEl.classList.remove("sgm-journey-content-selected");
-          });
-        }
-        var priceRanges = _SgmntfY_._jbGetStepItems("CUSTOM_PRICE_RANGE", null, jbDiscoveryData.tree);
-        var initialMinVal;
-        var initialMaxVal;
-        if (priceRanges && priceRanges.length === 2) {
-          initialMinVal = priceRanges[0];
-          initialMaxVal = priceRanges[1];
-        } else {
-          initialMinVal = parseInt(contentItems && contentItems.length > 0 ? contentItems[0].replace("-", "").trim() : 0);
-          initialMaxVal = parseInt(contentItems && contentItems.length > 0 ? contentItems[contentItems.length - 1].replace("-", "").trim() : 0);
-        }
-        initialMinVal = initialMinVal - (initialMinVal % 10);
-        initialMaxVal = initialMaxVal - (initialMaxVal % 10) + 10;
-        var rangeMin = _SgmntfY_._variables.journey.priceRange.min || (initialMinVal >= 2 ? initialMinVal - 2 : initialMinVal);
-        var rangeMax = _SgmntfY_._variables.journey.priceRange.max || initialMaxVal + (initialMaxVal > 10 ? 20 : 5);
-
-        document.getElementById("sgm-journey-slider-range-input-value-min").min = rangeMin;
-        document.getElementById("sgm-journey-slider-range-input-value-min").max = rangeMax;
-        document.getElementById("sgm-journey-slider-range-input-value-min").value = initialMinVal;
-
-        document.getElementById("sgm-journey-slider-range-input-value-max").min = rangeMin;
-        document.getElementById("sgm-journey-slider-range-input-value-max").max = rangeMax;
-        document.getElementById("sgm-journey-slider-range-input-value-max").value = initialMaxVal;
-
-        onChangeJBSliderInputMin(document.getElementById("sgm-journey-slider-range-input-value-max"), initialMinVal);
-        onChangeJBSliderInputMax(document.getElementById("sgm-journey-slider-range-input-value-min"), initialMaxVal);
-
-        document.getElementById("sgm-journey-slider-range-input-value-min").addEventListener("input",onChangeJBSliderInputMin.bind(this));
-        document.getElementById("sgm-journey-slider-range-input-value-max").addEventListener("input",onChangeJBSliderInputMax.bind(this));
-
-        function onChangeJBSliderInputMin(target, selectedValue) {
-          if (target.type === "input") target = target.currentTarget;
-
-          if (!selectedValue && selectedValue !== 0) {
-            selectedValue = Math.min(target.value, document.getElementById("sgm-journey-slider-range-input-value-max").value);
-          }
-          var minVal = parseInt(target.min);
-          var maxVal = parseInt(target.max);
-          var targetValue = (100 / (maxVal - minVal)) * selectedValue - (100 / (maxVal - minVal)) * minVal;
-
-          document.getElementsByClassName("sgm-journey-slider-range-point-min")[0].style.left = targetValue + "%";
-          document.getElementsByClassName("sgm-journey-slider-inverse-left")[0].style.width = targetValue + "%";
-          document.getElementsByClassName("sgm-journey-slider-range-fill")[0].style.left = targetValue + "%";
-          document.getElementsByClassName("sgm-journey-slider-range-fill")[0].min = targetValue;
-          document.getElementById("sgm-journey-slider-range-point-value-min").parentElement.style.left = targetValue + "%";
-          document.getElementById("sgm-journey-slider-range-point-value-min").innerHTML = "" + selectedValue;
-          document.getElementById("price-range-min").value = selectedValue;
-
-          var customHiddenElement = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-content-item-custom");
-          if (customHiddenElement) {
-            customHiddenElement.classList.add("sgm-journey-content-selected");
-            customHiddenElement.setAttribute("data-original-value", document.getElementById("price-range-min").value + " - " + document.getElementById("price-range-max").value);
-          }
-        }
-
-        function onChangeJBSliderInputMax(target, selectedValue) {
-          if (target.type === "input") target = target.currentTarget;
-
-          if (!selectedValue && selectedValue !== 0) {
-            selectedValue = Math.max(target.value, document.getElementById("sgm-journey-slider-range-input-value-min").value);
-          }
-          var minVal = parseInt(target.min);
-          var maxVal = parseInt(target.max);
-          var targetValue = (100 / (maxVal - minVal)) * parseInt(selectedValue) - (100 / (maxVal - minVal)) * minVal;
-
-          document.getElementsByClassName("sgm-journey-slider-inverse-right")[0].style.width = (100 - targetValue) + "%";
-          document.getElementsByClassName("sgm-journey-slider-range-fill")[0].style.right = (100 - targetValue) + "%";
-          document.getElementsByClassName("sgm-journey-slider-range-fill")[0].max = targetValue;
-          document.getElementsByClassName("sgm-journey-slider-range-point-max")[0].style.left = targetValue + "%";
-          document.getElementById("sgm-journey-slider-range-point-value-max").parentElement.style.left = targetValue + "%";
-          document.getElementById("sgm-journey-slider-range-point-value-max").innerHTML = "" + selectedValue;
-          document.getElementById("price-range-max").value = selectedValue;
-
-          var customHiddenElement = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-content-item-custom");
-          if (customHiddenElement) {
-            customHiddenElement.classList.add("sgm-journey-content-selected");
-            customHiddenElement.setAttribute("data-original-value", document.getElementById("price-range-min").value + " - " + document.getElementById("price-range-max").value);
-          }
-        }
-      }
-
-    },
-    _jbOnDataSelectHandler: function(jbDiscoveryData, selectedElement) {
-      // the method runs after select data(item) on the journey step
-
-      var selectedClassName = _SgmntfY_._jbIsCheckMarkDataSelect() ? "sgm-journey-checkmark" : "sgm-journey-content-selected";
-      if (_SgmntfY_._jbIsSingleDataSelect()) {
-        var previouslySelectedElements = document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector + " ." + selectedClassName);
-        if (previouslySelectedElements && previouslySelectedElements.length > 0) {
-          previouslySelectedElements.forEach(function(el) {
-            el.classList.remove("sgm-journey-content-selected");
-          })
-        }
-        selectedElement.currentTarget.classList.add("sgm-journey-content-selected");
-
-        if (_SgmntfY_._jbIsAllowedToChangeStepAfterSelect()) {
-          _SgmntfY_._jbOnStepChangeHandler(jbDiscoveryData);
-        }
-      } else {
-        if (selectedElement.currentTarget.classList.contains(selectedClassName)) {
-          selectedElement.currentTarget.classList.remove(selectedClassName)
-        } else {
-          selectedElement.currentTarget.classList.add(selectedClassName);
-        }
-
-        var currentSelectedElements = document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector + " ." + selectedClassName);
-
-        var hasSelectedData = currentSelectedElements && currentSelectedElements.length > 0;
-        var currentStepData = _SgmntfY_._jbGetCurrentStepData(jbDiscoveryData, false);
-
-        // if there is not next step
-        !_SgmntfY_._variables.journey.nextStep && hasSelectedData && _SgmntfY_._jbActionButtonHandler("finish", currentStepData, true);
-        !_SgmntfY_._variables.journey.nextStep && !hasSelectedData && _SgmntfY_._jbActionButtonHandler("skipAndFinish", currentStepData, true);
-
-        // if there is next step
-        _SgmntfY_._variables.journey.nextStep && hasSelectedData && _SgmntfY_._jbActionButtonHandler("next", currentStepData, true);
-        _SgmntfY_._variables.journey.nextStep && !hasSelectedData && _SgmntfY_._jbActionButtonHandler("skip", currentStepData, true);
-      }
-    },
-    _jbActionButtonHandler: function(buttonType, currentStepData, isVisible) {
-      // buttonType: next, skip, finish, skipAndFinish
-      var buttonEl = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-action .sgm-journey-discovery-action")
-      if(buttonType === 'previous'){
-        buttonEl = document.querySelector(_SgmntfY_._variables.journey.wrapperSelector + " .sgm-journey-action .sgm-journey-discovery-prev-action")
-      }
-      if (buttonEl) {
-        if (isVisible === true) {
-          buttonEl.classList.remove("sgm-journey-none");
-          buttonEl.setAttribute("data-type", buttonType);
-          if(buttonType === 'previous'){
-            var language;
-            if(_SgmntfY_._variables.language === 'TR'){
-              language = _SgmntfY_._variables.language;
-            }else{
-              language = 'EN'
-            }
-            buttonEl.textContent = _SgmntfY_._variables.journey.buttonTextMap[language].previous;
-          }else{
-            buttonEl.textContent = _SgmntfY_._jbGetButtonText(currentStepData.type, currentStepData.buttonTextMap)[buttonType] || "";
-          }
-        } else {
-          buttonEl.classList.add("sgm-journey-none");
-        }
-      }
-    },
-    _jbIsSingleDataSelect: function() {
-      // the method detects which steps have single selection data
-      return _SgmntfY_._variables.journey.currentStep === "MAIN_CATEGORY" || _SgmntfY_._variables.journey.currentStep === "CATEGORY";
-    },
-    _jbIsCheckMarkDataSelect: function() {
-      return _SgmntfY_._variables.journey.currentStep === "COLOR";
-    },
-    _jbIsAllowedToChangeStepAfterSelect: function() {
-      // if it's true then no need to click next button to go to next step
-      return _SgmntfY_._variables.journey.currentStep === "MAIN_CATEGORY" || _SgmntfY_._variables.journey.currentStep === "CATEGORY";
-    },
-    _jbOnStepChangeHandler: function(jbDiscoveryData) {
-      // the method is a bridge between after data selection and next page viewing
-      // when data selection is finished the method runs before to view next step
-      var selectedClassName = _SgmntfY_._jbIsCheckMarkDataSelect() ? "sgm-journey-checkmark" : "sgm-journey-content-selected";
-
-      var selectedValues = [];
-      var currentSelectedElements = document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector + " ." + selectedClassName);
-      if (currentSelectedElements && currentSelectedElements.length > 0) {
-        currentSelectedElements.forEach(function(selectedEl) {
-          if (selectedEl.hasAttribute("data-original-value")) {
-            selectedValues.push(selectedEl.getAttribute("data-original-value"));
-          }
-        })
-      }
-
-      _SgmntfY_._jbPrepareJourneyAnswer(selectedValues);
-      var params = {
-        step: _SgmntfY_._variables.journey.currentStep,
-        instanceId: _SgmntfY_._variables.journey.instanceId,
-        answer: JSON.stringify(_SgmntfY_._variables.journey.answer)
-      };
-      _SgmntfY_._variables.segmentifyObj("journey:select", params);
-
-      // view next step
-      _SgmntfY_._jbOnStepViewHandler(jbDiscoveryData);
-    },
-    _jbPrepareJourneyAnswer: function(selectedValues) {
-      // the method is a utility to prepare data in expected format
-      switch (_SgmntfY_._variables.journey.currentStep) {
-        case "MAIN_CATEGORY":
-          _SgmntfY_._variables.journey.answer['mainCategory'] = selectedValues[0];
-          break;
-        case "CATEGORY":
-          _SgmntfY_._variables.journey.answer['category'] = selectedValues[0];
-          break;
-        case "BRAND":
-          _SgmntfY_._variables.journey.answer['brand'] = selectedValues;
-          break;
-        case "SIZE":
-          _SgmntfY_._variables.journey.answer['size'] = selectedValues;
-          break;
-        case "COLOR":
-          _SgmntfY_._variables.journey.answer['color'] = selectedValues;
-          break;
-        case "PRICE_RANGE":
-          if (selectedValues && selectedValues.length > 0) {
-            selectedValues = selectedValues.map(function(val) {
-              return val.replace("+", " - ");
-            });
-          }
-          _SgmntfY_._variables.journey.answer['priceRange'] = selectedValues;
-          break;
-      }
-    },
-    _jbOnPrevStepChangeHandler: function (jbDiscoveryData) {
-      // when the method runs before to view previous step
-      _SgmntfY_._variables.journey.isTriggeredBackButton = true;
-      _SgmntfY_._jbRecalculateJourneyAnswer(jbDiscoveryData);
-      var params = {
-        step: _SgmntfY_._variables.journey.currentStep,
-        instanceId: _SgmntfY_._variables.journey.instanceId,
-        answer: JSON.stringify(_SgmntfY_._variables.journey.answer)
-      };
-      _SgmntfY_._variables.segmentifyObj("journey:select", params);
-
-      // view next step
-      _SgmntfY_._jbOnStepViewHandler(jbDiscoveryData);
-    },
-    _jbRecalculateJourneyAnswer: function (jbDiscoveryData) {
-      // the method is a remove current step from answer
-      if (_SgmntfY_._variables.journey.previousStep === 'MAIN_CATEGORY') {
-        _SgmntfY_._variables.journey.answer = {};
-      } else if (_SgmntfY_._variables.journey.previousStep === 'CATEGORY') {
-        var mainCateogryValue = _SgmntfY_._variables.journey.answer['mainCategory'];
-        _SgmntfY_._variables.journey.answer = {};
-        _SgmntfY_._variables.journey.answer.mainCategory = mainCateogryValue;
-      } else {
-        var calculatedAnswers = {};
-        for (var index = 0; index < jbDiscoveryData.steps.length; index++) {
-          // reset until current step
-          var stepType = jbDiscoveryData.steps[index].type;
-          var answerType = stepType.toLowerCase();
-          if(stepType === 'MAIN_CATEGORY'){
-            answerType = 'mainCategory';
-          }else if(stepType === 'PRICE_RANGE'){
-            answerType = 'priceRange';
-          }
-          if (_SgmntfY_._variables.journey.currentStep !== stepType) {
-            if (_SgmntfY_._variables.journey.answer[answerType]) {
-              calculatedAnswers[answerType] = _SgmntfY_._variables.journey.answer[answerType];
-            }
-          } else {
-            _SgmntfY_._variables.journey.answer = {};
-            _SgmntfY_._variables.journey.answer = calculatedAnswers;
-            break;
-          }
-        }
-      }
-    },
-    _jbExitHandler: function() {
-      var params = {
-        step: _SgmntfY_._variables.journey.currentStep,
-        instanceId: _SgmntfY_._variables.journey.instanceId,
-        answer: JSON.stringify(_SgmntfY_._variables.journey.answer)
-      };
-      _SgmntfY_._variables.segmentifyObj("journey:exit", params);
-      _SgmntfY_._jbOnDestroyJourneyFlowExecution(false);
-    },
-    _getDistinctArray: function(array) {
-      if (array && array.length > 0) {
-        return array.filter(function(value, index) {
-          return value && array.indexOf(value) === index;
-        });
-      } else {
-        return [];
-      }
-    },
-    _campaigns: {
-      NEWSLETTER: function (campaign, request) {
-        var config = {
-          title: campaign['title'],
-          description: campaign['description'],
-          placeholder: campaign['placeholder'],
-          termsUrl: campaign['termsUrl'],
-          termsText: campaign['termsText'],
-          buttonSubmitText: campaign['buttonSubmitText'],
-          buttonThanksText: campaign['buttonThanksText'],
-          buttonBgColor: campaign['buttonBgColor'],
-          buttonTextColor: campaign['buttonTextColor'],
-          vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
-        };
-        try {
-          if (campaign['preJs']) {
-            eval(campaign['preJs']);
-            var retVal = preRenderConf(config);
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
-        }
-        // render campaign html
-        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
-        _SgmntfY_._getJq()('body').prepend(renderedHtml);
-        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
-        try {
-          campaign['postJs'] && eval(campaign['postJs']);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
-        }
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Newsletter popup appended to html body for campaign(' + campaign['instanceId'] + ')');
-        // send impression
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'impression',
-          instanceId: campaign['instanceId'],
-          interactionId: campaign['instanceId']
-        });
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-          window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
-          }, 1000);
-        });
-        // bind submit handler
-        _SgmntfY_._getJq()('.seg-form-submit').bind('click', function(e) {
-          _SgmntfY_._getJq()('.seg-form-input').removeClass('seg-form-invalid');
-          _SgmntfY_._getJq()('.seg-email-collection .seg-checkbox').removeClass('seg-form-invalid');
-          e.preventDefault();
-          var $formInput = _SgmntfY_._getJq()('.seg-form-input');
-          var $formCheckbox = _SgmntfY_._getJq()('.seg-email-collection .seg-form-footer input[type="checkbox"]');
-          if (isEmail($formInput.val()) && $formCheckbox.is(':checked') == true) {
-            _SgmntfY_._getJq()(this).addClass('seg-sending');
-            _SgmntfY_._getJq()(this).css({'pointer-events': 'none'});
-            setTimeout(function() {
-              _SgmntfY_._getJq()('.seg-email-collection').addClass('seg-popup-thanks').removeClass('segFadeInUp');
-            }, 1300);
-            setTimeout(function() {
-              _SgmntfY_._getJq()('.seg-email-collection').addClass('segFadeOutDown');
-            }, 3000);
-            setTimeout(function() {
-              _SgmntfY_._getJq()('.seg-email-collection').remove();
-            }, 6000);
-            // send form event
-            var $newsletterForm = _SgmntfY_._getJq()('#seg-email-collection');
-            if ($newsletterForm.length > 0) {
-              _SgmntfY_._variables.segmentifyObj('user:form', {
-                formName: campaign['name'],
-                fields: $newsletterForm.sgmSerializeForm(),
-                params: {
-                  instanceId: campaign['instanceId']
-                }
-              });
-            }
-          }
-          if (!isEmail($formInput.val())) {
-            $formInput.addClass('seg-form-invalid');
-          }
-          if ($formCheckbox.is(':checked') == false) {
-            _SgmntfY_._getJq()('.seg-terms .seg-checkbox').addClass('seg-form-invalid');
-          }
-        });
-
-        var isEmail = function (email) {
-          var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-          return regex.test(email);
-        }
-      },
-      FORM: function (campaign, request) {
-        var config = {
-          title: campaign['title'],
-          description: campaign['description'],
-          buttonSubmitText: campaign['buttonSubmitText'],
-          vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
-        };
-        var fields = campaign['fields'] || [];
-        for (var i = 0; i < fields.length; ++i) {
-          var field = fields[i];
-          // common config
-          config['ff' + i + '_required'] = field['required'];
-          // field specific config
-          if (field['type'] === 'INPUT') {
-            config['ff' + i + '_name'] = field['name'];
-            config['ff' + i + '_placeholder'] = field['placeholder'];
-            config['ff' + i + '_inputType'] = field['inputType'];
-            if (field['name']) {
-              config['ff' + i + '_fieldName'] = field['name'];
-            } else {
-              config['ff' + i + '_fieldName'] = 'input-' + i;
-            }
-          } else if (field['type'] === 'TEXT_AREA') {
-            config['ff' + i + '_name'] = field['name'];
-            config['ff' + i + '_placeholder'] = field['placeholder'];
-            if (field['name']) {
-              config['ff' + i + '_fieldName'] = field['name'];
-            } else {
-              config['ff' + i + '_fieldName'] = 'textarea-' + i;
-            }
-          } else if (field['type'] === 'CHECKBOX' || field['type'] === 'RADIO_BUTTON') {
-            config['ff' + i + '_groupTitle'] = field['groupTitle'];
-            config['ff' + i + '_options'] = field['options'];
-            if (field['groupTitle']) {
-              config['ff' + i + '_fieldName'] = field['groupTitle'];
-            } else {
-              if (field['type'] === 'CHECKBOX') {
-                config['ff' + i + '_fieldName'] = 'checkbox-' + i;
-              } else {
-                config['ff' + i + '_fieldName'] = 'radiobutton-' + i;
-              }
-            }
-          }
-        }
-        try {
-          if (campaign['preJs']) {
-            eval(campaign['preJs']);
-            var retVal = preRenderConf(config);
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
-        }
-        // render campaign html
-        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
-        _SgmntfY_._getJq()('body').prepend(renderedHtml);
-        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
-        try {
-          campaign['postJs'] && eval(campaign['postJs']);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
-        }
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Form popup appended to html body for campaign(' + campaign['instanceId'] + ')');
-        // send impression
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'impression',
-          instanceId: campaign['instanceId'],
-          interactionId: campaign['instanceId']
-        });
-        // instanceId
-        _SgmntfY_._getJq()('.seg-form-survey').each(function () {
-          var $this = _SgmntfY_._getJq()(this);
-          if ($this.attr('class').indexOf('cmp_') === -1) {
-            $this.addClass(campaign['instanceId']);
-          }
-        });
-        // overlay
-        if (campaign['overlay'] === 'true') {
-          _SgmntfY_._getJq()('.seg-popup-overlay').show();
-        }
-        // bind close handler
-        _SgmntfY_._getJq()('.' + campaign['instanceId'] + ' .seg-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-          window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
-            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
-        });
-        // bind submit handler
-        _SgmntfY_._getJq()('.' + campaign['instanceId'] + ' .seg-form-submit').bind('click', function(e) {
-          e.preventDefault();
-          var $this = _SgmntfY_._getJq()(this);
-          var $formSurvey = _SgmntfY_._getJq()('.' + campaign['instanceId'] + '.seg-form-survey');
-          var $form = $formSurvey.find('.seg-form');
-          if (checkValidity($form)) {
-            $this.addClass('seg-sending');
-            $this.css({'pointer-events': 'none'});
-            setTimeout(function () {
-              $formSurvey.addClass('seg-popup-thanks').removeClass('segFadeInUp');
-            }, 1300);
-            setTimeout(function () {
-              $formSurvey.addClass('segFadeOutDown');
-            }, 3000);
-            setTimeout(function () {
-              $formSurvey.remove();
-              _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-            }, 6000);
-            // send form event
-            if ($form.length > 0) {
-              _SgmntfY_._variables.segmentifyObj('user:form', {
-                formName: campaign['name'],
-                fields: $form.sgmSerializeForm(),
-                params: {
-                  instanceId: campaign['instanceId']
-                }
-              });
-            }
-          }
-        });
-
-        var checkValidity = function ($form) {
-          try {
-            $form.find('.seg-form-invalid').removeClass('seg-form-invalid');
-            var fields = $form.find('input,textarea');
-            var retVal = true;
-            for (var i = 0; i < fields.length; ++i) {
-              var field = fields[i];
-              var $field = _SgmntfY_._getJq()(field);
-              if ($field.attr('type') === 'checkbox') {
-                continue;
-              }
-              if (!field.checkValidity()) {
-                if ($field.attr('type') === 'radio') {
-                  $field.parent().addClass('seg-form-invalid');
-                } else {
-                  $field.addClass('seg-form-invalid');
-                }
-                retVal = false;
-              }
-            }
-            var $checkboxes = $form.find('input[type="checkbox"]');
-            var checkboxNames = [];
-            $checkboxes.each(function () {
-              if (checkboxNames.indexOf(this.name) == -1) {
-                checkboxNames.push(this.name);
-              }
-            });
-            for (var j = 0; j < checkboxNames.length; ++j) {
-              if ($form.find('input[name="' + checkboxNames[j]+ '"]:required').length > 0 &&
-                  $form.find('input[name="' + checkboxNames[j]+ '"]:checked').length == 0) {
-                $form.find('input[name="' + checkboxNames[j]+ '"]').parent().addClass('seg-form-invalid');
-                retVal = false;
-              }
-            }
-            return retVal;
-          } catch (e) {
-            return true;
-          }
-        };
-      },
-      POPUP_BANNER: function (campaign, request) {
-        var config = {
-          title: campaign['title'],
-          image: campaign['image'],
-          url: campaign['url'],
-          vertical: campaign['verticalPosition'],
-          horizontal: campaign['horizontalPosition']
-        };
-
-        try {
-          if (campaign['preJs']) {
-            eval(campaign['preJs']);
-            var retVal = preRenderConf(config);
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
-        }
-        // render campaign html
-        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
-        _SgmntfY_._getJq()('body').prepend(renderedHtml);
-        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
-        try {
-          campaign['postJs'] && eval(campaign['postJs']);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
-        }
-        // overlay
-        if (campaign['overlay'] === 'true') {
-          _SgmntfY_._getJq()('.seg-popup-overlay').show();
-        }
-        // bind close handler
-        _SgmntfY_._getJq()('.seg-popup-close').bind('click', function () {
-          var $this = _SgmntfY_._getJq()(this);
-          $this.parent('.seg-popup').removeClass('segFadeInUp').addClass('segFadeOutDown');
-          window.setTimeout(function () {
-            $this.parent('.seg-popup').remove();
-            _SgmntfY_._getJq()('.seg-popup-overlay').remove();
-          }, 1000);
-          _SgmntfY_._variables.segmentifyObj("event:interaction", {
-            type: 'close',
-            instanceId: campaign['instanceId'],
-            interactionId: campaign['instanceId']
-          });
-        });
-        // bind click handler
-        _SgmntfY_._getJq()('.seg-banner-container img').bind('click', function () {
-          _SgmntfY_._variables.segmentifyObj('event:interaction', {
-            type: 'click',
-            instanceId: campaign['instanceId'],
-            interactionId: campaign['instanceId']
-          });
-        });
-        // send impression
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'impression',
-          instanceId: campaign['instanceId'],
-          interactionId: campaign['instanceId']
-        });
-      },
-      NOTIFICATION_BAR: function (campaign, request) {
-        var config = {
-          title: campaign['title'],
-          image: campaign['image'],
-          bgColor: campaign['bgColor'],
-          textColor: campaign['textColor'],
-          url: campaign['url'],
-          instanceId: campaign['instanceId'],
-          divClass: 'sgf-notif-bar-' + (campaign['verticalPosition'] || 'top')
-        };
-        try {
-          if (campaign['preJs']) {
-            eval(campaign['preJs']);
-            var retVal = preRenderConf(config);
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
-        }
-        // render campaign html
-        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
-        _SgmntfY_._getJq()('body').prepend(renderedHtml);
-        campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
-        try {
-          campaign['postJs'] && eval(campaign['postJs']);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
-        }
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Notification Bar appended to html body for campaign(' + campaign['instanceId'] + ')');
-        // add sticky option
-        if (campaign["sticky"] === 'true') {
-          _SgmntfY_._getJq()('.seg-notification-bar').addClass('seg-notification-bar-sticky');
-
-          // each all existing sticky bars
-          _SgmntfY_._getJq()(".seg-notification-bar-sticky:not([data-loaded])").each(function () {
-            // get current iteration
-            var $this = _SgmntfY_._getJq()(this);
-
-            $this.attr("data-loaded", "true");
-
-            // check if notification bar has an image
-            if ($this.find("img").length) {
-              // simpler image construction
-              var barImage = $this.find("img:first");
-              var barImageUrl = barImage.attr("src") || barImage.attr("data-src");
-
-              // wait image to be loaded
-              barImage.on("load", function () {
-                // get parent notification bar element
-                var $this = _SgmntfY_._getJq()(this).parents(".seg-notification-bar:first");
-
-                // get body padding-top css value
-                var topBarHeight = parseInt(_SgmntfY_._getJq()("body").css("padding-top").replace("px", ""));
-
-                // get body padding-bottom css value
-                var bottomBarHeight = parseInt(_SgmntfY_._getJq()("body").css("padding-bottom").replace("px", ""));
-
-                if ($this.hasClass("sgf-notif-bar-top")) {
-                  topBarHeight += $this.height();
-                } else if ($this.hasClass("sgf-notif-bar-bottom")) {
-                  bottomBarHeight += $this.height();
-                }
-
-                _SgmntfY_._getJq()("body").css("padding-top", topBarHeight).css("padding-bottom", bottomBarHeight);
-              });
-
-              // set image src attribute with the image url
-              barImage[0].src = barImageUrl;
-            }
-          });
-        }
-        // send impression
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'impression',
-          instanceId: campaign['instanceId'],
-          interactionId: campaign['instanceId']
-        });
-        // bind click handler
-        if (_SgmntfY_._getJq()('.seg-notification-bar-v2-' + campaign['instanceId']).length) {
-          _SgmntfY_._getJq()('.seg-notification-bar-v2-' + campaign['instanceId']).bind('click', function () {
-            _SgmntfY_._variables.segmentifyObj('event:interaction', {
-              type: 'click',
-              instanceId: campaign['instanceId'],
-              interactionId: campaign['instanceId']
-            });
-          });
-        } else {
-          _SgmntfY_._getJq()('.sgf-link').bind('click', function () {
-            _SgmntfY_._variables.segmentifyObj('event:interaction', {
-              type: 'click',
-              instanceId: campaign['instanceId'],
-              interactionId: campaign['instanceId']
-            });
-          });
-        }
-      },
-      PUSH_PERMISSION: function (campaign, request) {
-        var config = {
-          title: campaign['title'],
-          text: campaign['text'],
-          icon: campaign['icon'],
-          buttonLaterText: campaign['buttonLaterText'],
-          buttonAllowText: campaign['buttonAllowText'],
-          safariEnabled: campaign['safariEnabled'],
-          swPath: campaign['serviceWorkerPath'],
-          twoStepEnabled: campaign['twoStepEnabled']
-        };
-        try {
-          if (campaign['preJs']) {
-            eval(campaign['preJs']);
-            var retVal = preRenderConf(config);
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
-        }
-
-        try {
-          // 1- get existing value
-          var _pushPermissionKey = _SgmntfY_._getPersistentData(_SgmntfY_._variables.pushPermissionKey);
-          var exdays = -1;
-          var frequency = campaign.frequency;
-          if (frequency) {
-            if (frequency.type === 'SESSION') {
-              exdays = 0;
-            } else if (frequency.type === 'LIFETIME') {
-              exdays = 390;
-            } else if (frequency.type === 'DAYS') {
-              exdays = frequency.param;
-            }
-          }
-          // 2- set new cookie expiration
-          _SgmntfY_._storePersistentData(_SgmntfY_._variables.pushPermissionKey, 'true', exdays);
-          // 3- check cookie value
-          if (_SgmntfY_._isNotEmpty(_pushPermissionKey) && _pushPermissionKey === 'true') {
-            return;
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while checking campaign frequency:' + err);
-          // in case of error just set pushPermissionKey expiration time to session
-          _SgmntfY_._storePersistentData(_SgmntfY_._variables.pushPermissionKey, 'true', 0);
-        }
-
-        try {
-          campaign['postJs'] && eval(campaign['postJs']);
-          // populate pushInfo object
-          if (/OPR/i.test(navigator.userAgent)) _SgmntfY_._variables.pushInfo.agent = 'Opera';
-          else if (/YaBrowser/i.test(navigator.userAgent) || /Yowser/i.test(navigator.userAgent)) _SgmntfY_._variables.pushInfo.agent = 'Yandex';
-          else if (/SamsungBrowser/i.test(navigator.userAgent)) _SgmntfY_._variables.pushInfo.agent = 'Samsung';
-          else if (/ucbrowser/i.test(navigator.userAgent)) _SgmntfY_._variables.pushInfo.agent = 'UCBrowser';
-          else if (/Chrome/i.test(navigator.userAgent)) _SgmntfY_._variables.pushInfo.agent = 'Chrome';
-          else if (/Firefox/i.test(navigator.userAgent)) _SgmntfY_._variables.pushInfo.agent = 'Firefox';
-
-          if ('safari' in window && 'pushNotification' in window.safari) {
-            _SgmntfY_._variables.pushInfo.agent = 'Safari'
-          }
-
-          if (_SgmntfY_._variables.pushInfo.agent === 'Chrome' || _SgmntfY_._variables.pushInfo.agent === 'Opera' || _SgmntfY_._variables.pushInfo.agent === 'Yandex'
-            || _SgmntfY_._variables.pushInfo.agent === 'Samsung' || _SgmntfY_._variables.pushInfo.agent === 'UCBrowser' || _SgmntfY_._variables.pushInfo.agent === 'Firefox') {
-            _SgmntfY_._variables.pushInfo.isFirebaseCompatible = true;
-          }
-
-          if (_SgmntfY_._variables.pushInfo.agent !== 'Safari' && _SgmntfY_._variables.pushInfo.permissionMethod === 'Firebase' && _SgmntfY_._variables.pushInfo.isFirebaseCompatible) {
-            _SgmntfY_._getJq().getScript(_SgmntfY_._variables.pushInfo.firebase.scriptUrl, function () {
-              if (_SgmntfY_._variables.pushInfo.isFirebaseCompatible) {
-                if (!firebase.apps.length) {
-                  firebase.initializeApp({
-                    apiKey: _SgmntfY_._variables.pushInfo.firebase.apiKey,
-                    messagingSenderId: _SgmntfY_._variables.pushInfo.firebase.messagingSenderId
-                  });
-                }
-                _SgmntfY_._variables.pushInfo.messaging = firebase.messaging();
-              }
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register(config.swPath, {updateViaCache: 'none'}).then(function (reg) {
-                  if (_SgmntfY_._variables.pushInfo.isFirebaseCompatible) {
-                    firebase.messaging().useServiceWorker(reg);
-                  }
-                  _SgmntfY_._variables.pushInfo.serviceWorkerReg = reg;
-                  _SgmntfY_._pushInitPermissionCampaign(campaign, config);
-                }).catch(function (e) {
-                  _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while registering service worker ' + e);
-                });
-              }
-            });
-          }
-          if (_SgmntfY_._variables.pushInfo.agent === 'Safari') {
-            _SgmntfY_._pushInitPermissionCampaign(campaign, config);
-          }
-          if(_SgmntfY_._variables.pushInfo.agent !== 'Safari' && _SgmntfY_._variables.pushInfo.permissionMethod === 'Vapid'){
-            if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.register(config.swPath, {updateViaCache: 'none'}).then(function (reg) {
-                _SgmntfY_._variables.pushInfo.serviceWorkerReg = reg;
-                _SgmntfY_._pushInitPermissionCampaign(campaign, config);
-              }).catch(function (e) {
-                _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while registering service worker in vapid method' + e);
-              });
-            }
-          }
-        } catch (e) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while executing PUSH_PERMISSION campaign ' + e);
-        }
-      },
-      HERO_BANNER: function (campaign) {
-        var config = {
-          title: campaign['title'],
-          url: campaign['url'],
-          image: campaign['image'],
-          instanceId: campaign['instanceId']
-        };
-        // widget-view callback definition
-        var _instanceId = campaign['instanceId']; // will also be used for interactionId
-        var wvCB = function ($elem) {
-          var eventSent = false;
-          if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-            _SgmntfY_._interaction('widget-view', _instanceId, _instanceId);
-            eventSent = true;
-          } else {
-            if (!eventSent) {
-              var widgetViewInterval = setInterval(function() {
-                if (!eventSent && _SgmntfY_._isElemVisible($elem)) {
-                  _SgmntfY_._interaction('widget-view', _instanceId, _instanceId);
-                  eventSent = true;
-                  window.clearInterval(widgetViewInterval);
-                }
-              }, 100);
-            }
-          }
-        };
-        // html & preJs & postJs & css
-        try {
-          if (campaign['preJs']) {
-            eval(campaign['preJs']);
-            var retVal = preRenderConf(config);
-            if (typeof retVal !== 'undefined' && !retVal) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-              return;
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign pre js code: ' + err);
-        }
-        // render campaign html
-        var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
-        try {
-          // get target element as jQuery object
-          var _target = campaign['targetSelector'];
-          var targetElement = _SgmntfY_._getJq()(_target).first();
-          // put rendered banner HTML into the target
-          var _targetPosition = campaign['targetPosition'];
-          if (_targetPosition === 'SELF') {
-            targetElement.html(renderedHtml);
-            if (wvCB) {
-              wvCB(targetElement);
-            }
-          } else {
-            var $div = _SgmntfY_._getJq()('<div/>', {'class': 'seg-hero-banner-wrapper seg-clear'});
-            if (_targetPosition === 'AFTER' || _targetPosition === 'BEFORE') {
-              _targetPosition === 'AFTER' ? $div.html(renderedHtml).insertAfter(targetElement) : $div.html(renderedHtml).insertBefore(targetElement);
-            } else if (_targetPosition === 'APPEND' || _targetPosition === 'PREPEND') {
-              _targetPosition === 'APPEND' ? $div.html(renderedHtml).appendTo(targetElement) : $div.html(renderedHtml).prependTo(targetElement);
-            }
-            if (wvCB) {
-              wvCB($div);
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in filling target element [' + _target + '] for banner: ' + err);
-        }
-        if (campaign['css']) {
-          _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
-        }
-        try {
-          if (campaign['postJs']) {
-            eval(campaign['postJs']);
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing campaign post js code: ' + err);
-        }
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Hero Banner inserted to html for campaign(' + _instanceId + ')');
-        // interaction events
-        // send impression
-        _SgmntfY_._interaction('impression', _instanceId, _instanceId);
-        // bind click handler
-        if (_SgmntfY_._getJq()('.seg-hero-banner-link-' + _instanceId).length) {
-          _SgmntfY_._getJq()('.seg-hero-banner-link-' + _instanceId).bind('click', function () {
-            _SgmntfY_._interaction('click', _instanceId, _instanceId);
-          });
-        }
-      }
-    },
-    // Functions
-    _functions: {
-      getFunction: function (name) {
-        switch (name.toLowerCase()) {
-          case 'apikey':
-            return _SgmntfY_._functions.setApiKey;
-          case 'loglevel':
-            return _SgmntfY_._functions.setLogLevel;
-          case 'variables':
-            return _SgmntfY_._functions.setVariables;
-          case 'userid':
-            return _SgmntfY_._functions.setUserId;
-          case 'view:page':
-            return _SgmntfY_._functions.pageView;
-          case 'view:product':
-            return _SgmntfY_._functions.productView;
-          case 'basket:add':
-            return _SgmntfY_._functions.addToBasket;
-          case 'basket:remove':
-            return _SgmntfY_._functions.removeFromBasket;
-          case 'basket:clear':
-            return _SgmntfY_._functions.clearBasket;
-          case 'checkout:basket':
-            return _SgmntfY_._functions.checkoutViewBasket;
-          case 'checkout:customer':
-            return _SgmntfY_._functions.checkoutCustomerInfo;
-          case 'checkout:payment':
-            return _SgmntfY_._functions.checkoutPaymentInfo;
-          case 'checkout:purchase':
-            return _SgmntfY_._functions.checkoutPurchase;
-          case 'user:signin':
-            return _SgmntfY_._functions.userSignIn;
-          case 'user:signout':
-            return _SgmntfY_._functions.userSignOut;
-          case 'user:signup':
-            return _SgmntfY_._functions.userSignUp;
-          case 'user:subscribe':
-            return _SgmntfY_._functions.userSubscribe;
-          case 'user:unsubscribe':
-            return _SgmntfY_._functions.userUnsubscribe;
-          case 'user:update':
-            return _SgmntfY_._functions.userInfoUpdate;
-          case 'event:custom':
-            return _SgmntfY_._functions.customEvent;
-          case 'event:interaction':
-            return _SgmntfY_._functions.interaction;
-          case 'user:form':
-            return _SgmntfY_._functions.userForm;
-          case 'banner:impression':
-            return _SgmntfY_._functions.bannerImpression;
-          case 'banner:click':
-            return _SgmntfY_._functions.bannerClick;
-          case 'banner:update':
-            return _SgmntfY_._functions.bannerUpdate;
-          case 'bannergroup:view':
-            return _SgmntfY_._functions.bannerGroupView;
-          case 'bannergroup:detail':
-            return _SgmntfY_._functions.bannerGroupDetail;
-          case 'impression:promotion':
-            return _SgmntfY_._functions.promotionImpression;
-          case 'view:promotion':
-            return _SgmntfY_._functions.promotionView;
-          case 'push:click:interaction':
-            return _SgmntfY_._functions.pushInteraction;
-          case 'search': // backward compatible
-            return _SgmntfY_._functions.search;
-          case 'search:instant':
-            return _SgmntfY_._functions.search;
-          case 'search:faceted':
-            return _SgmntfY_._functions.facetedSearch;
-          case 'filter':
-            return _SgmntfY_._functions.filter;
-          case 'coupon':
-            return _SgmntfY_._functions.coupon;
-          case 'email:click':
-            return _SgmntfY_._functions.mailClickInteraction;
-          case 'ga:event':
-            return _SgmntfY_.GA.sendEvent;
-          case 'journey:init':
-            return _SgmntfY_._functions.initJourney;
-          case 'journey:success':
-            return _SgmntfY_._functions.successJourney;
-          case 'journey:start':
-            return _SgmntfY_._functions.startJourney;
-          case 'journey:view':
-            return _SgmntfY_._functions.viewJourney;
-          case 'journey:select':
-            return _SgmntfY_._functions.selectJourney;
-          case 'journey:exit':
-            return _SgmntfY_._functions.exitJourney;
-          case 'journey:skip':
-            return _SgmntfY_._functions.skipJourney;
-          case 'journey:finish':
-            return _SgmntfY_._functions.finishJourney;
-          case 'favorite:add':
-            return _SgmntfY_._functions.favoriteAdd;
-          case 'favorite:remove':
-            return _SgmntfY_._functions.favoriteRemove;
-          case 'favorite:detail':
-            return _SgmntfY_._functions.favoriteDetail;
-          case 'view:favorites':
-            return _SgmntfY_._functions.favoritesView;
-          default:
-            return function (params) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Command: ' + name);
-            };
-        }
-      },
-      getDataLayerFunction: function (name, params) {
-        switch (name.toLowerCase()) {
-          case 'page':
-            return _SgmntfY_._functions.pageView;
-          case 'product':
-            return _SgmntfY_._functions.productView;
-          case 'basket':
-            switch (params['step'].toLowerCase()) {
-              case 'add':
-                return _SgmntfY_._functions.addToBasket;
-              case 'remove':
-                return _SgmntfY_._functions.removeFromBasket;
-              case 'clear':
-                return _SgmntfY_._functions.clearBasket;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Basket Operations Step: ' + params['step']);
-                }
-            }
-          case 'checkout':
-            switch (params['step'].toLowerCase()) {
-              case 'basket':
-                return _SgmntfY_._functions.checkoutViewBasket;
-              case 'customer':
-                return _SgmntfY_._functions.checkoutCustomerInfo;
-              case 'payment':
-                return _SgmntfY_._functions.checkoutPaymentInfo;
-              case 'purchase':
-                return _SgmntfY_._functions.checkoutPurchase;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Checkout Step: ' + params['step']);
-                }
-            }
-          case 'user':
-            switch (params['step'].toLowerCase()) {
-              case 'signin':
-                return _SgmntfY_._functions.userSignIn;
-              case 'signout':
-                return _SgmntfY_._functions.userSignOut;
-              case 'signup':
-                return _SgmntfY_._functions.userSignUp;
-              case 'subscribe':
-                return _SgmntfY_._functions.userSubscribe;
-              case 'unsubscribe':
-                return _SgmntfY_._functions.userUnsubscribe;
-              case 'update':
-                return _SgmntfY_._functions.userInfoUpdate;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected User Operations Step: ' + params['step']);
-                }
-            }
-          case 'interaction':
-            return _SgmntfY_._functions.interaction;
-          case 'form':
-            return _SgmntfY_._functions.userForm;
-          case 'banners':
-            return _SgmntfY_._functions.bannerGroupView;
-          case 'banner':
-            switch (params['type'].toLowerCase()) {
-              case 'impression':
-                return _SgmntfY_._functions.bannerImpression;
-              case 'click':
-                return _SgmntfY_._functions.bannerClick;
-              case 'update':
-                return _SgmntfY_._functions.bannerUpdate;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Banner Operations Type: ' + params['type']);
-                }
-            }
-          case 'custom':
-            return _SgmntfY_._functions.customEvent;
-          case 'promotion':
-            switch (params['type'].toLowerCase()) {
-              case 'impression':
-                return _SgmntfY_._functions.promotionImpression;
-              case 'view':
-                return _SgmntfY_._functions.promotionView;
-              default:
-                return function (params) {
-                  _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Promotion Type: ' + params['type']);
-                }
-            }
-          default:
-            return function (params) {
-              _SgmntfY_.LOG_MESSAGE('WARN', 'Unexpected Command: ' + name);
-            };
-        }
-      },
-      callFunction: function (commands) {
-        // multiple commands
-        var requestDatas = [];
-        commands = commands || [];
-        for (var i = 0; i < commands.length; i++) {
-          var command = commands[i];
-          var commandFunction = _SgmntfY_._functions.getFunction(command[0]);
-          var commandArguments = Array.prototype.slice.call(command, 1);
-          try {
-            var requestData = commandFunction.apply(null, commandArguments);
-            if (requestData) {
-              requestDatas = requestDatas.concat(requestData);
-            }
-            _SgmntfY_.LOG_MESSAGE('INFO', 'Event triggered: ' + command[0]);
-          } catch(err) {
-            _SgmntfY_.LOG_MESSAGE('Error', "Can't convert command(" + command[0] + ") into request data. Details: " + err);
-          }
-        }
-        _SgmntfY_._sendRequestToServer(requestDatas);
-      },
-      setApiKey: function (apiKey, skipStyle) {
-        _SgmntfY_._variables.apiKey = apiKey;
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Api Key: ' + apiKey);
-        if (skipStyle) {
-          _SgmntfY_.LOG_MESSAGE('INFO', 'Account specific style is disabled, skipping...');
-        } else {
-          var cssFile = _SgmntfY_._variables.segmentifyCDNUrl + apiKey + "/segmentify.css";
-          _SgmntfY_.LOG_MESSAGE('INFO', 'Loading account specific css file: ' + cssFile);
-          _SgmntfY_._loadCSS(cssFile);
-        }
-
-        if (_SgmntfY_._isNotEmpty(_SgmntfY_._variables.apiKey)) {
-          _SgmntfY_._consumeNextPageQueue();
-          _SgmntfY_._consumeRetryQueue();
-        }
-        // activate ga if necessary, after _SgmntfY_.init() called
-        if (_SgmntfY_._variables.ga.enabled) {
-          _SgmntfY_.GA.activate();
-        }
-      },
-      setLogLevel: function (logLevel) {
-        var logLevelObject = _SgmntfY_.LOG_LEVELS[logLevel];
-        if (typeof logLevelObject !== 'undefined') {
-          _SgmntfY_._variables.logLevel = logLevelObject;
-          _SgmntfY_.LOG_MESSAGE('DEBUG', 'Segmentify Log Level Changed to: ' + logLevel);
-        }
-      },
-      setVariables: function (variables) {
-        variables = variables || {};
-        _SgmntfY_._extend(_SgmntfY_._variables, variables);
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Segmentify Variables are updated - New Values: ' + variables);
-      },
-      setUserId: function (userId) {
-        var oldUserId = _SgmntfY_._getUserId();
-        _SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey, userId, 390, _SgmntfY_._variables.storage.user.local);
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Segmentify User Id Changed to: ' + userId);
-        if (oldUserId !== userId) {
-          var data = {};
-          data['oldUserId'] = oldUserId || '';
-          data['async'] = 'false';
-          return _SgmntfY_._prepareRequest(data, 'USER_CHANGE');
-        }
-      },
-      pageView: function (data) {
-        data = data || {};
-        _SgmntfY_.GA.sendPageView(data["category"] || "");
-        return _SgmntfY_._prepareRequest(data, "PAGE_VIEW");
-      },
-      productView: function (data) {
-        data = data || {};
-        data['url'] = _SgmntfY_._clearProductUrl(data['url'] || document.URL);
-        // don't touch below line
-        // although engine doesn't use productUrl parameter, it is used for product metadata (only usage)
-        data.productUrl = data['productUrl'] || data['url'] || document.URL;
-        if (typeof data.productId === 'number') {
-          data.productId = data.productId.toString();
-        }
-        if (typeof data.categories === 'string') {
-          if (data.categories.indexOf('|') !== -1) {
-            var catArray = data.categories.split('|');
-            data.categories = [];
-            for (var idx in catArray) {
-              if (catArray.hasOwnProperty(idx)) {
-                data.categories.push(catArray[idx].trim());
-              }
-            }
-          } else {
-            data.categories = [data.categories];
-          }
-        } else {
-          // trim categories
-          for (var i in data.categories) {
-            if (data.categories.hasOwnProperty(i)) {
-              if (typeof data.categories[i] === "string") data.categories[i] = data.categories[i].trim();
-            }
-          }
-        }
-        data['categories'] = (data['categories'] || []).filter(_SgmntfY_._null);
-        data['source'] = data['source'] || _SgmntfY_._sourceOfUrl();
-        var clickedBanners = _SgmntfY_._getClickedBanners();
-        if (clickedBanners.length > 0) {
-          var activeBanners = [];
-          for (var i = 0; i < clickedBanners.length; ++i) {
-            var basic = _SgmntfY_._split(clickedBanners[i], ':', 4);
-            if (basic.length === 4 && !isNaN(parseInt(basic[2]))) {
-              activeBanners.push({title: basic[0], group: basic[1], order: parseInt(basic[2])});
-            }
-          }
-          data['activeBanners'] = activeBanners;
-        }
-        if (_SgmntfY_._variables.skipProductDetail.device.indexOf(_SgmntfY_._variables.ua.type) >= 0) {
-          data['noUpdate'] = ['all'];
-        }
-        // send request
-        return _SgmntfY_._prepareRequest(data, "PRODUCT_VIEW");
-      },
-      addToBasket: function (data) {
-        data = data || {};
-        data['step'] = 'add';
-        data['async'] = 'false';
-        data['quantity'] = data['quantity'] || 1;
-        var clickedBanners = _SgmntfY_._getClickedBanners();
-        if (clickedBanners.length > 0) {
-          var activeBanners = [];
-          for (var i = 0; i < clickedBanners.length; ++i) {
-            var basic = _SgmntfY_._split(clickedBanners[i], ':', 4);
-            if (basic.length === 4 && !isNaN(parseInt(basic[2]))) {
-              activeBanners.push({title: basic[0], group: basic[1], order: parseInt(basic[2])});
-            }
-          }
-          data['activeBanners'] = activeBanners;
-        }
-        if (!_SgmntfY_._variables.disableNextPage && typeof data['nextPage'] === 'undefined') {
-          data['nextPage'] = true;
-        }
-
-        data["basketId"] = data['basketId'] || "basket_" + _SgmntfY_._getUserId(); // if basketId is not supplied use userId
-        return _SgmntfY_._prepareRequest(data, "BASKET_OPERATIONS");
-      },
-      removeFromBasket: function (data) {
-        data = data || {};
-        data["step"] = "remove";
-        data['async'] = 'false';
-        if (!_SgmntfY_._variables.disableNextPage && typeof data['nextPage'] === 'undefined') {
-          data['nextPage'] = true;
-        }
-        data["basketId"] = data['basketId'] || "basket_" + _SgmntfY_._getUserId(); // if basketId is not supplied use userId
-        return _SgmntfY_._prepareRequest(data, "BASKET_OPERATIONS");
-      },
-      clearBasket: function (data) {
-        data = data || {};
-        data["step"] = "clear";
-        data['async'] = 'false';
-        if (!_SgmntfY_._variables.disableNextPage && typeof data['nextPage'] === 'undefined') {
-          data['nextPage'] = true;
-        }
-        data["basketId"] = data['basketId'] || "basket_" + _SgmntfY_._getUserId(); // if basketId is not supplied use userId
-        return _SgmntfY_._prepareRequest(data, "BASKET_OPERATIONS");
-      },
-      checkoutViewBasket: function (data) {
-        data = data || {};
-        data["step"] = "view-basket";
-        if (data.hasOwnProperty('productList')) {
-          for (var p = 0; p < data["productList"].length; ++p) {
-            data['productList'][p]['quantity'] = data['productList'][p]['quantity'] || 1;
-          }
-        }
-        data["basketId"] = data['basketId'] || "basket_" + _SgmntfY_._getUserId(); // if basketId is not supplied use userId
-        return _SgmntfY_._prepareRequest(data, "CHECKOUT");
-      },
-      checkoutCustomerInfo: function (data) {
-        data = data || {};
-        data["step"] = "customer-info";
-        data["basketId"] = data['basketId'] || "basket_" + _SgmntfY_._getUserId(); // if basketId is not supplied use userId
-        return _SgmntfY_._prepareRequest(data, "CHECKOUT");
-      },
-      checkoutPaymentInfo: function (data) {
-        data = data || {};
-        data["step"] = "payment-info";
-        data["basketId"] = data['basketId'] || "basket_" + _SgmntfY_._getUserId(); // if basketId is not supplied use userId
-        return _SgmntfY_._prepareRequest(data, "CHECKOUT");
-      },
-      checkoutPurchase: function (data) {
-        data = data || {};
-        data["step"] = "purchase";
-        data["basketId"] = data['basketId'] || "basket_" + _SgmntfY_._getUserId(); // if basketId is not supplied use userId
-        if (data.hasOwnProperty('productList')) {
-          for (var p = 0; p < data["productList"].length; ++p) {
-            data['productList'][p]['quantity'] = data['productList'][p]['quantity'] || 1;
-          }
-        }
-        var clickedBanners = _SgmntfY_._getClickedBanners();
-        if (clickedBanners.length > 0) {
-          var activeBanners = [];
-          for (var i = 0; i < clickedBanners.length; ++i) {
-            var basic = _SgmntfY_._split(clickedBanners[i], ':', 4);
-            if (basic.length === 4 && !isNaN(parseInt(basic[2]))) {
-              activeBanners.push({title: basic[0], group: basic[1], order: parseInt(basic[2])});
-            }
-          }
-          data['activeBanners'] = activeBanners;
-        }
-
-        return _SgmntfY_._prepareRequest(data, "CHECKOUT");
-      },
-      userSignIn: function (data) {
-        data = data || {};
-        data["step"] = "signin";
-        data['async'] = 'false';
-        data['isLogin'] = true;
-        data['isRegistered'] = true;
-        return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
-      },
-      userSignOut: function (data) {
-        data = data || {};
-        data["step"] = "signout";
-        data['async'] = 'false';
-        data['isLogin'] = false;
-        return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
-      },
-      userSignUp: function (data) {
-        data = data || {};
-        data["step"] = "signup";
-        data['async'] = 'false';
-        data['isRegistered'] = true;
-
-        return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
-      },
-      userSubscribe: function (data) {
-        data = data || {};
-        data["step"] = "subscribe";
-        data['async'] = 'false';
-        return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
-      },
-      userUnsubscribe: function (data) {
-        data = data || {};
-        data["step"] = "unsubscribe";
-        data['async'] = 'false';
-        return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
-      },
-      userInfoUpdate: function (data) {
-        data = data || {};
-        data["step"] = "update";
-        data['async'] = 'false';
-        if (typeof data["isLogin"] !== 'undefined') {
-          data["isRegistered"] = (data['isLogin'] === "true" || data["isLogin"] === true) ? "true" : data['isRegistered'];
-        }
-        var dataStr = JSON.stringify(data);
-        var localDataStr = _SgmntfY_._getPersistentData('sgfUserUpdateData', true);
-        if (localDataStr === undefined || dataStr !== localDataStr) {
-          _SgmntfY_._storePersistentData('sgfUserUpdateData', dataStr, -1, true);
-          return _SgmntfY_._prepareRequest(data, "USER_OPERATIONS");
-        }
-      },
-      userForm: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        return _SgmntfY_._prepareRequest(data, "FORM");
-      },
-      customEvent: function (data) {
-        data = data || {};
-        return _SgmntfY_._prepareRequest(data, "CUSTOM_EVENT");
-      },
-      search: function (data) {
-        data = data || {};
-        var _params = data['params'] || {};
-        _params = _SgmntfY_._getSearchVerboseParams(_params);
-        data['params'] = _params;
-        data['type'] = "instant";
-        return _SgmntfY_._prepareRequest(data, "SEARCH");
-      },
-      facetedSearch: function (data) {
-        data = data || {};
-        var _params = data['params'] || {};
-        _params = _SgmntfY_._getSearchVerboseParams(_params);
-        data['params'] = _params;
-        data['type'] = "faceted";
-        return _SgmntfY_._prepareRequest(data, "SEARCH");
-      },
-      interaction: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        if (!_SgmntfY_._variables.disableNextPage && typeof data['nextPage'] === 'undefined') {
-          data['nextPage'] = true;
-        }
-        if (data['type'] === 'impression' || data['type'] === 'widget-view' || data['type'] === 'push-permission-impression'
-          || data['type'] === 'push' || data['type'] === 'email' || data['type'] === 'slider:arrow:left' || data['type'] === 'slider:arrow:right') {
-          data['nextPage'] = false;
-        }
-        return _SgmntfY_._prepareRequest(data, "INTERACTION");
-      },
-      bannerImpression: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['type'] = 'impression';
-        return _SgmntfY_._prepareRequest(data, 'BANNER_OPERATIONS');
-      },
-      bannerClick: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['type'] = 'click';
-        if (!_SgmntfY_._variables.disableNextPage && typeof data['nextPage'] === 'undefined') {
-          data['nextPage'] = true;
-        }
-        _SgmntfY_._addClickedBanner(data['title'], data['group'], data['order'], data['url']);
-        return _SgmntfY_._prepareRequest(data, 'BANNER_OPERATIONS');
-      },
-      bannerUpdate: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['type'] = 'update';
-        return _SgmntfY_._prepareRequest(data, 'BANNER_OPERATIONS');
-      },
-      bannerGroupView: function (data) {
-        data = data || {};
-        return _SgmntfY_._prepareRequest(data, 'BANNER_GROUP_VIEW');
-      },
-      bannerGroupDetail: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        return _SgmntfY_._prepareRequest(data, "INTERNAL_BANNER_GROUP");
-      },
-      promotionImpression: function (data) {
-        data = data || {};
-        data['type'] = 'impression';
-        if (typeof data['categories'] === 'string') {
-          data['categories'] = [data['categories']];
-        }
-        data['categories'] = (data['categories'] || []).filter(_SgmntfY_._null);
-        if (typeof data['brands'] === 'string') {
-          data['brands'] = [data['brands']];
-        }
-        data['brands'] = (data['brands'] || []).filter(_SgmntfY_._null);
-        if (typeof data['labels'] === 'string') {
-          data['labels'] = [data['labels']];
-        }
-        data['labels'] = (data['labels'] || []).filter(_SgmntfY_._null);
-        if (typeof data['productIds'] === 'string') {
-          data['productIds'] = [data['productIds']];
-        }
-        data['productIds'] = (data['productIds'] || []).filter(_SgmntfY_._null);
-        return _SgmntfY_._prepareRequest(data, 'PROMOTION');
-      },
-      promotionView: function (data) {
-        data = data || {};
-        data['type'] = 'view';
-        if (typeof data['categories'] === 'string') {
-          data['categories'] = [data['categories']];
-        }
-        data['categories'] = (data['categories'] || []).filter(_SgmntfY_._null);
-        if (typeof data['brands'] === 'string') {
-          data['brands'] = [data['brands']];
-        }
-        data['brands'] = (data['brands'] || []).filter(_SgmntfY_._null);
-        if (typeof data['labels'] === 'string') {
-          data['labels'] = [data['labels']];
-        }
-        data['labels'] = (data['labels'] || []).filter(_SgmntfY_._null);
-        if (typeof data['productIds'] === 'string') {
-          data['productIds'] = [data['productIds']];
-        }
-        data['productIds'] = (data['productIds'] || []).filter(_SgmntfY_._null);
-        return _SgmntfY_._prepareRequest(data, 'PROMOTION');
-      },
-      pushInteraction : function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['nextPage'] = 'false';
-        // set cookie for push campaign for 10 minutes
-        _SgmntfY_._storePersistentData(data.instanceId, "1", 0.006);
-        _SgmntfY_.LOG_MESSAGE('DEBUG', "Push campaign interaction is sent for campaign: " + data.instanceId);
-        return _SgmntfY_._prepareRequest(data, "INTERACTION");
-      },
-      filter: function (data) {
-        data = data || {};
-        data['categories'] = (data['categories'] || []).filter(_SgmntfY_._null);
-        data['brands'] = (data['brands'] || []).filter(_SgmntfY_._null);
-        data['sizes'] = (data['sizes'] || []).filter(_SgmntfY_._null);
-        data['prices'] = (data['prices'] || []).filter(_SgmntfY_._null);
-        return _SgmntfY_._prepareRequest(data, 'FILTER');
-      },
-      coupon: function (data) {
-        data = data || {};
-        data['nextPage'] = 'false';
-        return _SgmntfY_._prepareRequest(data, "COUPON");
-      },
-      mailClickInteraction : function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['nextPage'] = 'false';
-        // set cookie for mail campaign for 10 minutes
-        _SgmntfY_._storePersistentData(data.instanceId + "_email", "1", 0.006);
-        return _SgmntfY_._prepareRequest(data, "INTERACTION");
-      },
-      initJourney: function (data) {
-        data = data || {};
-        data['type'] = 'INIT';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      successJourney: function (data) {
-        data = data || {};
-        data['type'] = 'SUCCESS';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      startJourney: function (data) {
-        data = data || {};
-        data['type'] = 'START';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      viewJourney: function (data) {
-        data = data || {};
-        data['type'] = 'VIEW';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      selectJourney: function (data) {
-        data = data || {};
-        data['type'] = 'SELECT';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      exitJourney: function (data) {
-        data = data || {};
-        data['type'] = 'EXIT';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      skipJourney: function (data) {
-        data = data || {};
-        data['type'] = 'SKIP';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      finishJourney: function (data) {
-        data = data || {};
-        data['type'] = 'FINISH';
-        return _SgmntfY_._prepareRequest(data, 'JOURNEY');
-      },
-      favoriteAdd: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['step'] = 'add';
-        return _SgmntfY_._prepareRequest(data, "WISHLIST");
-      },
-      favoriteRemove: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['step'] = 'remove';
-        return _SgmntfY_._prepareRequest(data, "WISHLIST");
-      },
-      favoriteDetail: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['step'] = 'detail';
-        return _SgmntfY_._prepareRequest(data, "WISHLIST");
-      },
-      favoritesView: function (data) {
-        data = data || {};
-        data['async'] = 'false';
-        data['step'] = 'view-favorites';
-        return _SgmntfY_._prepareRequest(data, "WISHLIST");
-      }
-    },
-    _bindRecommendationTrackEvents: function(targetElement, recommendationSettings, instanceId, tryCount) {
-      if (tryCount > 10) {
-        return;
-      }
-      tryCount = tryCount + 1;
-      var hasSliderClick = recommendationSettings && recommendationSettings.sliderClick;
-      var leftArrowSelector = hasSliderClick && recommendationSettings.sliderClick.leftArrowSelector;
-      var rightArrowSelector = hasSliderClick && recommendationSettings.sliderClick.rightArrowSelector;
-
-      if (!leftArrowSelector || !rightArrowSelector) {
-        return;
-      }
-
-      var leftArrowElement = targetElement.find(leftArrowSelector);
-      var rightArrowElement = targetElement.find(rightArrowSelector);
-      if (leftArrowElement.length === 0 || rightArrowElement.length === 0) {
-        setTimeout(_SgmntfY_._bindRecommendationTrackEvents, 200, targetElement, recommendationSettings, instanceId, tryCount);
-      } else {
-        leftArrowElement.on('click', function () {
-          _SgmntfY_._sendSliderClick(instanceId, "left");
-        });
-
-        rightArrowElement.on('click', function () {
-          _SgmntfY_._sendSliderClick(instanceId, "right");
-        });
-      }
-    },
-    _sendSliderClick: function (instanceId, interactionType) {
-      _SgmntfY_._variables.segmentifyObj('event:interaction', {
-        type: "slider:arrow:" + interactionType,
-        interactionId: "slider:arrow:" + interactionType,
-        instanceId: instanceId
-      });
-      _SgmntfY_.GA.sendArrowClick(instanceId, interactionType);
-    },
-    _prepareRequest: function (params, eventName, consumeNextPage) {
-      // if don't send flag is set, ignore request
-      if (typeof params['noSend'] !== 'undefined' && params['noSend'] === "true") {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'No send flag is set for event: ' + eventName + ', ignoring event');
-        return;
-      }
-      // if page is translated (chrome), ignore request
-      if (_SgmntfY_._getJq()('html').hasClass('translated-ltr') || _SgmntfY_._getJq()('html').hasClass('translated-rtl')) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Page is translated, ignoring event');
-        return;
-      }
-      if (navigator && navigator.language && navigator.language === 'c') {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'This is a bot, ignoring event');
-        return;
-      }
-      // check api key
-      if (_SgmntfY_._isEmpty(_SgmntfY_._variables.apiKey)) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Api Key is not set, not sending event: " + eventName);
-        return; // error no api key is set
-      }
-      // check user id
-      if (_SgmntfY_._isEmpty(_SgmntfY_._getUserId())) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "userId is not set, not sending event: " + eventName);
-        return; // error no user id is set
-      }
-      // check session id
-      if (_SgmntfY_._isEmpty(_SgmntfY_._getSessionId())) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "sessionId is not set, not sending event: " + eventName);
-        return; // error no session id is set
-      }
-
-      if (typeof consumeNextPage === 'undefined') {
-        consumeNextPage = false;
-      }
-      if (!consumeNextPage && typeof params['nextPage'] === 'boolean' && params['nextPage'] === true) {
-        _SgmntfY_._addToNextPageQueue({eventName: eventName, params: params});
-        return null;
-      }
-      var eventTime = new Date();
-      // request object
-      var request = {
-        data: {
-          name: eventName,
-          userId: _SgmntfY_._getUserId(),
-          sessionId: _SgmntfY_._getSessionId(),
-          testMode: _SgmntfY_._getTestMode() || 'false',
-          device: _SgmntfY_._variables.ua.type || 'PC',
-          noProcess: params.noProcess || false,
-          tryCount: 0,
-          nextPage: params['nextPage'] || false,
-          params: params['params'] || {},
-          recommendIds: (params['recommendIds'] || []).filter(_SgmntfY_._null),
-          pageUrl: params['pageUrl'] || document.URL,
-          referrer: params['referrer'] || document.referrer,
-          browser: params['browser'] || _SgmntfY_._variables.ua.name,
-          os: params['os'] || _SgmntfY_._variables.ua.os,
-          osversion: params['osversion'] || _SgmntfY_._variables.ua.osversion,
-          userAgent: params['userAgent'] || _SgmntfY_._variables.ua.agentString,
-          lang: params['lang'] || _SgmntfY_._variables.language,
-          currency: params['currency'] || _SgmntfY_._variables.currency,
-          region: params['region'] || _SgmntfY_._variables.region,
-          async: params['async'] || 'true',
-          globalMode: _SgmntfY_._getControlGroup(),
-          email: params['email'] || '',
-          ft: _SgmntfY_._getFireTime(eventTime) || '',
-          tz: _SgmntfY_._getTimeZone(eventTime) || ''
-        },
-        originalParams: params,
-        eventName: eventName
-      };
-      if (params.hasOwnProperty('bypassControlGroup')) {
-        request['data']['bypassControlGroup'] = params['bypassControlGroup'] === true; // make sure it is boolean true
-      }
-      if (typeof params.recommendationCallback === 'function') {
-        _SgmntfY_._getJq().extend(request, {recommendationCallback: params.recommendationCallback});
-      }
-      if (typeof params._cb === 'function') {
-        _SgmntfY_._getJq().extend(request, {_cb: params._cb});
-      }
-
-      // check required params
-      var requiredParams = _SgmntfY_._variables.requiredParams[eventName];
-      for (var i = 0; i < requiredParams.length; ++i) {
-        if (_SgmntfY_._isNotEmpty(params[requiredParams[i]])) {
-          request.data[requiredParams[i]] = params[requiredParams[i]];
-          if (typeof request.data[requiredParams[i]] === "string")  {
-            request.data[requiredParams[i]] = _SgmntfY_._clearNullByte(request.data[requiredParams[i]]).trim();
-          }
-        } else {
-          _SgmntfY_.LOG_MESSAGE('ERROR', "Missing parameter[" + requiredParams[i] + "] in event: " + eventName);
-          return; // error required parameter is missing
-        }
-      }
-      // add optional parameters
-      var optionalParams = _SgmntfY_._variables.optionalParams[eventName];
-      for (var i = 0; i < optionalParams.length; ++i) {
-        if (_SgmntfY_._isNotEmpty(params[optionalParams[i]])) {
-          request.data[optionalParams[i]] = params[optionalParams[i]];
-          if (typeof request.data[optionalParams[i]] === "string") {
-            request.data[optionalParams[i]] = _SgmntfY_._clearNullByte(request.data[optionalParams[i]]).trim();
-          }
-        }
-      }
-
-      return request;
-    },
-    // Persistent Data Functions
-    _storePersistentData: function setCookie(cname, cvalue, exdays, useWebStorage) {
-      //check for web storage
-      if (typeof(Storage) !== "undefined" && useWebStorage) {
-        try {
-          localStorage.setItem(cname, cvalue);
-          _SgmntfY_.LOG_MESSAGE('DEBUG', "Segmentify Persistent Data (Local Storage) Update: " + cname + ": " + cvalue);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', "Can't store Persistent Data (Local Storage) Update: " + cname + ": " + cvalue);
-        }
-      } else {
-        if (typeof cvalue === 'string') {
-          cvalue = encodeURIComponent(cvalue);
-        }
-        var d, expires = "", domain = "", cookie;
-        if (exdays) {
-          d = new Date();
-          d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-          expires = "; expires=" + d.toGMTString();
-        }
-        if (_SgmntfY_._variables.domain && _SgmntfY_._variables.domain.split(".").length >= 2) {
-          domain = "; domain=" + _SgmntfY_._variables.domain;
-        }
-        cookie = cname + "=" + cvalue + expires + domain + "; path=/";
-        try {
-          document.cookie = cookie;
-          _SgmntfY_.LOG_MESSAGE('DEBUG', "Segmentify Persistent Data (Cookie) Update: " + cookie);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', "Can't store Persistent Data (Cookie) Update: " + cookie);
-        }
-      }
-    },
-    _getPersistentData: function getCookie(cname, useWebStorage) {
-      if (typeof(Storage) !== "undefined" && useWebStorage) {
-        try {
-          return localStorage.getItem(cname);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', "Can't get Persistent Data (Local Storage): " + cname);
-          return null;
-        }
-      } else {
-        var name = cname + "=";
-        try {
-          var ca = document.cookie.split(';');
-          for (var i = 0; i < ca.length; i++) {
-            var c = ca[i].trim();
-            if (c.indexOf(name) === 0) return decodeURIComponent(c.substring(name.length, c.length));
-          }
-          return null;
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', "Can't get Persistent Data (Cookie): " + cname);
-          return null;
-        }
-      }
-    },
-    _clearProductUrl: function (url) {
-      var parameters = ['_sgm_source', '_sgm_campaign', '_sgm_action', '_sgm_type', '_sgm_test', 'utm_source', 'utm_medium',
-        'utm_term', 'utm_content', 'utm_campaign', 'utm_type', 'p_id', 'gclid', 'ds_p', 'ds_eid', 'ds_aid', 'ds_e', 'ds_c',
-        'ds_cid', 'ds_ag', 'ds_agid', 'ds_k', 'ds_kid', 'ds_kids', 'ds_kidnl', 'gclick', 'gsrc', 'gclsrc', '_sgm_coupon',
-        '_sgm_term'
-      ];
-      return _SgmntfY_._stripQueryParameters(url, parameters);
-    },
-    _stripQueryParameters: function (url, parameters) {
-      if (typeof parameters === "undefined" || !parameters) return url;
-      else if (typeof parameters === "string") parameters = [parameters];
-      //prefer to use l.search if you have a location/link object
-      var urlParts= (url || '').split('?');
-      if (urlParts.length >= 2) {
-        var prefixes = [];
-        for(var i = 0; i < (parameters || []).length; i++) {
-          prefixes.push(encodeURIComponent(parameters[i])+'=');
-        }
-
-        var paramPairs = urlParts[1].split(/[&;]/g);
-        //reverse iteration as may be destructive
-        for (var i = paramPairs.length; i-- > 0;) {
-          for (var j = 0; j < prefixes.length; j++) {
-            //idiom for string.startsWith
-            if (paramPairs[i].lastIndexOf(prefixes[j], 0) !== -1) {
-              paramPairs.splice(i, 1);
-              break;
-            }
-          }
-        }
-
-        if (paramPairs.length > 0) return urlParts[0] + '?' + paramPairs.join('&');
-        else return urlParts[0];
-      }
-      else return url;
-    },
-    _getQueryParameter: function (name, url) {
-      var trackedUrl = location.search;
-      if (this._isEmpty(trackedUrl)) {
-        var locationHash = location.hash;
-        if (this._isNotEmpty(locationHash) && locationHash.indexOf("?") !== -1) {
-          trackedUrl = locationHash.substring(locationHash.indexOf("?"));
-        }
-      }
-      if (typeof url !== "undefined") {
-        trackedUrl = url;
-      }
-      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-      var regex = new RegExp("[\\?&]" + name + "=([^&#?]*)"),
-          results = regex.exec(trackedUrl);
-      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-    },
-    _sendTrackedEvent: function (url) {
-      var _sgm_push_redirect_url = _SgmntfY_._getQueryParameter('_sgm_push_redirect_url', url);
-      if (_sgm_push_redirect_url && _sgm_push_redirect_url.length !== 0) {
-        window.location = _sgm_push_redirect_url;
-      }
-
-      var _sgm_campaign, _sgm_action, _sgm_source, _sgm_coupon, _sgm_term;
-
-      if (_SgmntfY_._getQueryParameter('utm_source', url) === 'segmentify') {
-        // v2 checks
-        _sgm_campaign = _SgmntfY_._getQueryParameter('utm_campaign', url);
-        _sgm_action = _SgmntfY_._getQueryParameter('utm_medium', url);
-        _sgm_source = _SgmntfY_._getQueryParameter('utm_content', url);
-      } else {
-        // v1 checks
-        _sgm_campaign = _SgmntfY_._getQueryParameter('_sgm_campaign', url);
-        _sgm_action = _SgmntfY_._getQueryParameter('_sgm_action', url);
-        _sgm_source = _SgmntfY_._getQueryParameter('_sgm_source', url);
-      }
-      _sgm_coupon = _SgmntfY_._getQueryParameter('_sgm_coupon', url);
-      _sgm_term = _SgmntfY_._getQueryParameter('_sgm_term', url);
-
-      if (_sgm_action === 'push') {
-        var _interaction = _SgmntfY_._getPersistentData(_sgm_campaign);
-        if (_SgmntfY_._isEmpty(_interaction) || (_SgmntfY_._isNotEmpty(_interaction) && _interaction === '0')) {
-          _SgmntfY_.LOG_MESSAGE('DEBUG', 'Sending tracked event: ' + _sgm_action + ' - ' + _sgm_campaign + ' - ' + _sgm_source + ' - type: push-click');
-          _SgmntfY_._variables.segmentifyObj("push:click:interaction", {
-            type: "push-click",
-            interactionId: _sgm_source,
-            instanceId: _sgm_campaign
-          });
-        }
-      }
-
-      if (_sgm_action === 'email') {
-        var _interaction = _SgmntfY_._getPersistentData(_sgm_campaign + "_email");
-        if (_SgmntfY_._isEmpty(_interaction) || (_SgmntfY_._isNotEmpty(_interaction) && _interaction === '0')) {
-          _SgmntfY_._variables.segmentifyObj("email:click", {
-            type: "email-click",
-            interactionId: _sgm_source,
-            instanceId: _sgm_campaign
-          });
-        }
-      }
-
-      var _params = {};
-      if (_sgm_term) {
-        _params['term'] = _sgm_term;
-      }
-      if (_sgm_campaign && _sgm_action && _sgm_source) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Sending tracked event: ' + _sgm_action + ' - ' + _sgm_campaign + ' - ' + _sgm_source);
-        _SgmntfY_._variables.segmentifyObj("event:interaction", {
-          type: _sgm_action,
-          interactionId: _sgm_source,
-          instanceId: _sgm_campaign,
-          params: _params
-        });
-
-        if (_sgm_action === 'push' && _sgm_coupon) {
-          _SgmntfY_._variables.segmentifyObj("coupon", {
-            type: _sgm_action,
-            interactionId: _sgm_source,
-            instanceId: _sgm_campaign
-          });
-        }
-
-        if (_sgm_action === 'click') {
-          _SgmntfY_.GA.sendProductClick(_sgm_campaign, _sgm_source);
-        }
-      }
-    },
-    _setTestMode: function (paramMode) {
-      var mode = paramMode || _SgmntfY_._getQueryParameter('_sgm_test');
-      _SgmntfY_._toggleTestMode(mode);
-
-      // check current test mode
-      if (_SgmntfY_._getExtensionStatus('test') !== 'exists' && _SgmntfY_._getTestMode() === 'true') {
-        try {
-          var testModeTemplate = [
-            '<div class="sgm-test-mode-header">',
-            '<a href="http://www.segmentify.com" target="_blank" class="sgm-logo"> </a>',
-            '<a href="https://chrome.google.com/webstore/detail/segmentify/dhcffckfimabfhbbjdngnajhnlohfjeo" target="_blank" class="sgm-ext"><span>Get <strong>Chrome Extension</strong> Now!</span></a>',
-            '<span class="sgm-test-mode-Show-Hide" data-hide="Hide" data-show="Show"></span>',
-            '<div class="sgm-test-mode-key">',
-            '<h2 id="sgm-test-mode-message"> Your browser is in<strong>Segmentify Test Mode</strong> </h2>',
-            '<div class="sgm-test-mode-radio">',
-            '<input class="sgm-tgl sgm-tgl-ios" id="sgm-cb1" type="checkbox" checked>',
-            '<label class="sgm-tgl-btn" for="sgm-cb1"></label>',
-            '</div>',
-            '</div>',
-            '</div>'
-          ].join("\n");
-
-          setTimeout(function () {
-            _SgmntfY_._getJq()("body").prepend(testModeTemplate);
-            if (_SgmntfY_._variables.ua.name.toLowerCase() !== "chrome") {
-              _SgmntfY_._getJq()(".sgm-test-mode-header .sgm-ext").hide();
-            }
-            _SgmntfY_._getJq()("body").addClass("sgm-test-body");
-
-            _SgmntfY_._getJq()('#sgm-cb1').change(function () {
-              var $this = _SgmntfY_._getJq()(this);
-              setTimeout(function () {
-                _SgmntfY_._toggleTestMode($this.is(':checked') ? 'on' : 'off');
-              }, 400);
-            });
-
-            _SgmntfY_._getJq()(".sgm-test-mode-Show-Hide").click(function () {
-              _SgmntfY_._getJq()("body").toggleClass("sgm-test-header-open");
-            });
-          }, 800);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('DEBUG', "Can't show test mode header: " + err);
-        }
-      }
-    },
-    _getTestMode: function () {
-      return _SgmntfY_._getPersistentData(_SgmntfY_._variables.testMode);
-    },
-    _toggleTestMode: function (mode) {
-      if (mode === 'on') {
-        _SgmntfY_._getJq()('#sgm-test-mode-message').html("Your browser is in<strong>Segmentify Test Mode</strong>");
-        _SgmntfY_._getJq()('#sgm-test-mode-message').find("strong").css("color", "#50BC61");
-        _SgmntfY_.LOG_MESSAGE('INFO', "Segmentify Test Mode activated");
-        _SgmntfY_._storePersistentData(_SgmntfY_._variables.testMode, 'true', 180); // expire in 180 days
-      } else if (mode === 'off') {
-        _SgmntfY_._getJq()('#sgm-test-mode-message').html("<strong>Segmentify Test Mode</strong> is disabled");
-        _SgmntfY_._getJq()('#sgm-test-mode-message').find("strong").css("color", "#fff");
-        _SgmntfY_.LOG_MESSAGE('INFO', "Segmentify Test Mode deactivated");
-        _SgmntfY_._storePersistentData(_SgmntfY_._variables.testMode, 'false', 180); // expire in 180 days
-        window.alert('You are out of Segmentify Test Mode, you will not see test campaigns.');
-        window.location = _SgmntfY_._stripQueryParameters(document.URL, '_sgm_test');
-      }
-    },
-    _getTracking: function () {
-      var _tracking = _SgmntfY_._getPersistentData(_SgmntfY_._variables.tracking);
-      if (_SgmntfY_._isNotEmpty(_tracking)) {
-        _SgmntfY_._setTracking(_tracking);
-      }
-      return _tracking;
-    },
-    _setTracking: function (tracking) {
-      if (tracking !== 'disabled') {
-        tracking = 'enabled';
-      }
-      _SgmntfY_._storePersistentData(_SgmntfY_._variables.tracking, tracking, 390);
-    },
-    _getQaMode: function () {
-      try {
-        var qaModeStorage = _SgmntfY_._variables.storage.qaMode;
-        return _SgmntfY_._getPersistentData(qaModeStorage.key, qaModeStorage.local) || 'false';
-      } catch (e) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Can\'t read QA mode status: ' + err);
-        return 'false';
-      }
-    },
-    _setQaMode: function(paramMode) {
-      var mode = paramMode || _SgmntfY_._getQueryParameter('_sgf_qa');
-      _SgmntfY_._toggleQaMode(mode);
-
-      // check current test mode
-      if (_SgmntfY_._getExtensionStatus('qa') !== 'exists' && _SgmntfY_._getQaMode() === 'true') {
-        try {
-          var qaModeTemplate = [
-            '<div class="sgm-test-mode-header">',
-            '<a href="http://www.segmentify.com" target="_blank" class="sgm-logo-blue"> </a>',
-            '<a href="https://chrome.google.com/webstore/detail/segmentify/dhcffckfimabfhbbjdngnajhnlohfjeo" target="_blank" class="sgm-ext"><span>Get <strong>QA Extension</strong> Now!</span></a>',
-            '<span class="sgm-test-mode-Show-Hide" data-hide="Hide" data-show="Show"></span>',
-            '<div class="sgm-test-mode-key">',
-            '<h2 id="sgm-qa-mode-message"> Your browser is in<strong>Segmentify QA Mode</strong> </h2>',
-            '<div class="sgm-test-mode-radio">',
-            '<input class="sgm-tgl sgm-tgl-ios" id="sgm-cb1" type="checkbox" checked>',
-            '<label class="sgm-tgl-btn" for="sgm-cb1"></label>',
-            '</div>',
-            '</div>',
-            '</div>'
-          ].join("\n");
-
-          setTimeout(function () {
-            _SgmntfY_._getJq()("body").prepend(qaModeTemplate);
-            if (_SgmntfY_._variables.ua.name.toLowerCase() !== "chrome") {
-              _SgmntfY_._getJq()(".sgm-test-mode-header .sgm-ext").hide();
-            }
-            _SgmntfY_._getJq()("body").addClass("sgm-test-body");
-
-            _SgmntfY_._getJq()('#sgm-cb1').change(function () {
-              var $this = _SgmntfY_._getJq()(this);
-              setTimeout(function () {
-                _SgmntfY_._toggleQaMode($this.is(':checked') ? 'on' : 'off');
-              }, 400);
-            });
-
-            _SgmntfY_._getJq()(".sgm-test-mode-Show-Hide").click(function () {
-              _SgmntfY_._getJq()("body").toggleClass("sgm-test-header-open");
-            });
-          }, 800);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('DEBUG', "Can't show test mode header: " + err);
-        }
-      }
-    },
-    _toggleQaMode: function(mode) {
-      var qaModeStorage = _SgmntfY_._variables.storage.qaMode;
-      if (mode === 'on') {
-        _SgmntfY_._getJq()('#sgm-qa-mode-message').html('Your browser is in<strong>Segmentify QA Mode</strong>');
-        _SgmntfY_._getJq()('#sgm-qa-mode-message').find('strong').css('color', '#50BC61');
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Segmentify QA Mode activated');
-        _SgmntfY_._storePersistentData(qaModeStorage.key, 'true', 180, qaModeStorage.local); // expire in 180 days
-      } else if (mode === 'off') {
-        _SgmntfY_._getJq()('#sgm-qa-mode-message').html('<strong>Segmentify QA Mode</strong> is disabled');
-        _SgmntfY_._getJq()('#sgm-qa-mode-message').find('strong').css('color', '#fff');
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Segmentify QA Mode deactivated');
-        _SgmntfY_._storePersistentData(qaModeStorage.key, 'false', 180, qaModeStorage.local); // expire in 180 days
-        window.alert('You are out of Segmentify QA Mode.');
-        window.location = _SgmntfY_._stripQueryParameters(document.URL, '_sgf_qa');
-      }
-    },
-    _getSearchVerboseParams: function(params) {
-      var searchQueryOverride = _SgmntfY_._getSearchQueryOverride();
-      if (searchQueryOverride) {
-        params['_search_no_cache_'] = "true";
-        params['_search_query_override_'] = searchQueryOverride;
-      } else {
-        params['_search_no_cache_'] = _SgmntfY_._getSearchNoCache();
-      }
-      if (_SgmntfY_._variables.search.queryVerboseLog === true) {
-        params['_search_query_verbose_log_'] = "true";
-      }
-      return params
-    },
-    _getSearchNoCache: function () {
-      try {
-        if (_SgmntfY_._variables.search.searchNoCache === true) {
-          return 'true';
-        } else {
-          var searchNoCacheStorage = _SgmntfY_._variables.storage.searchNoCache;
-          return _SgmntfY_._getPersistentData(searchNoCacheStorage.key, searchNoCacheStorage.local) || 'false';
-        }
-      } catch (e) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'Can\'t read Search no cache status: ' + err);
-        return 'false';
-      }
-    },
-    _getSearchQueryOverride: function() {
-      try {
-        var searchQueryOverride = _SgmntfY_._getPersistentData(_SgmntfY_._variables.search.queryOverrideKey, true);
-        var expires = JSON.parse(searchQueryOverride).expires;
-        if (Date.parse(expires) > new Date()) {
-          return searchQueryOverride;
-        } else {
-          _SgmntfY_._unsetSearchQueryOverride();
-          return null;
-        }
-      } catch (e) {
-        return null;
-      }
-    },
-    _getEventUrl: function () {
-      if (_SgmntfY_._getQaMode() === 'true') {
-        return _SgmntfY_._variables.segmentifyQaApiUrl;
-      } else {
-        return _SgmntfY_._variables.segmentifyApiUrl;
-      }
-    },
-    _getPushUrl: function () {
-      if (_SgmntfY_._getQaMode() === 'true') {
-        return _SgmntfY_._variables.pushInfo.qaDataCenter;
-      } else {
-        return _SgmntfY_._variables.pushInfo.dataCenter;
-      }
-    },
-    _getSessionId: function () {
-      var _sessionId = _SgmntfY_._getPersistentData(_SgmntfY_._variables.sessionStorageKey, _SgmntfY_._variables.storage.session.local);
-      return _sessionId ? _sessionId.trim() : '';
-    },
-    _getUserId: function () {
-      var _userId = _SgmntfY_._getPersistentData(_SgmntfY_._variables.userStorageKey, _SgmntfY_._variables.storage.user.local);
-      return _userId ? _userId.trim() : '';
-    },
-    _shuffle: function (o) {
-      for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-      return o;
-    },
-    _getClickedBanners: function () {
-      try {
-        var clickedBannersStorage = _SgmntfY_._variables.storage.clickedBanners;
-        return JSON.parse(_SgmntfY_._getPersistentData(clickedBannersStorage.key, clickedBannersStorage.local)) || [];
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', "Can't read clicked banners: " + err);
-      }
-      return [];
-    },
-    _addClickedBanner: function (title, group, order, url) {
-      if (typeof title === 'undefined' || typeof group === 'undefined' || typeof order === 'undefined' || typeof url === 'undefined') {
-        return;
-      }
-      var bannerKey = title + ':' + group + ':' + order + ':' + url;
-      var clickedBanners = _SgmntfY_._getClickedBanners();
-      if (clickedBanners.indexOf(bannerKey) === -1) {
-        clickedBanners.push(bannerKey);
-      }
-
-      if (clickedBanners.length > _SgmntfY_._variables.constants.clickedBannersLimit) {
-        clickedBanners = clickedBanners.splice(clickedBanners.length - _SgmntfY_._variables.constants.clickedBannersLimit);
-      }
-      var clickedBannersStorage = _SgmntfY_._variables.storage.clickedBanners;
-      _SgmntfY_._storePersistentData(clickedBannersStorage.key, JSON.stringify(clickedBanners), 0, clickedBannersStorage.local);
-    },
-    _getDelayedActions: function () {
-      try {
-        var delayedActionsStorage = _SgmntfY_._variables.storage.delayedActions;
-        return JSON.parse(_SgmntfY_._getPersistentData(delayedActionsStorage.key, delayedActionsStorage.local)) || [];
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't read delayed actions: " + err);
-      }
-      return [];
-    },
-    _setDelayedActions: function (delayedActions) {
-      var delayedActionsStorage = _SgmntfY_._variables.storage.delayedActions;
-      _SgmntfY_._storePersistentData(delayedActionsStorage.key, JSON.stringify(delayedActions), 0, delayedActionsStorage.local);
-    },
-    _addDelayedAction: function (action) {
-      var delayedActions = _SgmntfY_._getDelayedActions();
-      for (var i = 0; i < delayedActions.length; i++) {
-        if (delayedActions[i].params.actionId === action.params.actionId) return false;
-      }
-      var currentDate = new Date();
-      if (action.delayDate.getTime() < currentDate.getTime()) return false;
-      else {
-        var type = action.type;
-        var actionFunction = _SgmntfY_._actions[action.type];
-        var params = action.params;
-        var request = action.request;
-        setTimeout(function () {
-          var delayedActions = _SgmntfY_._getDelayedActions();
-          var exist = false;
-          for (var i = 0; i < delayedActions.length; i++) {
-            if (delayedActions[i].params.actionId === action.params.actionId) exist = true;
-          }
-          if (exist) {
-            _SgmntfY_.LOG_MESSAGE('INFO', 'Action(' + type + ') is triggered after delay');
-            actionFunction.call(null, params, request);
-            _SgmntfY_._removeDelayedAction(params.actionId);
-          }
-        }, (action.delayDate.getTime() - currentDate.getTime()) + Math.floor(Math.random() * 750));
-        delayedActions.push(action);
-        _SgmntfY_._setDelayedActions(delayedActions);
-        return true;
-      }
-    },
-    _removeDelayedAction: function (actionId) {
-      var delayedActions = _SgmntfY_._getDelayedActions();
-      for (var i = 0; i < delayedActions.length; i++) {
-        if (delayedActions[i].params.actionId === actionId) {
-          delayedActions.splice(i, 1);
-          _SgmntfY_._setDelayedActions(delayedActions);
-          return;
-        }
-      }
-    },
-    _getRetryQueue: function () {
-      try {
-        var retryQueueStorage = _SgmntfY_._variables.storage.retryQueue;
-        return JSON.parse(_SgmntfY_._getPersistentData(retryQueueStorage.key, retryQueueStorage.local)) || [];
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't read retry queue: " + err);
-      }
-      return [];
-    },
-    _setRetryQueue: function (retryQueue) {
-      var retryQueueStorage = _SgmntfY_._variables.storage.retryQueue;
-      _SgmntfY_._storePersistentData(retryQueueStorage.key, JSON.stringify(retryQueue), 0, retryQueueStorage.local);
-    },
-    _addToRetryQueue: function (q) {
-      var rq = _SgmntfY_._getRetryQueue();
-      while (q.length > 0) {
-        var ev = q.shift();
-        var retryable = ev['eventName'] === 'CHECKOUT' || ev['eventName'] === 'BASKET_OPERATIONS' || ev['eventName'] === 'INTERACTION';
-        if (!retryable) {
-          continue;
-        }
-        var tc = ev.data.tryCount || 0;
-        if (tc < _SgmntfY_._variables.constants.retryLimit) {
-          ev.data.tryCount = tc + 1;
-          if (_SgmntfY_._variables.isUnload) {
-            ev.originalParams.discardResponse = 'true';
-          }
-          rq.push(ev);
-        }
-      }
-      _SgmntfY_._setRetryQueue(rq);
-    },
-    _consumeRetryQueue: function () {
-      var rq = _SgmntfY_._getRetryQueue();
-      if (rq && rq.length > 0) {
-        var q = [];
-        while (rq.length > 0) {
-          var ev = rq.shift();
-          // update user and session id
-          ev.data.userId = _SgmntfY_._getUserId();
-          ev.data.sessionId = _SgmntfY_._getSessionId();
-          q.push(ev);
-        }
-        _SgmntfY_._sendRequestToServer(q);
-        _SgmntfY_._setRetryQueue([]);
-      }
-    },
-    _getDataLayer: function () {
-      return window[_SgmntfY_._variables.dataLayer];
-    },
-    _consumeDataLayer: function () {
-      if (_SgmntfY_._variables.consumeDataLayer) {
-        var dlq = [];
-        var extractEvent = function (key, params) {
-          if (params.hasOwnProperty('__processed__') && params['__processed__'] === true) return;
-          var extendedParams = _SgmntfY_._extend(params, common);
-          var func = _SgmntfY_._functions.getDataLayerFunction(key, extendedParams);
-          var dle = func.apply(null, [extendedParams]);
-          if (dle) dlq.push(dle);
-        };
-        var transformEventData = function (key, params) {
-          var newParams = JSON.parse(JSON.stringify(params));
-          var config = _SgmntfY_._variables.dataLayerConfig[key] || {};
-          for (var c in config) {
-            if (config.hasOwnProperty(c)) {
-              var v = config[c];
-              if (newParams.hasOwnProperty(v)) {
-                var param = newParams[v];
-                delete newParams[v];
-                newParams[c] = param;
-              }
-            }
-          }
-          return newParams;
-        };
-        var dataLayer = _SgmntfY_._getDataLayer() || {};
-        var common = transformEventData('common', dataLayer['common'] || {});
-        if (common.hasOwnProperty('userId')) {
-          var userChangeRequest = _SgmntfY_._functions.setUserId(common['userId']);
-          if (userChangeRequest) {
-            dlq.push(userChangeRequest);
-            delete _SgmntfY_._getDataLayer()['common']['userId'];
-          }
-        }
-        for (var key in dataLayer) {
-          if (dataLayer.hasOwnProperty(key)) {
-            if (key === 'common') {
-              continue;
-            }
-            if (_SgmntfY_._getJq().isArray(dataLayer[key])) {
-              for (var a = 0; a < dataLayer[key].length; ++a) {
-                extractEvent(key, transformEventData(key, dataLayer[key][a]));
-                _SgmntfY_._getDataLayer()[key][a]['__processed__'] = true;
-              }
-            } else {
-              extractEvent(key, transformEventData(key, dataLayer[key]));
-              _SgmntfY_._getDataLayer()[key]['__processed__'] = true;
-            }
-          }
-        }
-        if (dlq.length > 0) {
-          _SgmntfY_._sendRequestToServer(dlq);
-        }
-      }
-    },
-    _getNextPageQueue: function () {
-      try {
-        var nextPageQueueStorage = _SgmntfY_._variables.storage.nextPageQueue;
-        return JSON.parse(_SgmntfY_._getPersistentData(nextPageQueueStorage.key, nextPageQueueStorage.local)) || [];
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't read next page queue: " + err);
-      }
-      return [];
-    },
-    _setNextPageQueue: function (nextPageQueue) {
-      var nextPageQueueStorage = _SgmntfY_._variables.storage.nextPageQueue;
-      _SgmntfY_._storePersistentData(nextPageQueueStorage.key, JSON.stringify(nextPageQueue), 0, nextPageQueueStorage.local);
-    },
-    _addToNextPageQueue: function (request) {
-      var npq = _SgmntfY_._getNextPageQueue();
-      npq.push(request);
-      _SgmntfY_._setNextPageQueue(npq);
-    },
-    _consumeNextPageQueue: function () {
-      var npq = _SgmntfY_._getNextPageQueue();
-      if (npq && npq.length > 0) {
-        var q = [];
-        while (npq.length > 0) {
-          var ev = npq.shift();
-          if (!ev.hasOwnProperty("data")) {
-            ev = _SgmntfY_._prepareRequest(ev['params'], ev['eventName'], true);
-          }
-          // update user and session id
-          ev.data.userId = _SgmntfY_._getUserId();
-          ev.data.sessionId = _SgmntfY_._getSessionId();
-          q.push(ev);
-        }
-        _SgmntfY_._sendRequestToServer(q);
-        _SgmntfY_._setNextPageQueue([]);
-      }
-    },
-    _addRecommendedProduct: function (productId) {
-      _SgmntfY_._variables.recommendedProducts.push(productId);
-    },
-    _containsRecommendedProduct: function (productId) {
-      return _SgmntfY_._variables.recommendedProducts.indexOf(productId) >= 0;
-    },
-    _addRecommendedPromotion: function (promoCode) {
-      _SgmntfY_._variables.recommendedPromotions.push(promoCode);
-    },
-    _containsRecommendedPromotion: function (promoCode) {
-      return _SgmntfY_._variables.recommendedPromotions.indexOf(promoCode) >= 0;
-    },
-    _getExtensionStatus: function (extension) {
-      try {
-        var extensionStatusStorage;
-        if ('qa' === extension) {
-          extensionStatusStorage = _SgmntfY_._variables.storage.qaExtensionStatus;
-        } else {
-          extensionStatusStorage = _SgmntfY_._variables.storage.extensionStatus;
-        }
-        return _SgmntfY_._getPersistentData(extensionStatusStorage.key, extensionStatusStorage.local) || '';
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', "Can't read extension status: " + err);
-      }
-      return '';
-    },
-    _getDelayedCampaigns: function () {
-      try {
-        var delayedCampaignsStorage = _SgmntfY_._variables.storage.delayedCampaigns;
-        return JSON.parse(_SgmntfY_._getPersistentData(delayedCampaignsStorage.key, delayedCampaignsStorage.local)) || [];
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't read delayed campaigns: " + err);
-      }
-      return [];
-    },
-    _setDelayedCampaigns: function (delayedCampaigns) {
-      var delayedCampaignsStorage = _SgmntfY_._variables.storage.delayedCampaigns;
-      _SgmntfY_._storePersistentData(delayedCampaignsStorage.key, JSON.stringify(delayedCampaigns), 0, delayedCampaignsStorage.local);
-    },
-    _addDelayedCampaign: function (delayedCampaign) {
-      var delayedCampaigns = _SgmntfY_._getDelayedCampaigns();
-      for (var i = 0; i < delayedCampaigns.length; ++i) {
-        if (delayedCampaigns[i]['campaign']['instanceId'] === delayedCampaign['campaign']['instanceId']) return false;
-      }
-      var now = new Date();
-      if (delayedCampaign['time'].getTime() < now.getTime()) {
-        return false;
-      } else {
-        var campaign = delayedCampaign['campaign'];
-        var request = delayedCampaign['request'];
-        var campaignFunction = _SgmntfY_._campaigns[campaign['type']];
-        setTimeout(function () {
-          var delayedCampaigns = _SgmntfY_._getDelayedCampaigns();
-          var exist = false;
-          for (var i = 0; i < delayedCampaigns.length; ++i) {
-            if (delayedCampaigns[i]['campaign']['instanceId'] === delayedCampaign['campaign']['instanceId']) exist = true;
-          }
-          if (exist) {
-            _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + campaign['type'] + ') triggered after delay');
-            campaignFunction.call(null, campaign, request);
-            _SgmntfY_._removeDelayedCampaign(campaign['instanceId']);
-          }
-        }, (delayedCampaign['time'].getTime() - now.getTime()) + Math.floor(Math.random() * 750));
-        delayedCampaigns.push(delayedCampaign);
-        _SgmntfY_._setDelayedCampaigns(delayedCampaigns);
-        return true;
-      }
-    },
-    _removeDelayedCampaign: function (instanceId) {
-      var delayedCampaigns = _SgmntfY_._getDelayedCampaigns();
-      for (var i = 0; i < delayedCampaigns.length; i++) {
-        if (delayedCampaigns[i]['campaign']['instanceId'] === instanceId) {
-          delayedCampaigns.splice(i, 1);
-          _SgmntfY_._setDelayedCampaigns(delayedCampaigns);
-          return;
-        }
-      }
-    },
-    _getPageViewsCampaigns: function () {
-      try {
-        var pageViewCampaignsStorage = _SgmntfY_._variables.storage.pageViewCampaigns;
-        return JSON.parse(_SgmntfY_._getPersistentData(pageViewCampaignsStorage.key, pageViewCampaignsStorage.local)) || [];
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't read pageview campaigns: " + err);
-      }
-      return [];
-    },
-    _setPageViewsCampaigns: function (pageViewCampaigns) {
-      var pageViewCampaignsStorage = _SgmntfY_._variables.storage.pageViewCampaigns;
-      _SgmntfY_._storePersistentData(pageViewCampaignsStorage.key, JSON.stringify(pageViewCampaigns), 0, pageViewCampaignsStorage.local);
-    },
-    _addPageViewsCampaign: function (pageViewsCampaign) {
-      var pageViewsCampaigns = _SgmntfY_._getPageViewsCampaigns();
-      for (var i = 0; i < pageViewsCampaigns.length; ++i) {
-        if (pageViewsCampaigns[i]['campaign']['instanceId'] === pageViewsCampaign['campaign']['instanceId']){
-          if (pageViewsCampaign['sessionId'] === _SgmntfY_._getSessionId()) {
-            return false;
-          } else {
-            _SgmntfY_._removePageViewsCampaign(pageViewsCampaign['campaign']['instanceId']);
-            break;
-          }
-        }
-      }
-      pageViewsCampaigns.push(pageViewsCampaign);
-      _SgmntfY_._setPageViewsCampaigns(pageViewsCampaigns);
-      return true;
-    },
-    _removePageViewsCampaign: function (instanceId) {
-      var pageViewsCampaigns = _SgmntfY_._getPageViewsCampaigns();
-      for (var i = 0; i < pageViewsCampaigns.length; i++) {
-        if (pageViewsCampaigns[i]['campaign']['instanceId'] === instanceId) {
-          pageViewsCampaigns.splice(i, 1);
-          _SgmntfY_._setPageViewsCampaigns(pageViewsCampaigns);
-          return;
-        }
-      }
-    },
-    _triggerPageViewsCampaign: function(pageViewCampaign) {
-      if (pageViewCampaign['pageView'] === 0 && pageViewCampaign['sessionId'] === _SgmntfY_._getSessionId()) {
-        var campaign = pageViewCampaign['campaign'];
-        var request = pageViewCampaign['request'];
-        var campaignFunction = _SgmntfY_._campaigns[campaign['type']];
-        var pageViewCampaigns = _SgmntfY_._getPageViewsCampaigns();
-        var exist = false;
-        for (var i = 0; i < pageViewCampaigns.length; ++i) {
-          if (pageViewCampaigns[i]['campaign']['instanceId'] === pageViewCampaign['campaign']['instanceId']) exist = true;
-        }
-        if (exist) {
-          _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + campaign['type'] + ') triggered after pageviews');
-          campaignFunction.call(null, campaign, request);
-          _SgmntfY_._removePageViewsCampaign(campaign['instanceId']);
-        }
-      }
-    },
-    _interaction: function (type, instanceId, interactionId) {
-      _SgmntfY_._variables.segmentifyObj('event:interaction', {
-        type: type,
-        instanceId: instanceId,
-        interactionId: interactionId
-      });
-    },
-    _getFireTime: function (date) {
-
-      function pad(number, length) {
-        var s = number.toString();
-        while (s.length < length) {
-          s = "0" + s;
-        }
-        return s;
-      }
-
-      try {
-        return date.getFullYear() + '.' + pad(date.getMonth() + 1, 2) + '.' + pad(date.getDate(), 2) + ' '
-            + pad(date.getHours(), 2) + ':' + pad(date.getMinutes(), 2) + ':' + pad(date.getSeconds(), 2) + '.' + pad(date.getMilliseconds(), 3);
-      } catch (e) {
-        return '';
-      }
-    },
-    _getTimeZone: function (date) {
-      try {
-        return date.getTimezoneOffset().toString();
-      } catch (e) {
-        return '';
-      }
-    },
-    // Getters
-    _getJq: function () {
-      return _SgmntfY_._variables.jq;
-    },
-    _getMustache: function () {
-      return _SgmntfY_._variables.mustache;
-    },
-    _getObjectByString: function (o, s) {
-      s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
-      s = s.replace(/^\./, '');           // strip a leading dot
-      var a = s.split('.');
-      for (var i = 0, n = a.length; i < n; ++i) {
-        var k = a[i];
-        if (k in o) {
-          o = o[k];
-        } else {
-          return;
-        }
-      }
-      return o;
-    },
-    // Misc
-    _isUndefined: function(value) { return typeof value === 'undefined'; },
-    _notNull: function(value) { return typeof value !== 'undefined' && value != null; },
-    _isEmpty: function(value) { return (typeof value === 'undefined' || value == null || value === ""); },
-    _isNotEmpty: function(value) { return !_SgmntfY_._isEmpty(value); },
-    _isPlainObject: function( obj ) {
-      if (typeof obj == 'object' && obj !== null) {
-        if (typeof Object.getPrototypeOf == 'function') {
-          var proto = Object.getPrototypeOf(obj);
-          return proto === Object.prototype || proto === null;
-        }
-        return Object.prototype.toString.call(obj) == '[object Object]';
-      }
-      return false;
-    },
-    _isElemVisible: function ($elem) {
-      try {
-        if (_SgmntfY_._exists($elem) && $elem.css('display') !== 'none') {
-          var $window = _SgmntfY_._getJq()(window);
-
-          var docViewTop = $window.scrollTop();
-          var docViewBottom = docViewTop + $window.height();
-
-          if ($elem instanceof HTMLElement) {
-            $elem = _SgmntfY_._getJq()($elem);
-          } else if ($elem instanceof HTMLCollection) {
-            $elem = _SgmntfY_._getJq()($elem[0]);
-          }
-          var elemTop = $elem.offset().top;
-          var elemBottom = elemTop + 100; // seeing 100 pixels of element is enough for us
-
-          return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-        } else {
-          return false;
-        }
-      } catch (err) {
-        return false;
-      }
-    },
-    _exists: function (elem) {
-      if (elem instanceof HTMLElement) {
-        return elem !== null;
-      } else if (elem instanceof HTMLCollection || elem instanceof _SgmntfY_._getJq() || elem instanceof jQuery || elem instanceof $) {
-        return elem.length > 0;
-      } else {
-        return false;
-      }
-    },
-    _extend: function () {
-      var options, name, src, copy, clone,
-          target = arguments[0] || {},
-          i = 1,
-          length = arguments.length,
-          deep = false;
-
-      // Handle a deep copy situation
-      if (typeof target === "boolean") {
-        deep = target;
-        // Skip the boolean and the target
-        target = arguments[i] || {};
-        i++;
-      }
-
-      for (; i < length; i++) {
-        // Only deal with non-null/undefined values
-        if ((options = arguments[i]) != null) {
-          // Extend the base object
-          for (name in options) {
-            if (options.hasOwnProperty(name)) {
-              src = target[name];
-              copy = options[name];
-
-              // Prevent never-ending loop
-              if (target === copy) {
-                continue;
-              }
-
-              // Recurse if we're merging plain objects or arrays
-              if (deep && copy && _SgmntfY_._isPlainObject(copy)) {
-                clone = src && ((typeof src === "object") && (src !== null)) ? src : {};
-
-                // Never move original objects, clone them
-                target[name] = _SgmntfY_._extend(deep, clone, copy);
-
-                // Don't bring in undefined values
-              } else if (copy !== undefined) {
-                target[name] = copy;
-              }
-            }
-          }
-        }
-      }
-
-      // Return the modified object
-      return target;
-    },
-    _split: function (str, separator, limit) {
-      if (str && typeof str === 'string') {
-        var i, array = str.split(separator);
-        for (i = 0; i < array.length; i++) {
-          array[i] = array[i].trim();
-        }
-        if(limit && limit < array.length) {
-          var result = array.splice(0,limit - 1);
-          result.push(array.join(separator));
-          array = result;
-        }
-        return array;
-      }
-      else return null;
-    },
-    _parseFloat: function (value) {
-      if (value == null) return value;
-      else if (typeof value === "undefined") return null;
-      else if (typeof value === "number") return value;
-      else if (typeof value === "string") return parseFloat(value);
-      else return value;
-    },
-    _parseBoolean: function (value) {
-      if (typeof value === "undefined") return null;
-      else if (typeof value === "number") {
-        if (value === 0) return "false";
-        else return "true";
-      }
-      else if (typeof value === "string") {
-        if (value === "0" || value.toLowerCase() === "false") return "false";
-        else return "true";
-      }
-      else if (typeof value === "boolean") return value.toString();
-      else return value;
-    },
-    _null: function (item) {
-      return item != undefined && item != '';
-    },
-    _clearNullByte: function (value) {
-      return value.replace(/\0/g, '');
-    },
-    _checkVersion: function (required, current) {
-      var cur = current.split('.');
-      var min = required.split('.');
-      prevs = [];
-
-      for (var i = 0, len = Math.max(cur.length, min.length); i < len; i++) {
-        cur[i] = parseInt(cur[i]);
-        if (isNaN(cur[i])) cur[i] = 0;
-        min[i] = parseInt(min[i]);
-        if (isNaN(min[i])) min[i] = 0;
-        if (cur[i] < min[i]) return false;
-        else if (cur[i] > min[i]) return true;
-      }
-      return true;
-    },
-    _updateBrowserAndDeviceInfo: function () {
-      if (typeof window['bowser'] === 'undefined') {
-        return;
-      }
-      var _bowser = window['bowser']._detect(_SgmntfY_._variables.ua.agentString);
-      if (_SgmntfY_._variables.ua.type == null) {
-        // type
-        if (_bowser.tablet) _SgmntfY_._variables.ua.type = 'tablet';
-        else if (_bowser.mobile) _SgmntfY_._variables.ua.type = 'mobile';
-        else _SgmntfY_._variables.ua.type = 'PC';
-        // name
-        if (_bowser.chromium) _SgmntfY_._variables.ua.name = 'Chrome';
-        else _SgmntfY_._variables.ua.name = _bowser.name;
-        // version
-        _SgmntfY_._variables.ua.version = _bowser.version;
-      }
-      if (_SgmntfY_._variables.ua.os == null) {
-        // os
-        _SgmntfY_._variables.ua.os = _bowser.osname || 'Other';
-        _SgmntfY_._variables.ua.osversion = _bowser.osversion;
-      }
-    },
-    _addLeavePageHandler: function (action, request) {
-      var type = action["type"];
-      var params = action["params"];
-      var actionFunction = _SgmntfY_._actions[type];
-
-      _SgmntfY_.LOG_MESSAGE('INFO', 'Action(' + type + ') will be triggered when user leaves page');
-      var mouseLeaveHandler = function (event) {
-        if (event.clientY < 0) {
-          _SgmntfY_.LOG_MESSAGE('INFO', 'Action(' + type + ') is triggered at user leave page');
-          _SgmntfY_._getJq()(document).unbind('mouseleave', mouseLeaveHandler);
-          actionFunction.call(null, params, request);
-        }
-      };
-      _SgmntfY_._getJq()(document).bind('mouseleave', mouseLeaveHandler);
-    },
-    _addWaitPageHandler: function (action, request) {
-      var type = action["type"];
-      var params = action["params"];
-      var delayAction = action["delayAction"] || null;
-      var actionFunction = _SgmntfY_._actions[type];
-
-      var delayTime = parseInt(delayAction.time);
-      _SgmntfY_.LOG_MESSAGE('INFO', 'Action(' + type + ') will be triggered after ' + delayTime + ' second(s) delay on same page');
-      setTimeout(function () {
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Action(' + type + ') is triggered after delay');
-        actionFunction.call(null, params, request);
-      }, delayTime * 1000);
-    },
-    _addScrollHandler: function (action, request) {
-      var type = action['type'];
-      var delayAction = action['delayAction'];
-      var scrollPct = parseInt(delayAction['time']) || 0;
-      _SgmntfY_.LOG_MESSAGE('INFO', 'Action (' + type + ') will be triggered after ' + scrollPct + '% of page is scrolled');
-      var scrollHandler = function () {
-        if (scrollPct <= _SgmntfY_._getScrollPercent()) {
-          _SgmntfY_.LOG_MESSAGE('INFO', 'Action (' + type + ') triggered after ' + scrollPct + '% of page is scrolled');
-          _SgmntfY_._getJq()(document).unbind('scroll', scrollHandler);
-          var actionFunction = _SgmntfY_._actions[type];
-          actionFunction.call(null, action['params'], request);
-        }
-      };
-      _SgmntfY_._getJq()(document).bind('scroll', scrollHandler);
-    },
-    // campaign handlers
-    _addCampaignDelayHandler: function (campaign, request) {
-      var type = campaign['type'];
-      var timing = campaign['timing'];
-      var delayTime = parseInt(timing['param']);
-      _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + type + ') will be triggered after ' + delayTime + ' second(s) delay on same page');
-      window.setTimeout(function () {
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + type + ') triggered after ' + delayTime + ' delay');
-        var campaignFunction = _SgmntfY_._campaigns[type];
-        campaignFunction.call(null, campaign, request);
-      }, delayTime * 1000);
-    },
-    _addCampaignDelayAllPagesHandler: function (campaign, request) {
-      var timing = campaign['timing'] || '0';
-      var delayTime = new Date((new Date()).getTime() + (1000 * parseInt(timing['param'])));
-      var delayedCampaign = {
-        campaign: campaign,
-        request: request,
-        time: delayTime
-      };
-      // check this campaign is already stored for triggering
-      if (!_SgmntfY_._addDelayedCampaign(delayedCampaign)) {
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + campaign['instanceId'] + ') already added for delayed campaign');
-      } else {
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + campaign['instanceId'] + ') added for delayed campaign in future');
-      }
-    },
-    _addCampaignPageViewsHandler: function (campaign, request) {
-      var timing = campaign['timing'] || '0';
-      var pageView = parseInt(timing['param']) - 1;
-      var pageViewCampaign = {
-        campaign: campaign,
-        request: request,
-        pageView: pageView,
-        sessionId: _SgmntfY_._getSessionId()
-      };
-      // check this campaign is already stored for triggering
-      if (!_SgmntfY_._addPageViewsCampaign(pageViewCampaign)) {
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + campaign['instanceId'] + ') already added for pageview campaign');
-      } else {
-        _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + campaign['instanceId'] + ') added for pageview campaign in future');
-      }
-    },
-    _addCampaignScrollHandler: function (campaign, request) {
-      var type = campaign['type'];
-      var timing = campaign['timing'];
-      var scrollPct = parseInt(timing.param);
-      _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + type + ') will be triggered after ' + scrollPct + '% of page is scrolled');
-      var scrollHandler = function () {
-        if (scrollPct <= _SgmntfY_._getScrollPercent()) {
-          _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + type + ') triggered after ' + scrollPct + '% of page is scrolled');
-          _SgmntfY_._getJq()(document).unbind('scroll', scrollHandler);
-          var campaignFunction = _SgmntfY_._campaigns[type];
-          campaignFunction.call(null, campaign, request);
-        }
-      };
-      _SgmntfY_._getJq()(document).bind('scroll', scrollHandler);
-    },
-    _addCampaignLeaveHandler: function (campaign, request) {
-      var type = campaign['type'];
-      _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + type + ') will be triggered when user leaves page');
-      var leaveHandler = function (event) {
-        if (event.clientY < 0) {
-          _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + type + ') triggered at user leave page');
-          _SgmntfY_._getJq()(document).unbind('mouseleave', leaveHandler);
-          var campaignFunction = _SgmntfY_._campaigns[type];
-          campaignFunction.call(null, campaign, request);
-        }
-      };
-      _SgmntfY_._getJq()(document).bind('mouseleave', leaveHandler);
-    },
-    _addCampaignInteractionHandler: function (campaign, request) {
-
-    },
-    _getScrollPercent: function () {
-      var h = document.documentElement,
-          b = document.body,
-          st = 'scrollTop',
-          sh = 'scrollHeight';
-      return (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;
-    },
-    // Post Data
-    _updateUserAndSessionId: function (requiredKeyCount) {
-      _SgmntfY_._variables.waitingKeys = true;
-      // get keys
-      var request = {
-        data: null,
-        url: _SgmntfY_._getEventUrl() + "/get/key/v1.json?count=" + requiredKeyCount
-      };
-      _SgmntfY_._getJq().ajax({
-        contentType: 'text/plain',
-        processData: false,
-        type: 'GET',
-        url: request.url,
-        timeout: (_SgmntfY_._variables.constants.eventTimeout * 1000)
-      }).done(function (responseData, textStatus, jqXHR) {
-        _SgmntfY_._ajaxSuccess(request, responseData, textStatus);
-        // update user id
-        if (requiredKeyCount === 2) {
-          _SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey, responseData[1], 390, _SgmntfY_._variables.storage.user.local); // expire in 13 months
-        }
-        var userId = _SgmntfY_._getUserId();
-        if (_SgmntfY_._isEmpty(userId)) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', "Can't update User Id");
-          return;
-        }
-        _SgmntfY_.LOG_MESSAGE('INFO', "User Id Changed: " + userId);
-        // update session id
-        _SgmntfY_._storePersistentData(_SgmntfY_._variables.sessionStorageKey, responseData[0], 0, _SgmntfY_._variables.storage.session.local); // session cookie
-        if (_SgmntfY_._isEmpty(_SgmntfY_._getSessionId())) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', "Can't update User Session");
-          return;
-        }
-        _SgmntfY_.LOG_MESSAGE('INFO', "User Session Changed: " + responseData[0]);
-        _SgmntfY_._variables.waitingKeys = false;
-        _SgmntfY_._variables.keysTryCount++;
-      }).fail(function (jqXHR, textStatus, errorThrown) {
-        _SgmntfY_._ajaxError(request, jqXHR, textStatus, errorThrown);
-        _SgmntfY_._variables.keysTryCount++;
-        _SgmntfY_._variables.waitingKeys = false;
-      });
-    },
-    _sendRequestToServer: function (requestDataArray) {
-
-      // check datas
-      if (!requestDataArray || requestDataArray.length <= 0) return;
-      // combine data of all requests
-      var dataArray = [];
-      for (var i = 0; i < requestDataArray.length; i++) {
-        dataArray.push(requestDataArray[i].data);
-      }
-      var _headers = {
-        'X-Sfy-Api-Key': _SgmntfY_._variables.apiKey
-      };
-
-      _SgmntfY_._getJq().ajax({
-        contentType: 'text/plain',
-        processData: false,
-        type: 'POST',
-        url: _SgmntfY_._getEventUrl() + "/add/events/v1.json?apiKey=" + _SgmntfY_._variables.apiKey,
-        data: JSON.stringify(dataArray),
-        headers: _headers,
-        timeout: (_SgmntfY_._variables.constants.eventTimeout * 1000)
-      }).done(function (responseData, textStatus, jqXHR) {
-        _SgmntfY_._ajaxSuccess(dataArray, responseData, textStatus);
-        var statusCode = responseData['statusCode'] || '';
-        if (statusCode === 'SUCCESS') {
-          var responses = responseData['responses'];
-          var campaigns = responseData['campaigns'];
-          var searches = responseData['search'];
-          var coupons = responseData['coupons'] || [[]];
-
-          if (responses.length === requestDataArray.length && campaigns.length === requestDataArray.length) {
-            for (var j = 0; j < responses.length; j++) {
-              var request = requestDataArray[j];
-              var responseArray = responses[j];
-              var campaignArray = campaigns[j];
-              var searchArray = searches[j];
-
-              var couponArray = coupons[j];
-
-              // check discard flag
-              if (request.originalParams.discardResponse !== "true") {
-                _SgmntfY_._getResponse(request, responseArray);
-                _SgmntfY_._getCampaign(request, campaignArray);
-                _SgmntfY_._getSearchCampaign(request, searchArray);
-                _SgmntfY_.initCoupon(couponArray);
-              } else {
-                _SgmntfY_.LOG_MESSAGE('DEBUG', 'Action(' + request.eventName + ') responses are discarded');
-              }
-            }
-          } else {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Segmentify response length(' + responses.length + ') doesn\'t match request length(' + requestDataArray.length + ')');
-          }
-        } else {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Segmentify response is (' + statusCode + ')');
-          if (statusCode === 'NO_SESSIONID') {
-            _SgmntfY_._updateUserAndSessionId(1);
-          } else if (statusCode === 'NO_USERID') {
-            _SgmntfY_._updateUserAndSessionId(2);
-          }
-        }
-      }).fail(function (jqXHR, textStatus, errorThrown) {
-        var isJBRequest = false;
-        for (var i = 0; i < requestDataArray.length; i++) {
-          if(_SgmntfY_._jbOverFlowOperations._journeyFinished(requestDataArray[i])) {
-            isJBRequest = true;
-          }
-        }
-        if (isJBRequest) {
-          _SgmntfY_._jbOnDestroyJourneyFlowExecution(false);
-        }
-        _SgmntfY_._searchFailHandler(requestDataArray);
-        _SgmntfY_._addToRetryQueue(requestDataArray);
-        _SgmntfY_._ajaxError(dataArray, jqXHR, textStatus, errorThrown);
-      });
-    },
-    _searchFailHandler: function(requestDataArray) {
-      var sgmSearchEventRequest = null;
-      if (requestDataArray && requestDataArray.length > 0) {
-        sgmSearchEventRequest = requestDataArray.filter(function(item) {
-          return item.eventName === "SEARCH";
-        });
-      }
-      if (sgmSearchEventRequest && sgmSearchEventRequest.length > 0) {
-        var searchEventReq = sgmSearchEventRequest[0];
-        if (searchEventReq.data && searchEventReq.data.type === "faceted" && typeof searchEventReq._cb === "function") {
-          searchEventReq._cb(null, {jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown});
-        } else {
-          if (_SgmntfY_._getJq()(".seg-search-wrapper").length !== 0) {
-            if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-              var sgmSearchEventRequest = null;
-              if (sgmSearchEventRequest && sgmSearchEventRequest.length > 0 && _SgmntfY_._variables.search.initialCampaign) {
-                _SgmntfY_._getSearchCampaign(sgmSearchEventRequest[0], [{campaign: _SgmntfY_._variables.search.initialCampaign}]);
-              } else {
-                _SgmntfY_._getJq().each(_SgmntfY_._searchGetInputElement(), function () {
-                  if (_SgmntfY_._getJq()(this).css("transform") == "matrix(1, 0, 0, 1, 0, -2000)") {
-                    _SgmntfY_._getJq()(this).addClass("seg-search-unset");
-                    _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("open");
-                    _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-open");
-                    _SgmntfY_._getJq()(this).blur();
-                  }
-                });
-              }
-            } else {
-              if (_SgmntfY_._getJq()(".seg-search-wrapper").hasClass("open") ||
-                _SgmntfY_._getJq()(".seg-search-wrapper").hasClass("sgm-search-open")) {
-                _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("open");
-                _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-open");
-              }
-            }
-          }
-        }
-      }
-    },
-    // Response Handlers
-    _getResponse: function (request, responseArray) {
-      _SgmntfY_._jbCheckDeliveryStep(request, responseArray);
-      for (var key = 0; key < responseArray.length; key++) {
-        var response = responseArray[key];
-        if (response.hasOwnProperty("type")) {
-          var type = response["type"];
-          var delayAction = response["delayAction"] || null;
-          var params = response["params"];
-          var instanceId = response["instanceId"];
-          var actionFunction = _SgmntfY_._actions[type];
-          if (params['isControlGroup'] === false) {
-            _SgmntfY_.LOG_MESSAGE('DEBUG', 'User is in control group for campaign: ' + params.instanceId);
-            continue;
-          }
-          if (typeof actionFunction === 'function') {
-            // triggered when user leaves window
-            if (delayAction && delayAction.type === 'LEAVE_PAGE') {
-              _SgmntfY_._addLeavePageHandler(response, request);
-            } else if (delayAction && delayAction.type === 'WAIT_SAME_PAGE' && parseInt(delayAction.time) > 0) {
-              _SgmntfY_._addWaitPageHandler(response, request);
-            } else if (delayAction && delayAction.type === 'WAIT_ALL_PAGES' && parseInt(delayAction.time) > 0) {
-              // check this action is already stored for triggering
-              var delayDate = new Date((new Date()).getTime() + (1000 * parseInt(delayAction.time)));
-              var action = {
-                delayDate: delayDate,
-                params: params,
-                type: type,
-                request: request
-              };
-              if (!_SgmntfY_._addDelayedAction(action)) {
-                _SgmntfY_.LOG_MESSAGE('INFO', 'Action(id=' + action.params.actionId + ') is already added for delayed action');
-              } else {
-                _SgmntfY_.LOG_MESSAGE('INFO', 'Action(id=' + action.params.actionId + ') is added for delayed action in future');
-              }
-            } else if (delayAction && delayAction.type === 'SCROLL') {
-              _SgmntfY_._addScrollHandler(response, request);
-            } else {
-              _SgmntfY_.LOG_MESSAGE('INFO', 'Action(' + type + ') triggered immediately');
-              actionFunction.call(null, params, request);
-            }
-          } else {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Unknown action: ' + type);
-          }
-        }
-      }
-    },
-    _jbCheckDeliveryStep: function (request, responseArray) {
-      if(_SgmntfY_._jbOverFlowOperations._journeyFinished(request)) {
-        var hasRecoData = false;
-        var hasCouponData = false;
-        var hasLandingPage = false;
-        var landingPage;
-        for (var key = 0; key < responseArray.length; key++) {
-          var response = responseArray[key];
-          var type = response['type'];
-          if (type === "recommendProducts" && Object.keys(response.params.recommendedProducts)) {
-            Object.keys(response.params.recommendedProducts).forEach(function(recoType) {
-              if (response.params.recommendedProducts[recoType] && response.params.recommendedProducts[recoType].length > 0) {
-                hasRecoData = true;
-              }
-            });
-          }
-          if (type === "giveCoupon") {
-            hasCouponData = true;
-          }
-          if (type === "landingPage") {
-            landingPage = response['params'].landingPageUrl;
-            if(landingPage && landingPage.length > 0){
-              hasLandingPage = true;
-            }
-          }
-        }
-        if (hasRecoData === true || hasCouponData === true || hasLandingPage === true) {
-          _SgmntfY_._jbOnDestroyJourneyFlowExecution(true);
-          //if only landing page active we redirect to landing page
-          if(hasRecoData === false && hasCouponData === false){
-            _SgmntfY_.LOG_MESSAGE('DEBUG', 'Redirecting action to url: ' + landingPage);
-            window.location = landingPage;
-          }
-        } else {
-          _SgmntfY_._jbOnDestroyJourneyFlowExecution(false);
-        }
-      }
-    },
-    // campaign handler
-    _getCampaign: function (request, campaignArray) {
-      for (var key = 0; key < campaignArray.length; key++) {
-        var campaign = campaignArray[key] || {};
-        if (campaign.hasOwnProperty('type')) {
-          var type = campaign['type'];
-          var campaignFunction = _SgmntfY_._campaigns[type];
-          if (typeof campaignFunction === 'function') {
-            var timing = campaign['timing'] || {};
-            if (timing['type'] === 'DELAY') {
-              _SgmntfY_._addCampaignDelayHandler(campaign, request);
-            } else if (timing['type'] === 'DELAY_ALL_PAGES') {
-              _SgmntfY_._addCampaignDelayAllPagesHandler(campaign, request);
-            } else if (timing['type'] === 'PAGE_VIEWS') {
-              _SgmntfY_._addCampaignPageViewsHandler(campaign, request);
-            } else if (timing['type'] === 'SCROLL') {
-              _SgmntfY_._addCampaignScrollHandler(campaign, request);
-            } else if (timing['type'] === 'PAGELEAVE') {
-              _SgmntfY_._addCampaignLeaveHandler(campaign, request);
-            } else if (timing['type'] === 'INTERACTION') {
-              _SgmntfY_._addCampaignInteractionHandler(campaign, request);
-            } else {
-              _SgmntfY_.LOG_MESSAGE('INFO', 'Campaign (' + type + ') triggered immediately.');
-              campaignFunction.call(null, campaign, request);
-            }
-          } else {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Unknown campaign: ' + type);
-          }
-        }
-      }
-    },
-    initCoupon: function(couponArray) {
-      try {
-        if (couponArray.length === 0) {
-          return;
-        }
-
-        var currentCoupon = _SgmntfY_._getJq()(document).find("#seg-coupon-asimov");
-        if (currentCoupon && currentCoupon.length > 0) {
-          return;
-        }
-
-        var coupon = couponArray[0];
-
-        var html = coupon.widget.html;
-        var validationText = coupon.widget.validationText;
-        var config = {
-          code: coupon.code,
-          valid_until: validationText + ' ' + (new Date(coupon.validUntil).toLocaleDateString()),
-          copy_button_text: coupon.widget.copyButtonText,
-          description: coupon.widget.description,
-          title: coupon.widget.title
-        };
-
-        var renderedHtml = _SgmntfY_._getMustache().render(html, config);
-        renderedHtml = _SgmntfY_._getJq()(renderedHtml);
-        var _parent = renderedHtml.first();
-        var _content = renderedHtml.find('.seg-coupon-asimov_content');
-        var _switch = renderedHtml.find('.seg-coupon-asimov_switch');
-
-        if (coupon.widget.position === "RIGHT") {
-          _parent.addClass('seg-coupon-asimov_right');
-        }
-
-        _content.css({
-          'background-color': coupon.widget.backgroundColor,
-          'color': coupon.widget.foregroundColor
-        });
-
-        _switch.css({
-          'background-color': coupon.widget.backgroundColor,
-          'color': coupon.widget.foregroundColor
-        });
-
-        _SgmntfY_._getJq()('body').prepend(renderedHtml);
-
-        _SgmntfY_.bindCouponBindings({
-          copiedInfoText: coupon.widget.copiedInfoText
-        });
-        _SgmntfY_._openCoupon();
-        setTimeout(function () {
-          _SgmntfY_._closeCoupon();
-        }, 2000);
-      } catch(e) {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Coupon couldn\'t be rendered!');
-      }
-    },
-    bindCouponBindings: function (lang) {
-      try {
-        function toggle() {
-          var _container = _SgmntfY_._getJq()('#seg-coupon-asimov');
-          _container.addClass('no-interaction');
-          _container.css('height', _SgmntfY_._getJq()('#seg-coupon-asimov').prop('scrollHeight'));
-
-          // close
-          if (_container.hasClass('seg-coupon-asimov_open')) {
-            var switchHeight = _container.children('.seg-coupon-asimov_switch').height();
-            _container.css('height', switchHeight);
-          }
-          // open
-          else {
-            setTimeout(function() {
-              _container.css('height', 'auto');
-            }, 500);
-          }
-          setTimeout(function() {
-            _container.removeClass('no-interaction');
-          }, 500);
-          _container.toggleClass('seg-coupon-asimov_open');
-        }
-
-        _SgmntfY_._getJq()(document).on('click', '.seg-coupon-asimov_switch', function() {
-          var _innerContainer = _SgmntfY_._getJq()(this).parent('#seg-coupon-asimov');
-          if (_innerContainer.hasClass('no-interaction')) {
-            return false;
-          }
-
-          toggle();
-        });
-
-        _SgmntfY_._getJq()(document).on('click', '.seg-coupon-asimov_copy:not(.no-interaction)', function() {
-          _SgmntfY_._getJq()('#seg-coupon-asimov').addClass('no-interaction');
-          _SgmntfY_._getJq()(this).addClass('no-interaction');
-          _SgmntfY_._textCopyToClipBoard('seg-coupon-asimov_code');
-          var actionButtonText = _SgmntfY_._getJq()('.seg-coupon-asimov_copy').html();
-          _SgmntfY_._getJq()('.seg-coupon-asimov_copy').html(lang.copiedInfoText);
-          setTimeout(function(){
-            toggle();
-            setTimeout(function() {
-              _SgmntfY_._getJq()('.seg-coupon-asimov_copy').html(actionButtonText);
-              _SgmntfY_._getJq()('#seg-coupon-asimov').removeClass('no-interaction');
-              _SgmntfY_._getJq()('.seg-coupon-asimov_copy').removeClass('no-interaction');
-            }, 400);
-          }, 1000);
-          return false;
-        });
-      } catch(e){
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Could not bind coupon bindings.');
-      }
-    },
-    _textCopyToClipBoard: function(node) {
-      node = document.getElementsByClassName(node)[0];
-
-      if (document.body.createTextRange) {
-        var range = document.body.createTextRange();
-        range.moveToElementText(node);
-        range.select();
-      }
-      else if (window.getSelection) {
-        var selection = window.getSelection();
-        var range = document.createRange();
-        range.selectNodeContents(node);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-      else {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Could not select text in node: Unsupported browser.');
-      }
-      document.execCommand("copy");
-      if (window.getSelection) { // All browsers, except IE <=8
-        window.getSelection().removeAllRanges();
-      }
-      else if (document.selection) { // IE <=8
-        document.selection.empty();
-      }
-    },
-    _openCoupon: function(){
-      var _container = _SgmntfY_._getJq()('#seg-coupon-asimov');
-      _container.addClass('no-interaction');
-      _container.css('height', _SgmntfY_._getJq()('#seg-coupon-asimov').prop('scrollHeight'));
-      // open
-      setTimeout(function() {
-        _container.css('height', 'auto');
-      }, 500);
-      setTimeout(function() {
-        _container.removeClass('no-interaction');
-      }, 500);
-      _container.toggleClass('seg-coupon-asimov_open');
-    },
-    _closeCoupon: function(){
-      var _container = _SgmntfY_._getJq()('#seg-coupon-asimov');
-      _container.addClass('no-interaction');
-      _container.css('height', _SgmntfY_._getJq()('#seg-coupon-asimov').prop('scrollHeight'));
-      // close
-      if (_container.hasClass('seg-coupon-asimov_open')) {
-        var switchHeight = _container.children('.seg-coupon-asimov_switch').height();
-        _container.css('height', switchHeight);
-      }
-      setTimeout(function() {
-        _container.removeClass('no-interaction');
-      }, 500);
-      _container.toggleClass('seg-coupon-asimov_open');
-    },
-    _decodeHtml: function (html) {
-      var txt = document.createElement("textarea");
-      txt.innerHTML = html;
-      return txt.value;
-    },
-    _getControlGroup: function() {
-      // check control group active, if not don't return group
-      // so it will be ignored at sending event
-      if (_SgmntfY_._variables.controlGroup && _SgmntfY_._variables.controlGroup.source === 'OPTIMIZE') {
-        // get group
-        var group = google_optimize && google_optimize.get(_SgmntfY_._variables.controlGroup.experimentID);
-        if (group == _SgmntfY_._variables.controlGroup.controlValue) {
-          return 'CONTROL';
-        } else if (group == _SgmntfY_._variables.controlGroup.activeValue) {
-          return 'REAL';
-        }
-      }
-    },
-    // search campaign handler
-    _getSearchCampaign: function (request, searchArray) {
-      if (request.eventName === 'SEARCH' && request.data.type === 'faceted') {
-        if (typeof request._cb === "function") {
-          return request._cb(searchArray);
-        }
-      } else {
-          if (isSearchEventAndExecutable() && searchArray.length === 0) {
-            searchArray = [{campaign: _SgmntfY_._variables.search.initialCampaign}];
-          }
-
-          if (searchArray.length !== 0) {
-            if (searchArray[0].isExecutable === true || searchArray[0].isExecutableForAfter === true) {
-              setSearchVariables();
-              _SgmntfY_._initSearch();
-            } else {
-              if (typeof searchArray[0].isExecutable === "undefined" && typeof searchArray[0].isExecutableForAfter === "undefined") {
-                var queryOnInput = undefined;
-                if (_SgmntfY_._variables.search.currentActiveInput && _SgmntfY_._variables.search.currentActiveInput.value) {
-                  queryOnInput = _SgmntfY_._variables.search.currentActiveInput.value.trim();
-                }
-                if (request.data.query === undefined ||
-                  typeof _SgmntfY_._variables.search.currentActiveInput === "undefined" ||
-                  request.data.query === _SgmntfY_._prepareSearchQuery(queryOnInput)) {
-                  _SgmntfY_._searchResultHandler(request, searchArray);
-              }
-            }
-          }
-        }
-      }
-
-      function setSearchVariables() {
-        var initialCampaign = searchArray[0].initialCampaign;
-        _SgmntfY_._variables.search.isExecutable = searchArray[0].isExecutable;
-        _SgmntfY_._variables.search.isExecutableForAfter = searchArray[0].isExecutableForAfter;
-        _SgmntfY_._variables.search.input = searchArray[0].idOrClassName;
-        _SgmntfY_._variables.search.manuelTrigger = searchArray[0].manuelTrigger;
-        _SgmntfY_._variables.search.initialCampaign = initialCampaign;
-        _SgmntfY_._variables.search.searchMinChar = (initialCampaign && initialCampaign.minCharacterCount) || 3;
-        _SgmntfY_._variables.search.searchDelay = (initialCampaign && initialCampaign.searchDelay) || 500;
-        _SgmntfY_._variables.search.shadowRootElements = searchArray[0].shadowRootElements || [];
-        _SgmntfY_._variables.search.shadowRootElementsForHide = searchArray[0].shadowRootElementsForHide || [];
-        _SgmntfY_._variables.search.shadowRootElementsForTrigger = searchArray[0].shadowRootElementsForTrigger || [];
-        _SgmntfY_._variables.search.forceRemoveInputVal = (initialCampaign && typeof initialCampaign.forceRemoveInputVal !== "undefined" ? initialCampaign.forceRemoveInputVal : false);
-
-        if (_SgmntfY_._variables.search.input.indexOf(",input#sgm-qa-search") === -1) {
-          _SgmntfY_._variables.search.input = _SgmntfY_._variables.search.input + ",input#sgm-qa-search";
-        }
-        _SgmntfY_._searchSetActiveRootElement();
-      }
-
-      function isSearchEventAndExecutable() {
-        return request.eventName === "SEARCH" && (_SgmntfY_._variables.search.isExecutable || _SgmntfY_._variables.search.isExecutableForAfter)
-      }
-    },
-    _searchSetActiveRootElement: function() {
-      _SgmntfY_._variables.search.activeRootElement = document;
-      _SgmntfY_._variables.search.activeRootElementForHide = document;
-      _SgmntfY_._variables.search.activeRootElementForTrigger = document;
-
-      _SgmntfY_._variables.search.shadowRootElements.forEach(onIterateShadowRootElements); // input selector
-      _SgmntfY_._variables.search.shadowRootElementsForHide.forEach(onIterateShadowRootElementsForHide); // hide element selector
-      _SgmntfY_._variables.search.shadowRootElementsForTrigger.forEach(onIterateShadowRootElementsForTrigger); // manuel trigger selector
-
-      //////
-
-      function onIterateShadowRootElements(shadowRootEl) {
-        var rootEl = _SgmntfY_._getJq()(shadowRootEl, _SgmntfY_._variables.search.activeRootElement);
-        if (rootEl && rootEl.length > 0) {
-          _SgmntfY_._variables.search.activeRootElement = rootEl[0].shadowRoot;
-        } else {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'ShadowRoot Element could not be found: ' + shadowRootEl);
-        }
-      }
-
-      function onIterateShadowRootElementsForHide(shadowRootEl) {
-        var rootEl = _SgmntfY_._getJq()(shadowRootEl, _SgmntfY_._variables.search.activeRootElementForHide);
-        if (rootEl && rootEl.length > 0) {
-          _SgmntfY_._variables.search.activeRootElementForHide = rootEl[0].shadowRoot;
-        } else {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'ShadowRoot Element For Hide could not be found: ' + shadowRootEl);
-        }
-      }
-      function onIterateShadowRootElementsForTrigger(shadowRootEl) {
-        var rootEl = _SgmntfY_._getJq()(shadowRootEl, _SgmntfY_._variables.search.activeRootElementForTrigger);
-        if (rootEl && rootEl.length > 0) {
-          _SgmntfY_._variables.search.activeRootElementForTrigger = rootEl[0].shadowRoot;
-        } else {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'ShadowRoot Element For Trigger could not be found: ' + shadowRootEl);
-        }
-      }
-    },
-    _isSearchOpen: function() {
-      var searchWrapper = _SgmntfY_._getJq()(".seg-search-wrapper");
-      return searchWrapper.hasClass("open") || searchWrapper.hasClass("sgm-search-open");
-    },
-    _searchInputActivateHandler: function(event) {
-      if (_SgmntfY_._getJq()(".seg-search-wrapper") && _SgmntfY_._isSearchOpen()) {
-        return;
-      }
-      _SgmntfY_._variables.search.currentActiveInput = event.target;
-
-      if (_SgmntfY_._getJq()(".seg-search-wrapper").length === 0) {
-        var $divLoad = _SgmntfY_._getJq()('<div/>', {'class': 'seg-search-wrapper'});
-        $divLoad.appendTo('body');
-      }
-
-      initializeSearchWindow();
-
-      if (_SgmntfY_._variables.search.forceRemoveInputVal === true) {
-        _SgmntfY_._variables.search.currentActiveInput.value = "";
-      }
-      var _sgmSearchInputValLength = _SgmntfY_._variables.search.currentActiveInput.value.trim().length;
-      _SgmntfY_._variables.search.keywordSearch = _sgmSearchInputValLength >= _SgmntfY_._variables.search.searchMinChar ;
-      _SgmntfY_._variables.search.emptySearch = _sgmSearchInputValLength === 0 || _sgmSearchInputValLength < _SgmntfY_._variables.search.searchMinChar;
-
-      if (_SgmntfY_._variables.search.emptySearch === true || _SgmntfY_._variables.search.keywordSearch === true) {
-        _SgmntfY_._sendSearchRequest();
-      }
-
-      /////
-      function initializeSearchWindow() {
-        if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-          if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            _SgmntfY_._getJq()(".seg-search-wrapper").addClass("keyboard-on");
-            _SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-keyboard-on");
-            _SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-ios-device");
-          }
-
-          var willBeAddNoSideBarClass = typeof sgmSearchSettings !== "undefined" && sgmSearchSettings.mobileSearchAssets && sgmSearchSettings.mobileSearchAssets.length === 0;
-
-          if (willBeAddNoSideBarClass) {
-            _SgmntfY_._getJq()(".seg-search-wrapper").addClass("no-sidebar");
-            _SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-no-sidebar");
-          }
-          _SgmntfY_._getJq()(".seg-search-wrapper").addClass("mobile");
-          _SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-mobile");
-
-
-          // set meta-viewport if not set
-          var hasViewPort = false;
-          var metaTags = _SgmntfY_._getJq()("meta");
-          metaTags.each(function(metaTag) {
-            if (metaTag.name === "viewport") {
-              hasViewPort = true;
-
-              if (metaTag.content.includes("width=") === true && metaTag.content.includes("width=device-width") !== true) {
-                if (metaTag.content.includes("user-scalable=") !== true) {
-                  metaTag.content = metaTag.content.concat(" ,user-scalable=no");
-                }
-              } else {
-                if (metaTag.content.includes("width=device-width") !== true) {
-                  metaTag.content = metaTag.content.concat(" ,width=device-width");
-                }
-                if (metaTag.content.includes("initial-scale=") !== true) {
-                  metaTag.content = metaTag.content.concat(" ,initial-scale=1.0");
-                }
-                if (metaTag.content.includes("maximum-scale=") !== true) {
-                  metaTag.content = metaTag.content.concat(" ,maximum-scale=1.0");
-                }
-                if (metaTag.content.includes("user-scalable=") !== true) {
-                  metaTag.content = metaTag.content.concat(" ,user-scalable=no");
-                }
-              }
-            }
-          });
-          if (!hasViewPort) {
-            var metaTag = document.createElement('meta');
-            metaTag.name = "viewport";
-            metaTag.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
-            document.getElementsByTagName('head')[0].appendChild(metaTag);
-          }
-        }
-
-      }
-    },
-    _setSearchQueryOverride: function(queryOverride) {
-      if (queryOverride && typeof queryOverride === "object") {
-        var expires = new Date();
-        expires.setHours(expires.getHours() + 2);
-        queryOverride.expires = expires;
-        _SgmntfY_._storePersistentData(_SgmntfY_._variables.search.queryOverrideKey, JSON.stringify(queryOverride), 1, true); // expire in 1 day
-      }
-    },
-    _unsetSearchQueryOverride: function() {
-      _SgmntfY_._storePersistentData(_SgmntfY_._variables.search.queryOverrideKey, null, 0, true);
-    },
-    _disableSearchTriggerEventsOnSite: function() {
-      _SgmntfY_._searchGetInputElement().off();
-      if (_SgmntfY_._getActiveSearchManuelTrigger()) {
-        _SgmntfY_._searchGetManuelTriggerElementForMobile().off();
-      }
-      _SgmntfY_._searchGetInputElement().attr("autocomplete", "OFF");
-    },
-    _getActiveSearchManuelTrigger: function() {
-      if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-        return _SgmntfY_._variables.search.manuelTrigger;
-      } else if (_SgmntfY_._getJq()(window).width() >= _SgmntfY_._variables.search.maxMobileWidth && _SgmntfY_._variables.search.manuelTriggerEnabledForDesktop === true) {
-        return _SgmntfY_._variables.search.manuelTriggerDesktop;
-      }
-      return null;
-    },
-    _activateSgmSearchTriggerEvents: function() {
-      var inputElements = _SgmntfY_._variables.search.activeRootElement.querySelectorAll(_SgmntfY_._variables.search.input);
-      if (bowser.name.toLowerCase() === "safari" || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)) {
-        if (inputElements && inputElements.length){
-          inputElements.forEach(function(inputElement) {
-            inputElement.addEventListener("click", _SgmntfY_._searchInputActivateHandler);
-          });
-          _SgmntfY_._getJq()(document).on("click", "#sgm-mobile-input input", _SgmntfY_._searchInputActivateHandler);
-        } else {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'search input element could not found while loading the script');
-          _SgmntfY_._getJq()(document).on("click", _SgmntfY_._variables.search.input + ", #sgm-mobile-input input", _SgmntfY_._searchInputActivateHandler);
-        }
-      } else {
-        if (inputElements && inputElements.length){
-          inputElements.forEach(function(inputElement) {
-            inputElement.addEventListener("focus", _SgmntfY_._searchInputActivateHandler);
-          });
-          _SgmntfY_._getJq()(document).on("focus", "#sgm-mobile-input input", _SgmntfY_._searchInputActivateHandler);
-        } else {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'search input element could not found while loading the script');
-          _SgmntfY_._getJq()(document).on("focus", _SgmntfY_._variables.search.input + ", #sgm-mobile-input input", _SgmntfY_._searchInputActivateHandler);
-        }
-      }
-    },
-    _searchGetInputElement: function() {
-      return _SgmntfY_._getJq()(_SgmntfY_._variables.search.input, _SgmntfY_._variables.search.activeRootElement);
-    },
-    _searchGetManuelTriggerElementForDesktop: function() {
-      return _SgmntfY_._getJq()(_SgmntfY_._variables.search.manuelTriggerDesktop, _SgmntfY_._variables.search.activeRootElementForTrigger);
-    },
-    _searchGetManuelTriggerElementForMobile: function() {
-      return _SgmntfY_._getJq()(_SgmntfY_._variables.search.manuelTrigger, _SgmntfY_._variables.search.activeRootElementForTrigger);
-    },
-    _initSearch: function() {
-      _SgmntfY_._disableSearchTriggerEventsOnSite();
-      _SgmntfY_._activateSgmSearchTriggerEvents();
-
-      _SgmntfY_._getJq().each(_SgmntfY_._searchGetInputElement(), function (inputEl) {
-        if (this === _SgmntfY_._variables.search.activeRootElement.activeElement) {
-          _SgmntfY_._searchInputActivateHandler({target: this});
-          return false;
-        }
-      });
-
-      // when typing or pasting
-      var inputElements = _SgmntfY_._variables.search.activeRootElement.querySelectorAll(_SgmntfY_._variables.search.input);
-      if (inputElements && inputElements.length > 0) {
-        inputElements.forEach(function(inputElement) {
-          inputElement.addEventListener("input", onSearchInputHandler);
-          inputElement.addEventListener("blur", onBlurSgmMobileInput);
-        });
-        _SgmntfY_._getJq()(document).on('input', "#sgm-mobile-input input", onSearchInputHandler);
-        _SgmntfY_._getJq()(document).on("blur", "#sgm-mobile-input input", onBlurSgmMobileInput);
-      } else {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'search input element could not found while loading the script');
-        _SgmntfY_._getJq()(document).on('input', _SgmntfY_._variables.search.input + ", #sgm-mobile-input input", onSearchInputHandler);
-        _SgmntfY_._getJq()(document).on("blur", _SgmntfY_._variables.search.input + ", #sgm-mobile-input input", onBlurSgmMobileInput);
-      }
-
-      if (_SgmntfY_._getActiveSearchManuelTrigger()) {
-        var manuelTriggerElements = _SgmntfY_._variables.search.activeRootElementForTrigger.querySelectorAll(_SgmntfY_._getActiveSearchManuelTrigger());
-        if (manuelTriggerElements && manuelTriggerElements.length) {
-          manuelTriggerElements.forEach(function(manuelTriggerElement) {
-            manuelTriggerElement.addEventListener("click", onManuelTriggerFocusHandler);
-          });
-        } else {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'search manuel trigger element could not found while binding the event');
-          _SgmntfY_._getJq()(document).on("click", _SgmntfY_._getActiveSearchManuelTrigger(), onManuelTriggerFocusHandler);
-        }
-      }
-
-      _SgmntfY_._evalSearchBodyScrollLockPreJs();
-
-      //////////////
-
-      function onSearchInputHandler(event) {
-        _SgmntfY_._variables.search.currentActiveInput = event.target;
-        var searchValue = _SgmntfY_._variables.search.currentActiveInput.value;
-
-        _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput).not("#sgm-mobile-input input").val(searchValue);
-
-        _SgmntfY_._variables.search.keywordSearch = searchValue.length >= _SgmntfY_._variables.search.searchMinChar;
-        _SgmntfY_._variables.search.emptySearch = searchValue.length === 0 || searchValue.length  < _SgmntfY_._variables.search.searchMinChar;
-
-        if (_SgmntfY_._variables.search.emptySearch === true || _SgmntfY_._variables.search.keywordSearch === true) {
-          _SgmntfY_._sendSearchRequest();
-        }
-
-      }
-      function onManuelTriggerFocusHandler() {
-        if (_SgmntfY_._getJq()(".seg-search-wrapper").length === 0) {
-          var $divLoad = _SgmntfY_._getJq()('<div/>', {'class': 'seg-search-wrapper'});
-          $divLoad.appendTo('body');
-        }
-        _SgmntfY_._variables.search.emptySearch = true;
-        _SgmntfY_._variables.search.keywordSearch = false;
-        _SgmntfY_._sendSearchRequest(true);
-      }
-      function onBlurSgmMobileInput() {
-        _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("keyboard-on");
-        _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-keyboard-on");
-        _SgmntfY_._searchGetInputElement().removeAttr("readonly");
-      }
-    },
-    _sendSearchRequest: function(isManuelTriggered) {
-      var query = "";
-      _SgmntfY_._variables.search.manuelTriggerClicked = false;
-      if (isManuelTriggered) {
-        _SgmntfY_._variables.search.manuelTriggerClicked = true;
-      } else {
-        query = _SgmntfY_._variables.search.currentActiveInput
-            && _SgmntfY_._variables.search.currentActiveInput.value
-            && _SgmntfY_._variables.search.currentActiveInput.value.trim();
-      }
-
-      try {
-        if (_SgmntfY_._variables.search.searchTimer) {
-          clearTimeout(_SgmntfY_._variables.search.searchTimer);
-        }
-      } catch(error) {}
-
-      _SgmntfY_._variables.search.searchTimer = setTimeout(onSearchDelay, _SgmntfY_._variables.search.searchDelay);
-
-      /////
-      //TODO https://segmentify.atlassian.net/browse/DEV-72
-      function onSearchDelay() {
-        if(_SgmntfY_._variables.search.emptySearch === true) {
-          _SgmntfY_._variables.segmentifyObj("search", {query: ""});
-        }
-        if (_SgmntfY_._variables.search.keywordSearch === true && query.length >= _SgmntfY_._variables.search.searchMinChar) {
-          _SgmntfY_._variables.segmentifyObj("search", {query: _SgmntfY_._prepareSearchQuery(query)});
-        }
-      }
-    },
-    _triggerSearch: function(searchTriggerObj) {
-      if (_SgmntfY_._variables.search.isExecutable === true || _SgmntfY_._variables.search.isExecutableForAfter === true) {
-        var searchText = searchTriggerObj && searchTriggerObj.searchText;
-        if (!searchText) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'searchText is mandatory field to trigger search');
-          return;
-        }
-        var defaultSearchTriggerVal = {
-          delay: 0,
-          isManuelTriggered: false,
-          inputSelector: _SgmntfY_._variables.search.input,
-          manuelTrigger: _SgmntfY_._getActiveSearchManuelTrigger()
-        };
-
-        var _searchTriggerObj = _SgmntfY_._getCopiedObject(defaultSearchTriggerVal, searchTriggerObj);
-
-        setTimeout(triggerSearchHandler, _searchTriggerObj.delay);
-      } else {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'search is not executable to trigger search');
-      }
-
-      ///////
-
-      function triggerSearchHandler() {
-        var inputElement = _SgmntfY_._getJq()(_searchTriggerObj.inputSelector);
-        if (inputElement && inputElement.length > 0) {
-          _SgmntfY_._variables.search.currentActiveInput = inputElement[0];
-          _SgmntfY_._variables.search.currentActiveInput.value = searchText;
-
-          //click & focus
-          _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput, _SgmntfY_._variables.search.activeRootElement).click();
-          _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput, _SgmntfY_._variables.search.activeRootElement).focus();
-
-          if (_searchTriggerObj.isManuelTriggered === true && _searchTriggerObj.manuelTrigger) {
-            _SgmntfY_._getJq()(_searchTriggerObj.manuelTrigger).click();
-          } else {
-            _SgmntfY_._sendSearchRequest();
-          }
-        }
-      }
-    },
-    _prepareSearchQuery: function(query) { // to manipulate search query (it is not related synonyms)
-      return query;
-    },
-    // search handler
-    _searchResultHandler: function (request, searchResult) {
-      var searchArray = searchResult[0];
-      var campaign = searchArray['campaign'];
-      var products = searchArray['products'] || [];
-      var brands = searchArray['brands'] || {};
-      var brandProducts = searchArray['brandProducts'] || {};
-      var categories = searchArray['categories'] || {};
-      var categoryProducts = searchArray['categoryProducts'] || {};
-      var keywords = searchArray['keywords'] || {};
-      var additionalContents = searchArray['contents'] || [];
-      var banners = searchArray['banners'] || [];
-
-      if (campaign == null) {
-        return;
-      }
-
-      _SgmntfY_._variables.segmentifyObj("event:interaction", {
-        type: "impression",
-        interactionId: "static",
-        instanceId: campaign['instanceId']
-      });
-
-      if (products !== null && products.length > 0) {
-        _SgmntfY_._variables.segmentifyObj("event:interaction", {
-          type: "widget-view",
-          interactionId: "static",
-          instanceId: campaign['instanceId']
-        });
-      }
-
-      _SgmntfY_._variables.search.emptySearch = campaign['instanceId'] === "BEFORE_SEARCH";
-      _SgmntfY_._variables.search.keywordSearch = campaign['instanceId'] === "SEARCH";
-      _SgmntfY_._variables.search.forceRemoveInputVal = campaign['forceRemoveInputVal'];
-
-      sgmSearchSettings = {
-        data: {},
-        mobileInput: "#sgm-mobile-input",
-        searchResultsEl: ".seg-search-wrapper",
-        incremental: searchArray['incremental'],
-        searchUrlPrefix: campaign['searchUrlPrefix'],
-        instanceId: campaign['instanceId'],
-        html: campaign['html'],
-        postJs: campaign['postJs'],
-        preJs: campaign['preJs'],
-        css: campaign['css'],
-        openingDirection: campaign['openingDirection'],
-        input: campaign['searchInputSelector'],
-        forceRemoveInputVal: campaign['forceRemoveInputVal'],
-        currentSearchBoxEl: campaign['hideCurrentSelector'],
-        searchAssets: campaign['searchAssets'] || [],
-        mobileSearchAssets: campaign['mobileSearchAssets'] || [],
-        searchAssetsTexts: campaign['stringSearchAssetTextMap'] || [],
-        categoryTreeView: false,
-        manuelTrigger: campaign['triggerSelector'],
-        sgmSearchShowAll: false,
-        resultsTopMargin: {
-          "mobile": 0,
-          "desktop": 0
-        },
-        isSidebarItemsClickable: {
-          "categories": false,
-          "brands": false,
-          "keywords": false
-        },
-        highlightEnabled: {
-          "categories": false,
-          "brands": false,
-          "keywords": false
-        },
-        itemLimits: {
-          howManyBrand: 0,
-          howManyCategory: 0,
-          howManyKeyword: 0,
-          howManyDesktopProduct: campaign['desktopItemCount'],
-          howManyMobileProduct: campaign['mobileItemCount']
-        },
-        itemEnable: {
-          category: false,
-          brand: false,
-          keyword: false
-        },
-        sidebar: {
-          mobile: false,
-          desktop: true
-        },
-        texts: {
-          categories: "",
-          popularCategories: "",
-          brands: "",
-          popularBrands: "",
-          keywords: "",
-          products: "",
-          showAll: "Show All",
-          currency: "",
-          notFound: "",
-          cancelText: ""
-        }
-      };
-      if (sgmSearchSettings.input.indexOf(",input#sgm-qa-search") === -1) {
-        sgmSearchSettings.input = sgmSearchSettings.input + ",input#sgm-qa-search";
-      }
-      if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth && sgmSearchSettings.mobileSearchAssets.length === 0) {
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar");
-      }
-      if (_SgmntfY_._getJq()("#sgm_current_search_box").length === 0) { // TODO jquery hide yöntimi bak fehmi
-        var siteSearchBoxSelector = _SgmntfY_._variables.search.activeRootElementForHide;
-        if (_SgmntfY_._variables.search.activeRootElementForHide === document) {
-          siteSearchBoxSelector = "head";
-        }
-        _SgmntfY_._getJq()(siteSearchBoxSelector).append('<style id="sgm_current_search_box">' + sgmSearchSettings.currentSearchBoxEl + ' { display: none!important; position: absolute!important; left: -999999px!important; top: -99999999px!important; visibility: hidden!important; opacity: 0!important }</style>');
-      }
-      _SgmntfY_._variables.search.searchDelay = campaign['searchDelay'] > 50 ? campaign['searchDelay'] : 50;
-      _SgmntfY_._variables.search.searchMinChar = campaign['minCharacterCount'];
-
-      sgmSearchSettings.texts.showAll = _SgmntfY_._variables.search.showAll;
-
-      // asset settings
-      var searchAssetElements = _SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth ? sgmSearchSettings.mobileSearchAssets : sgmSearchSettings.searchAssets;
-      _SgmntfY_._getJq().each(searchAssetElements, function (index, assetItem) {
-        if (assetItem["type"] === "CATEGORY") {
-          sgmSearchSettings.categoryTreeView = assetItem["categoryTreeView"];
-          sgmSearchSettings.isSidebarItemsClickable.categories = assetItem["clickable"];
-          sgmSearchSettings.itemLimits.howManyCategory = assetItem["itemCount"];
-          sgmSearchSettings.itemEnable.category = true;
-          sgmSearchSettings.highlightEnabled.categories = assetItem["highlight"];
-        } else if (assetItem["type"] === "BRAND") {
-          sgmSearchSettings.isSidebarItemsClickable.brands = assetItem["clickable"];
-          sgmSearchSettings.itemLimits.howManyBrand = assetItem["itemCount"];
-          sgmSearchSettings.itemEnable.brand = true;
-          sgmSearchSettings.highlightEnabled.brands = assetItem["highlight"];
-        } else if (assetItem["type"] === "KEYWORD") {
-          sgmSearchSettings.isSidebarItemsClickable.keywords = assetItem["clickable"];
-          sgmSearchSettings.itemLimits.howManyKeyword = assetItem["itemCount"];
-          sgmSearchSettings.itemEnable.keyword = true;
-          sgmSearchSettings.highlightEnabled.keywords = assetItem["highlight"];
-        }
-      });
-
-      // text settings
-      var currentDeviceIsPC = "PC" === (_SgmntfY_._variables.ua.type || "PC").toUpperCase();
-      _SgmntfY_._getJq().each(sgmSearchSettings.searchAssetsTexts, function (language, assetText) {
-        if (language === request.data.lang) {
-          sgmSearchSettings.texts.categories = assetText["categoriesText"];
-          sgmSearchSettings.texts.popularCategories = currentDeviceIsPC ? assetText["popularCategoriesText"] : assetText["mobilePopularCategoriesText"];
-          sgmSearchSettings.texts.brands = assetText["brandsText"];
-          sgmSearchSettings.texts.popularBrands = currentDeviceIsPC ? assetText["popularBrandsText"] : assetText["mobilePopularBrandsText"];
-          sgmSearchSettings.texts.popularProducts = assetText["popularProductsText"];
-          sgmSearchSettings.texts.products = assetText["popularProductsText"];
-          sgmSearchSettings.texts.keywords = currentDeviceIsPC ? assetText["popularKeywordsText"] : assetText["mobilePopularKeywordsText"];
-          sgmSearchSettings.texts.cancelText = assetText["mobileCancelText"];
-          sgmSearchSettings.texts.notFound = assetText["notFoundText"];
-        }
-      });
-
-      // set search data
-      sgmSearchSettings.data["categories"] = _SgmntfY_._getArrayOfMap(categories);
-      sgmSearchSettings.data["brands"] = _SgmntfY_._getArrayOfMap(brands);
-      sgmSearchSettings.data["keywords"] = _SgmntfY_._getArrayOfKeywordsMap(keywords);
-      sgmSearchSettings.data["products"] = _SgmntfY_._getArrayOfProductMap(products);
-      sgmSearchSettings.data.keywordsProducts = keywords;
-      sgmSearchSettings.data.categoryProducts = categoryProducts;
-      sgmSearchSettings.data.brandProducts = brandProducts;
-      sgmSearchSettings.data.itemEnable = sgmSearchSettings.itemEnable;
-      sgmSearchSettings.data.texts = sgmSearchSettings.texts;
-      sgmSearchSettings.data.synonyms = searchArray.synonyms;
-      sgmSearchSettings.data.additionalContents = additionalContents;
-      sgmSearchSettings.data.banners = banners.slice(0,5);
-      try {
-        if (sgmSearchSettings.preJs) {
-          eval(sgmSearchSettings.preJs);
-          var retVal = preRenderConf(sgmSearchSettings);
-          if (typeof retVal !== 'undefined' && !retVal) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'preRenderConf returned false exiting!');
-            return;
-          }
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product search pre js code: ' + err);
-      }
-
-      _SgmntfY_._populateSearchResults(sgmSearchSettings.data, null, true);
-
-      _SgmntfY_._getJq()(document).on("submit", sgmSearchSettings.searchResultsEl + " form", function (e) {
-        e.preventDefault();
-        _SgmntfY_._goToSearchResultPage();
-      });
-
-      // click event for sidebar items
-      _SgmntfY_._getJq()(document).on("click", ".sgm-search-sidebar ul li", function () {
-        var group = _SgmntfY_._getJq()(this).parent("ul").data("group");
-        if (sgmSearchSettings.isSidebarItemsClickable[group] === true) {
-          var dataUrl = _SgmntfY_._getJq()(this).attr("data-url") || "";
-          if (dataUrl) {
-            window.location.href = _SgmntfY_._getJq()(this).attr("data-url");
-            _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("open");
-            _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-open");
-          }
-        }
-      });
-
-      // hover event form sidebar items
-      _SgmntfY_._getJq()(document).on("mouseover", ".sgm-search-sidebar li", function () {
-        var currentName = _SgmntfY_._getJq()(this).data("original");
-        var selectedName = getSelectedName();
-        if (_SgmntfY_._getJq()(window).width() >= _SgmntfY_._variables.search.maxMobileWidth && currentName != selectedName) {
-          var group = _SgmntfY_._getJq()(this).parent("ul").data("group");
-          _SgmntfY_._getJq()(".sgm-search-sidebar li.selected").removeClass("selected");
-          _SgmntfY_._getJq()(".sgm-search-sidebar li.sgm-search-selected").removeClass("sgm-search-selected");
-          _SgmntfY_._getJq()(this).addClass("selected");
-          _SgmntfY_._getJq()(this).addClass("sgm-search-selected");
-          var productMap = {};
-          if (group === "keywords") {
-            productMap = sgmSearchSettings.data.keywordsProducts;
-          } else if (group === "categories") {
-            productMap = sgmSearchSettings.data.categoryProducts;
-          } else if (group === "brands") {
-            productMap = sgmSearchSettings.data.brandProducts;
-          }
-
-          _SgmntfY_._getJq().each(productMap, function (name, products) {
-            if (name && currentName && name.toString() === currentName.toString()) {
-              var data = {};
-              data["products"] = _SgmntfY_._getArrayOfProductMap(products);
-              _SgmntfY_._populateSearchResults(data, "products");
-            }
-          });
-          _SgmntfY_._getJq()(".sgm-search-products-title").html(_SgmntfY_._getJq()(this).text());
-        }
-
-        function getSelectedName() {
-          var selectedEl = document.querySelector(".sgm-search-sidebar li.selected");
-          if (selectedEl && selectedEl.dataset && selectedEl.dataset.original) {
-            return selectedEl.dataset.original.toString();
-          }
-          return "";
-        }
-      });
-
-      // close results when window size changed
-      _SgmntfY_._getJq()(window).on("load resize scroll orientationchange", onChangeWindowOrOrientation);
-
-      _SgmntfY_._getJq()(document).on("click", "#sgm-mobile-input-cancel", _SgmntfY_.mobileSearchCancel);
-
-      _SgmntfY_._getJq()(document).on("click", ".sgm-search-show-all", function (e) {
-        document.location = sgmSearchSettings.searchUrlPrefix + _SgmntfY_._variables.search.currentActiveInput.value.trim();
-      });
-
-      // click out of box and close results
-      _SgmntfY_._getJq()(document).on("click", "*", onCloseSearchResult);
-
-      _SgmntfY_._getJq()('.sgm-search-wrapper').addClass("seg-infinit-z-index");
-
-      ////////
-
-      function onChangeWindowOrOrientation(event) {
-        _SgmntfY_._setSearchResultsPosition();
-        _SgmntfY_._openSearchResults();
-        if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("mobile");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-mobile");
-          if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-            _SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-ios-device");
-          }
-        } else {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("mobile");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-mobile");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-ios-device");
-        }
-      }
-
-      function onCloseSearchResult(e) {
-        try {
-          if (_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("open")
-              || _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("sgm-search-open")) {
-            var searchResultEl = _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl);
-            var searchInputEl = _SgmntfY_._getJq()(sgmSearchSettings.input, _SgmntfY_._variables.search.activeRootElement);
-
-            // if clicked element is not in search box or clicked element is not mobile input cancel
-            if (((!searchResultEl.is(e.target) &&
-                searchResultEl.has(e.target).length === 0) &&
-                !_SgmntfY_._getJq()(searchInputEl).is(_SgmntfY_._variables.search.activeRootElement.activeElement)) ||
-                _SgmntfY_._getJq()(e.target).attr("id") === "sgm-mobile-input-cancel") {
-              var targetElement = document.querySelector(sgmSearchSettings.searchResultsEl);
-              // 2. ...in some event handler after showing the target element...disable body scroll
-              bodyScrollLock.enableBodyScroll(targetElement);
-              _SgmntfY_._getJq()('.seg-search-wrapper').remove();
-              _SgmntfY_._variables.search.manuelTriggerClicked = false;
-            }
-          }
-        }
-        catch(err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in document click: ' + err);
-        }
-      }
-    },
-    _getArrayOfMap: function (data) {
-      var newArray = [];
-      var index = 0;
-      _SgmntfY_._getJq().each(data, function (key, value) {
-        newArray[index] = {
-          "name": key,
-          "url" : value
-        };
-        index = index + 1;
-      });
-      return newArray;
-    },
-    _populateSearchResults: function (data, type, openResultsFlag) {
-      data.emptySearch = _SgmntfY_._variables.search.emptySearch;
-      data.keywordSearch = _SgmntfY_._variables.search.keywordSearch;
-      var productsTemplate = null;
-      var domparser = new DOMParser();
-      // TODO https://segmentify.atlassian.net/browse/DEV-72
-      try {
-        productsTemplate = domparser.parseFromString(sgmSearchSettings.html, "text/html").getElementById('sgm-search-product-template');
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Error in html parsing for id: sgm-search-product-template: ' + err);
-        return;
-      }
-
-      var template;
-      var rendered;
-
-      var tempSgmSearchSettingsData = _SgmntfY_._getCopiedObject(data);
-      if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-        tempSgmSearchSettingsData.products = data.products.slice(0, sgmSearchSettings.itemLimits.howManyMobileProduct);
-      } else {
-        tempSgmSearchSettingsData.products = data.products.slice(0, sgmSearchSettings.itemLimits.howManyDesktopProduct);
-      }
-
-      if (type === "products") {
-        rendered = _SgmntfY_._getMustache().render(productsTemplate.innerHTML, tempSgmSearchSettingsData);
-        _SgmntfY_._fillSearchResults(rendered, "products");
-      } else {
-        if (_SgmntfY_._getJq()(".sgm-search-sidebar").length === 0) {
-          try {
-            template = domparser.parseFromString(sgmSearchSettings.html, "text/html").getElementById('sgm-search-template');
-            if (template) {
-              template = _SgmntfY_._decodeHtml(template.innerHTML);
-              rendered = _SgmntfY_._getMustache().render(template, tempSgmSearchSettingsData, {
-                products: productsTemplate.innerHTML
-              });
-              _SgmntfY_._fillSearchResults(rendered);
-            }
-          } catch (err) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error in html parsing for id: sgm-search-template: ' + err);
-          }
-        } else {
-          getTemplateAndFillSearchResult('sgm-search-sidebar');
-          getTemplateAndFillSearchResult('sgm-search-header');
-          getTemplateAndFillSearchResult('sgm-search-products');
-        }
-
-        if (_SgmntfY_._getJq()(".sgm-search-sidebar").length === 1) {
-          rendered = _SgmntfY_._getMustache().render(productsTemplate.innerHTML, tempSgmSearchSettingsData);
-          _SgmntfY_._fillSearchResults(rendered, "products");
-        }
-      }
-      _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).find(".sgm-search-sidebar").find("li").each(function () {
-        var sidebarItemText = _SgmntfY_._getJq()(this).text();
-        sidebarItemText = _SgmntfY_._prepareSearchAssetText(sidebarItemText);
-
-        var searchInputText = "";
-        if (_SgmntfY_._variables.search.currentActiveInput && _SgmntfY_._variables.search.currentActiveInput.value) {
-          searchInputText = _SgmntfY_._variables.search.currentActiveInput.value.trim();
-        }
-
-        var searchDataGroup = this.parentElement.getAttribute("data-group");
-        // check if its not mobile & input text is not empty
-        var inputTexts = sgmSearchSettings.data.synonyms || [];
-        if (inputTexts.length === 0) {
-          inputTexts.push(searchInputText);
-        }
-        if (_SgmntfY_._getJq()(window).width() >= _SgmntfY_._variables.search.maxMobileWidth && searchInputText && searchInputText !== "") {
-          if (searchDataGroup === "categories" && sgmSearchSettings.highlightEnabled.categories) {
-            sidebarItemText = _SgmntfY_._highlight(inputTexts, sidebarItemText);
-          } else if (searchDataGroup === "brands" && sgmSearchSettings.highlightEnabled.brands) {
-            sidebarItemText = _SgmntfY_._highlight(inputTexts, sidebarItemText);
-          } else if (searchDataGroup === "keywords" && sgmSearchSettings.highlightEnabled.keywords) {
-            sidebarItemText = _SgmntfY_._highlight(inputTexts, sidebarItemText);
-          }
-        }
-        _SgmntfY_._getJq()(this).html(sidebarItemText);
-      });
-
-      if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-        var newFormWrapper = '<form action="/"></form>'
-        var newInputWrapper = '<div id="sgm-mobile-input"></div>';
-        if (_SgmntfY_._getJq()("#sgm-mobile-input").length === 0) {
-          var currentInputClone = _SgmntfY_._getJq()("<input type='search' name='search' autocomplete='OFF'>");
-          currentInputClone.insertBefore(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).children(".sgm-search-header")).wrap(newInputWrapper).wrap(newFormWrapper);
-          _SgmntfY_._getJq()("#sgm-mobile-input").append('<div id="sgm-mobile-input-clear"></div><div id="sgm-mobile-input-cancel">' + sgmSearchSettings.texts.cancelText + '</div>');
-
-          var sgmMobileInput = _SgmntfY_._getJq()("#sgm-mobile-input input");
-
-          if (sgmMobileInput && sgmMobileInput.length > 0) {
-            if (!_SgmntfY_._variables.search.currentActiveInput) {
-              _SgmntfY_._variables.search.currentActiveInput = sgmMobileInput[0];
-            }
-
-            setTimeout(function () {
-              sgmMobileInput.val(_SgmntfY_._variables.search.currentActiveInput.value).focus();
-              _SgmntfY_._variables.search.currentActiveInput = sgmMobileInput[0];
-              _SgmntfY_._searchGetInputElement().not("#sgm-mobile-input input").attr("readonly", "readonly");
-            }, 10);
-          }
-        }
-      }
-      if (openResultsFlag === true) {
-        _SgmntfY_._openSearchResults(true);
-        _SgmntfY_._searchFillAdditionalContents();
-        _SgmntfY_._searchFillBanners(sgmSearchSettings.data.banners);
-      }
-
-      applyPostProcess();
-
-      //////////
-
-      function getTemplateAndFillSearchResult(className) {
-        try {
-          var template = domparser.parseFromString(sgmSearchSettings.html, "text/html").getElementsByClassName(className)[0];
-          if (template) {
-            template = _SgmntfY_._decodeHtml(template.innerHTML);
-            rendered = _SgmntfY_._getMustache().render(template, tempSgmSearchSettingsData, {
-              products: productsTemplate.innerHTML
-            });
-            _SgmntfY_._fillSearchResults(rendered, className);
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in parsing html for  ' + className + ' in search ' + err);
-        }
-      }
-
-      function applyPostProcess() {
-        try {
-          var sgmSearchStyleId = "sgmStyle" + sgmSearchSettings.instanceId;
-          var sgmStyleElement = document.getElementById(sgmSearchStyleId);
-          if (sgmStyleElement !== null && sgmSearchSettings.css) {
-            sgmStyleElement.innerHTML = sgmSearchSettings.css;
-          } else {
-            sgmSearchSettings.css && _SgmntfY_._getJq()('<style id="' + sgmSearchStyleId + '" />').html(sgmSearchSettings.css).prependTo(_SgmntfY_._getJq()('body'));
-          }
-          sgmSearchSettings.postJs && eval(sgmSearchSettings.postJs);
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Error in executing product SEARCH post js or css code: ' + err);
-        }
-      }
-    },
-    _searchResetAdditionalContents: function() {
-      _SgmntfY_._getJq()(".seg-search-wrapper div[data-sgm-ac-position^=searchbox").each(onIterateAdditionalContentEl);
-
-      //////
-      function onIterateAdditionalContentEl(index, el) {
-        _SgmntfY_._getJq()(el).html("");
-      }
-    },
-    _searchFillAdditionalContents: function() {
-      _SgmntfY_._searchResetAdditionalContents();
-      if (sgmSearchSettings.data.additionalContents) {
-        for (var i = 0; i < sgmSearchSettings.data.additionalContents.length; i++) {
-          var content = sgmSearchSettings.data.additionalContents[i];
-          _SgmntfY_._getJq()(".seg-search-wrapper div[data-sgm-ac-position=" + content.key + "]").html(content.html);
-        }
-      }
-    },
-    _searchResetBanners: function () {
-      _SgmntfY_._getJq()(".seg-search-wrapper .seg-search-banner").each(function (index, el) {
-        _SgmntfY_._getJq()(el).html("");
-      });
-    },
-    _searchRenderBanner: function (data) {
-      var container = document.querySelector('[seg-search-banner-position="'+data.position+'"]');
-
-      // Creates flexbox container for the banners
-      if (container === null) {
-        var targets = _SgmntfY_._variables.search.bannerTargets;
-
-        container = document.createElement('div');
-        container.classList.add('seg-search-banner-position');
-        container.setAttribute('seg-search-banner-position', data.position);
-
-        // If the banner position will precede the elements in the content, 'prepend' method will use 'append' method otherwise
-        if (data.position === 'ASSETS_HEADER' || data.position === 'RESULTS_HEADER') {
-          _SgmntfY_._getJq()(targets[data.position]).prepend(container);
-        } else {
-          _SgmntfY_._getJq()(targets[data.position]).append(container);
-        }
-      }
-  
-      var banner = document.createElement('div');
-      banner.classList.add('seg-search-banner');
-      banner.style.width = data.width || '100%';
-      banner.style.height = data.height || 'auto';
-      container.appendChild(banner);
-  
-      var anchor = document.createElement('a');
-      anchor.classList.add('seg-search-banner__anchor');
-      anchor.href = data.targetUrl;
-      if (data.newtab === true) {
-        anchor.target = '_blank';
-      }
-      banner.appendChild(anchor);
-  
-      var image = document.createElement('img');
-      image.classList.add('seg-search-banner__image');
-      image.alt = data.name;
-      image.src = data.bannerUrl;
-      image.style.width = '100%';
-      image.style.height = data.height || 'auto';
-      anchor.appendChild(image);
-    },
-    _searchFillBanners: function (banners) {
-      try {
-        _SgmntfY_._searchResetBanners();
-        if (banners) {
-          for (var i = 0; i < banners.length; i++) {
-            var banner = banners[i];
-            _SgmntfY_._searchRenderBanner(banner);
-
-            _SgmntfY_._variables.segmentifyObj("event:interaction", {
-              type: "widget-view",
-              interactionId: _SgmntfY_._getQueryParameter("_sgm_source", banner.targetUrl),
-              instanceId: _SgmntfY_._getQueryParameter("_sgm_campaign", banner.targetUrl)
-            });
-          }
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Error in filling searchbox banners.' + err);
-      }
-    },
-    _prepareSearchAssetText: function(sidebarItemText) {
-      if (sgmSearchSettings.categoryTreeView === false) {
-        sidebarItemText = sidebarItemText.replace(/>/g, "/").toLocaleLowerCase(_SgmntfY_._variables.language).split("/");
-        sidebarItemText = sidebarItemText[sidebarItemText.length - 1];
-      } else {
-        sidebarItemText = sidebarItemText.replace(/>/g, "/").toLocaleLowerCase(_SgmntfY_._variables.language);
-      }
-      sidebarItemText = toCapitalize(sidebarItemText);
-
-      return sidebarItemText;
-
-      ////////
-
-      function toCapitalize(_str) {
-        return _str.toLowerCase()
-            .split(' ')
-            .map(function (s) {
-              return s.charAt(0).toUpperCase() + s.substring(1)
-            })
-            .join(' ');
-      }
-    },
-    mobileSearchCancel: function (e) {
-      e.stopImmediatePropagation();
-      var targetElement = document.querySelector(".seg-search-wrapper");
-      // 2. ...in some event handler after showing the target element...disable body scroll
-      bodyScrollLock.enableBodyScroll(targetElement);
-      _SgmntfY_._getJq()("body, .wrapper-1").removeClass("noscroll");
-      _SgmntfY_._getJq()('.seg-search-wrapper').remove();
-      _SgmntfY_._searchGetInputElement().val("");
-      _SgmntfY_._variables.search.manuelTriggerClicked = false;
-    },
-    _goToSearchResultPage: function() {
-      if (_SgmntfY_._variables.search.currentActiveInput.value.trim().length > 0) {
-        window.location.href = sgmSearchSettings.searchUrlPrefix + encodeURIComponent(_SgmntfY_._variables.search.currentActiveInput.value.trim());
-      }
-      return false;
-    },
-    _highlight: function(focusedInputs, sideBarText){
-      focusedInputs.forEach(function(focusedInput) {
-        var searchQuery = focusedInput.toLocaleLowerCase(_SgmntfY_._variables.language);
-        var regexp = new RegExp(searchQuery, 'ig');
-        sideBarText = sideBarText.replace(regexp, "<span class='sgm-search-keyword-highlight'>$&</span>");
-      });
-      return sideBarText;
-    },
-    _openSearchResults: function (openFlag) {
-      // sidebar or not
-      if (_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("mobile")
-          || _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("sgm-search-mobile")) {
-        if (_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).find(".sgm-search-sidebar li").length === 0) {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar");
-        } else {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("no-sidebar");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-no-sidebar");
-        }
-      } else {
-        if (_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).find(".sgm-search-sidebar li").length === 0) {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar");
-        } else {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("no-sidebar");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-no-sidebar");
-        }
-      }
-      // products or not
-      if (_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).find(".sgm-search-products li").length === 0) {
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-products");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-products");
-      } else {
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("no-products");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-no-products");
-      }
-      // cursor for sidebar items
-      if (sgmSearchSettings.isSidebarItemsClickable.categories === true) {
-        _SgmntfY_._getJq()(".sgm-search-sidebar ul[data-group=categories] li").addClass("sgm-cursor-pointer");
-      }
-      if (sgmSearchSettings.isSidebarItemsClickable.brands === true) {
-        _SgmntfY_._getJq()(".sgm-search-sidebar ul[data-group=brands] li").addClass("sgm-cursor-pointer");
-      }
-      if (sgmSearchSettings.isSidebarItemsClickable.keywords === true) {
-        _SgmntfY_._getJq()(".sgm-search-sidebar ul[data-group=keywords] li").addClass("sgm-cursor-pointer");
-      }
-      if (sgmSearchSettings.sgmSearchShowAll === false) {
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-show-all");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-show-all");
-      }
-      if(_SgmntfY_._variables.search.manuelTriggerClicked === true){
-        _SgmntfY_._disableBodyScrollAndAddOpen(openFlag);
-        _SgmntfY_._variables.search.manuelTriggerClicked = false;
-      } else{
-        _SgmntfY_._getJq().each(_SgmntfY_._getJq()(sgmSearchSettings.input, _SgmntfY_._variables.search.activeRootElement), function () {
-          if (_SgmntfY_._getJq()(this).is(":focus")) {
-            _SgmntfY_._disableBodyScrollAndAddOpen(openFlag);
-            return false;
-          }
-        });
-      }
-    },
-    _disableBodyScrollAndAddOpen: function(openFlag){
-      _SgmntfY_._setSearchResultsPosition();
-      if (openFlag) {
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("open");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-open");
-        if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-          var targetElement = document.querySelector(".seg-search-wrapper");
-          // 2. ...in some event handler after showing the target element...disable body scroll
-          if(targetElement) {
-            bodyScrollLock.disableBodyScroll(targetElement);
-          }
-          if (sgmSearchSettings.mobileSearchAssets.length === 0) {
-            _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar");
-            _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar");
-          }
-        }
-      }
-    },
-    _setSearchProductCategory: function(tempProduct, originalProduct) {
-      if (originalProduct.category && originalProduct.category.length > 0) {
-        if (sgmSearchSettings.categoryTreeView === false) {
-          var _replacedCategory = originalProduct.category[0].replace(/>/g, "/").toLocaleLowerCase(_SgmntfY_._variables.language);
-          _replacedCategory = _replacedCategory.split("/");
-          _replacedCategory = _replacedCategory[_replacedCategory.length - 1];
-          tempProduct["category"] = _replacedCategory;
-        } else {
-          tempProduct["category"] = originalProduct.category[0].replace(/>/g, "/").toLocaleLowerCase(_SgmntfY_._variables.language);
-        }
-        tempProduct["categories-original"] = originalProduct.category[0];
-
-        if(sgmSearchSettings.incremental === true) {
-          tempProduct["categories-original"] = [];
-          _SgmntfY_._getJq().each(originalProduct.category, function(key, value) {
-            tempProduct["categories-original"].push(value);
-          });
-        }
-      }
-    },
-    _getArrayOfProductMap: function (data) {
-      var mappedProducts = [];
-      if (Array.isArray(data)) {
-        data.forEach(onIterateData);
-      }
-      return mappedProducts;
-
-      //////
-      function onIterateData(originalProduct) {
-        var tempProduct = {};
-        _SgmntfY_._getJq().extend(tempProduct, originalProduct);
-
-        tempProduct["name"] = _SgmntfY_._decodeHtml(originalProduct.name);
-
-        _SgmntfY_._setSearchProductCategory(tempProduct, originalProduct);
-
-        if (tempProduct.brand) {
-          tempProduct["brand"] = originalProduct.brand.toLocaleLowerCase(_SgmntfY_._variables.language);
-          tempProduct["brands-original"] = originalProduct.brand;
-        }
-        mappedProducts.push(tempProduct);
-      }
-    },
-    _getArrayOfKeywordsMap: function (data) {
-      var newArray = [];
-      var index = 0;
-      _SgmntfY_._getJq().each(data, function (key, value) {
-        newArray[index] = {
-          "name": key,
-          "url": sgmSearchSettings.searchUrlPrefix + key
-        };
-        index = index + 1;
-      });
-      return newArray;
-    },
-    _fillSearchResults: function (renderedHtml, type) {
-      try {
-        if (_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).length === 0) {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).html(renderedHtml);
-        } else {
-          if (type === "products") {
-            _SgmntfY_._getJq()('.sgm-search-products ul').html(renderedHtml);
-          } else {
-            if (_SgmntfY_._getJq()(".sgm-search-sidebar").length === 0) {
-              _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).html(renderedHtml);
-            } else {
-              if (type === "sgm-search-sidebar") {
-                _SgmntfY_._getJq()(".sgm-search-sidebar").html(renderedHtml);
-              } else if (type === "sgm-search-header") {
-                _SgmntfY_._getJq()(".sgm-search-header").html(renderedHtml);
-              } else if (type === "sgm-search-products") {
-                _SgmntfY_._getJq()(".sgm-search-products").html(renderedHtml);
-              }
-            }
-          }
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('WARN', 'Error in filling target element[' + type + '] with product recommendations: ' + err);
-      }
-    },
-    _setSearchResultsPosition: function () {
-      if (_SgmntfY_._getJq()(window).width() < _SgmntfY_._variables.search.maxMobileWidth) {
-        var vh = _SgmntfY_._getJq()(window).innerHeight() * 0.01;
-        document.documentElement.style.setProperty('--vh', vh + 'px');
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("mobile");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-mobile");
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-          _SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-ios-device");
-        }
-      } else {
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("mobile");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-mobile");
-        _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-ios-device");
-        try {
-          clearInterval(searchBoxInterval);
-          clearTimeout(searchBoxTimeOut);
-        }
-        catch(err) {
-        }
-        _SgmntfY_._setSearchPositionInterval();
-        searchBoxInterval = setInterval(_SgmntfY_._setSearchPositionInterval, 10);
-        searchBoxTimeOut = setTimeout(function() { clearInterval(searchBoxInterval);  }, 3000);
-      }
-    },
-    _setSearchPositionInterval: function() { //TODO https://segmentify.atlassian.net/browse/DEV-72
-      if (_SgmntfY_._getJq()(window).width() > _SgmntfY_._variables.search.maxMobileWidth
-          && (_SgmntfY_._getJq()(".seg-search-wrapper").hasClass("no-products")
-              || _SgmntfY_._getJq()(".seg-search-wrapper").hasClass("sgm-search-no-products"))) {
-        return;
-      }
-      var direction = sgmSearchSettings.openingDirection.toLowerCase();
-      var stickyFlag = false;
-      var staticFlag = false;
-      var doNothing = false;
-
-      var currentActiveInput = _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput, _SgmntfY_._variables.search.activeRootElement);
-      currentActiveInput.parents().not("body").not("html").each(function (index, elem) {
-        if (_SgmntfY_._getJq()(elem).css('position') === 'fixed') {
-          stickyFlag = true;
-          return false;
-        } else if (_SgmntfY_._getJq()(elem).css('position') === 'static') {
-          staticFlag = true;
-          return false;
-        }
-        if (_SgmntfY_._getJq()(elem).css('display') === 'none') {
-          doNothing = true;
-          _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("open");
-          _SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-open");
-          return false;
-        }
-      });
-
-      if (doNothing === false) {
-        if (stickyFlag === true) {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("seg-position-absolute");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("seg-position-fixed");
-        } else if (staticFlag === true) {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("seg-position-absolute");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("seg-position-fixed");
-        } else {
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("seg-position-absolute");
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("seg-position-absolute");
-        }
-
-        var inputPosition = _SgmntfY_._variables.search.currentActiveInput.getBoundingClientRect();
-        var lastInputPosition = {top: "", left: ""};
-
-        if (typeof inputPosition === "undefined") {
-          return;
-        }
-
-        // input'un top pozisyonu değişmişse
-        if (inputPosition.top !== lastInputPosition.top) {
-          var inputHeight = _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput, _SgmntfY_._variables.search.activeRootElement).outerHeight();
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).css("top", inputPosition.top + inputHeight + 1);
-          lastInputPosition.top = inputPosition.top;
-        }
-
-        // input'un left pozisyonu değişmişse
-        if (inputPosition.left !== lastInputPosition.left) {
-          var ww = _SgmntfY_._getJq()(window).width();
-          var inputWidth = _SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput, _SgmntfY_._variables.search.activeRootElement).parent().outerWidth();
-          var resultElWidth = _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).outerWidth();
-
-          var css = {
-            "right": inputPosition.left,
-            "center": inputPosition.left - (resultElWidth / 2) + (inputWidth / 2),
-            "left": (inputPosition.left + inputWidth) - resultElWidth
-          }
-
-          if (direction === "right") {
-            // if there is no enough space on right
-            if (css[direction] + resultElWidth >= ww) {
-              // align center by input
-              css[direction] = css["center"];
-            }
-          } else if (direction === "left") {
-            // if there is no enough space on left
-            if (css[direction] <= 0) {
-              // align center by input
-              css[direction] = css["center"];
-            }
-          }
-
-          if (css[direction] === css["center"]) {
-            // ortalayınca sağ ya da sol kenar ekranın dışına taşıyorsa
-            if (css["center"] <= 0 || css["center"] + resultElWidth >= ww) {
-              // ekrana ortala
-              css[direction] = (ww / 2) - (resultElWidth / 2)
-            }
-          }
-          _SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).css("left", css[direction]);
-        }
-        lastInputPosition = inputPosition;
-      }
-
-    },
-    _evalSearchBodyScrollLockPreJs: function () {
-      (function (global, factory) {
-        var mod = {
-          exports: {}
-        };
-        factory(mod.exports);
-        window.bodyScrollLock = mod.exports;
-      })(this, function (exports) {
-        'use strict';
-        Object.defineProperty(exports, "__esModule", {
-          value: true
-        });
-
-        function _toConsumableArray(arr) {
-          if (Array.isArray(arr)) {
-            for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-              arr2[i] = arr[i];
-            }
-            return arr2;
-          } else {
-            return Array.from(arr);
-          }
-        }
-
-        // Older browsers don't support event options, feature detect it.
-
-        // Adopted and modified solution from Bohdan Didukh (2017)
-        // https://stackoverflow.com/questions/41594997/ios-10-safari-prevent-scrolling-behind-a-fixed-overlay-and-maintain-scroll-posi
-
-        var hasPassiveEvents = false;
-        if (typeof window !== 'undefined') {
-          var passiveTestOptions = {
-            get passive() {
-              hasPassiveEvents = true;
-              return undefined;
-            }
-          };
-          window.addEventListener('testPassive', null, passiveTestOptions);
-          window.removeEventListener('testPassive', null, passiveTestOptions);
-        }
-
-        var isIosDevice = typeof window !== 'undefined' && window.navigator && window.navigator.platform && /iP(ad|hone|od)/.test(window.navigator.platform);
-
-        var locks = [];
-        var documentListenerAdded = false;
-        var initialClientY = -1;
-        var previousBodyOverflowSetting = void 0;
-        var previousHtmlOverflowSetting = void 0;
-        var previousBodyPaddingRight = void 0;
-
-        // returns true if `el` should be allowed to receive touchmove events.
-        var allowTouchMove = function allowTouchMove(el) {
-          return locks.some(function (lock) {
-            return !!(lock.options.allowTouchMove && lock.options.allowTouchMove(el));
-          });
-        };
-
-        var preventDefault = function preventDefault(rawEvent) {
-          var e = rawEvent || window.event;
-
-          // For the case whereby consumers adds a touchmove event listener to document.
-          // Recall that we do document.addEventListener('touchmove', preventDefault, { passive: false })
-          // in disableBodyScroll - so if we provide this opportunity to allowTouchMove, then
-          // the touchmove event on document will break.
-          if (allowTouchMove(e.target)) {
-            return true;
-          }
-
-          // Do not prevent if the event has more than one touch (usually meaning this is a multi touch gesture like pinch to zoom).
-          if (e.touches.length > 1) return true;
-
-          if (e.preventDefault) e.preventDefault();
-
-          return false;
-        };
-
-        var setOverflowHidden = function setOverflowHidden(options) {
-          // Setting overflow on body/documentElement synchronously in Desktop Safari slows down
-          // the responsiveness for some reason. Setting within a setTimeout fixes this.
-          setTimeout(function () {
-            // If previousBodyPaddingRight is already set, don't set it again.
-            if (previousBodyPaddingRight === undefined) {
-              var _reserveScrollBarGap = !!options && options.reserveScrollBarGap === true;
-              var scrollBarGap = window.innerWidth - document.documentElement.clientWidth;
-
-              if (_reserveScrollBarGap && scrollBarGap > 0) {
-                previousBodyPaddingRight = document.body.style.paddingRight;
-                document.body.style.paddingRight = scrollBarGap + 'px';
-              }
-            }
-
-            // If previousBodyOverflowSetting is already set, don't set it again.
-            if (previousBodyOverflowSetting === undefined) {
-              previousBodyOverflowSetting = document.body.style.overflow;
-              document.body.style.cssText = 'overflow:hidden !important';
-              _SgmntfY_._getJq()("html").css("overflow", "hidden !important");
-            }
-            if (previousHtmlOverflowSetting === undefined) {
-              previousHtmlOverflowSetting = _SgmntfY_._getJq()("html").css("overflow");
-              _SgmntfY_._getJq()("html").css("overflow", "hidden");
-            }
-          });
-        };
-
-        var restoreOverflowSetting = function restoreOverflowSetting() {
-          // Setting overflow on body/documentElement synchronously in Desktop Safari slows down
-          // the responsiveness for some reason. Setting within a setTimeout fixes this.
-          setTimeout(function () {
-            if (previousBodyPaddingRight !== undefined) {
-              document.body.style.paddingRight = previousBodyPaddingRight;
-
-              // Restore previousBodyPaddingRight to undefined so setOverflowHidden knows it
-              // can be set again.
-              previousBodyPaddingRight = undefined;
-            }
-
-            if (previousBodyOverflowSetting !== undefined) {
-              document.body.style.overflow = previousBodyOverflowSetting;
-
-              // Restore previousBodyOverflowSetting to undefined
-              // so setOverflowHidden knows it can be set again.
-              previousBodyOverflowSetting = undefined;
-            }
-            if (previousHtmlOverflowSetting !== undefined) {
-              _SgmntfY_._getJq()("html").css("overflow", previousHtmlOverflowSetting);
-
-              // Restore previousHtmlOverflowSetting to undefined
-              // so setOverflowHidden knows it can be set again.
-              previousHtmlOverflowSetting = undefined;
-            }
-          });
-        };
-
-        // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
-        var isTargetElementTotallyScrolled = function isTargetElementTotallyScrolled(targetElement) {
-          return targetElement ? targetElement.scrollHeight - targetElement.scrollTop <= targetElement.clientHeight : false;
-        };
-
-        var handleScroll = function handleScroll(event, targetElement) {
-          var clientY = event.targetTouches[0].clientY - initialClientY;
-
-          if (allowTouchMove(event.target)) {
-            return false;
-          }
-
-          if (targetElement && targetElement.scrollTop === 0 && clientY > 0) {
-            // element is at the top of its scroll.
-            return preventDefault(event);
-          }
-
-          if (isTargetElementTotallyScrolled(targetElement) && clientY < 0) {
-            // element is at the top of its scroll.
-            return preventDefault(event);
-          }
-
-          event.stopPropagation();
-          return true;
-        };
-
-        var disableBodyScroll = exports.disableBodyScroll = function disableBodyScroll(targetElement, options) {
-          if (isIosDevice) {
-            // targetElement must be provided, and disableBodyScroll must not have been
-            // called on this targetElement before.
-            if (!targetElement) {
-              // eslint-disable-next-line no-console
-              console.error('disableBodyScroll unsuccessful - targetElement must be provided when calling disableBodyScroll on IOS devices.');
-              return;
-            }
-
-            if (targetElement && !locks.some(function (lock) {
-              return lock.targetElement === targetElement;
-            })) {
-              var lock = {
-                targetElement: targetElement,
-                options: options || {}
-              };
-
-              locks = [].concat(_toConsumableArray(locks), [lock]);
-
-              targetElement.ontouchstart = function (event) {
-                if (event.targetTouches.length === 1) {
-                  // detect single touch.
-                  initialClientY = event.targetTouches[0].clientY;
-                }
-              };
-              targetElement.ontouchmove = function (event) {
-                if (event.targetTouches.length === 1) {
-                  // detect single touch.
-                  handleScroll(event, targetElement);
-                }
-              };
-
-              if (!documentListenerAdded) {
-                document.addEventListener('touchmove', preventDefault, hasPassiveEvents ? { passive: false } : undefined);
-                documentListenerAdded = true;
-              }
-            }
-          } else {
-            setOverflowHidden(options);
-            var _lock = {
-              targetElement: targetElement,
-              options: options || {}
-            };
-
-            locks = [].concat(_toConsumableArray(locks), [_lock]);
-          }
-        };
-
-        var clearAllBodyScrollLocks = exports.clearAllBodyScrollLocks = function clearAllBodyScrollLocks() {
-          if (isIosDevice) {
-            // Clear all locks ontouchstart/ontouchmove handlers, and the references.
-            locks.forEach(function (lock) {
-              lock.targetElement.ontouchstart = null;
-              lock.targetElement.ontouchmove = null;
-            });
-
-            if (documentListenerAdded) {
-              document.removeEventListener('touchmove', preventDefault, hasPassiveEvents ? { passive: false } : undefined);
-              documentListenerAdded = false;
-            }
-
-            locks = [];
-
-            // Reset initial clientY.
-            initialClientY = -1;
-          } else {
-            restoreOverflowSetting();
-            locks = [];
-          }
-        };
-
-        var enableBodyScroll = exports.enableBodyScroll = function enableBodyScroll(targetElement) {
-          if (isIosDevice) {
-            if (!targetElement) {
-              // eslint-disable-next-line no-console
-              console.error('enableBodyScroll unsuccessful - targetElement must be provided when calling enableBodyScroll on IOS devices.');
-              return;
-            }
-
-            targetElement.ontouchstart = null;
-            targetElement.ontouchmove = null;
-
-            locks = locks.filter(function (lock) {
-              return lock.targetElement !== targetElement;
-            });
-
-            if (documentListenerAdded && locks.length === 0) {
-              document.removeEventListener('touchmove', preventDefault, hasPassiveEvents ? { passive: false } : undefined);
-
-              documentListenerAdded = false;
-            }
-          } else {
-            locks = locks.filter(function (lock) {
-              return lock.targetElement !== targetElement;
-            });
-            if (!locks.length) {
-              restoreOverflowSetting();
-            }
-          }
-        };
-      });
-    },
-    _getCopiedObject: function() {
-      var toObj = Object();
-      for(var i=0; i<arguments.length; i++) {
-        if (typeof Object.assign === "function") {
-          Object.assign(toObj, arguments[i])
-        } else {
-          _SgmntfY_._getJq().extend(toObj, arguments[i])
-        }
-      }
-      return toObj;
-    },
-    // push permission functions
-    _pushInitPermissionCampaign: function (campaign, config) {
-      // render html by default for safari
-      if (config.safariEnabled && _SgmntfY_._variables.pushInfo.agent === 'Safari') {
-        if (_SgmntfY_._variables.pushInfo.subscription !== 'GRANTED' && _SgmntfY_._variables.pushInfo.subscription !== 'DENIED') {
-          checkRemotePermission(window.safari.pushNotification.permission(_SgmntfY_._variables.pushInfo.safari.webPushId));
-
-          function checkRemotePermission(permissionData) {
-            if (permissionData.permission === 'denied') {
-              if (_SgmntfY_._variables.pushInfo.subscription !== 'DENIED') {
-                fetch(_SgmntfY_._getPushUrl() + 'subscription/deny?apiKey=' + _SgmntfY_._variables.apiKey
-                  + '&userId=' + _SgmntfY_._getUserId() + '&instanceId=' + _SgmntfY_._variables.pushInfo.instanceId
-                  + '&browser=' + _SgmntfY_._variables.pushInfo.agent + '&device=' + _SgmntfY_._variables.ua.type.toUpperCase());
-                return;
-              }
-              _SgmntfY_._variables.pushInfo.promptInteraction = 'denied';
-            } else if (permissionData.permission === 'granted') {
-              _SgmntfY_._pushSendSafariSubscription(permissionData, true);
-              _SgmntfY_._variables.pushInfo.promptInteraction = 'granted';
-            } else {
-              _SgmntfY_._pushRenderHtml(campaign, config);
-              _SgmntfY_._pushBindClickHandlers(false, false);
-              _SgmntfY_._variables.pushInfo.safariEnabled = config.safariEnabled;
-            }
-          }
-        }
-      } else {
-        var isVapid = _SgmntfY_._variables.pushInfo.permissionMethod === 'Vapid';
-        var isFirebase = _SgmntfY_._variables.pushInfo.isFirebaseCompatible && _SgmntfY_._variables.pushInfo.permissionMethod === 'Firebase';
-        var shouldIShowPopUp = _SgmntfY_._pushShouldShowPopUp(config);
-        _SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.getSubscription().then(function (pushSub) {
-          if (pushSub) {
-            if (_SgmntfY_._variables.pushInfo.subscription !== 'GRANTED') {
-              // remove subscription details in order to get new subscriptionId/auth and p256dh over new server credentials
-              pushSub.unsubscribe().then(function (successful) {
-                if (successful) {
-                  _SgmntfY_._pushRequestPermissionFunc(isVapid, isFirebase, true);
-                }
-              }).catch(function (e) {
-                _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while unsubscribing user: ' + e);
-              })
-            }
-          } else {
-            _SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.permissionState({userVisibleOnly: true}).then(function (permissionState) {
-              if (permissionState === 'denied' || permissionState === 'DENIED') {
-                _SgmntfY_._variables.pushInfo.promptInteraction = 'denied';
-                _SgmntfY_.LOG_MESSAGE('WARN', 'Permission request denied!');
-                if (_SgmntfY_._variables.pushInfo.subscription !== 'DENIED') {
-                  fetch(_SgmntfY_._getPushUrl() + 'subscription/deny?apiKey=' + _SgmntfY_._variables.apiKey
-                    + '&userId=' + _SgmntfY_._getUserId() + '&instanceId=' + _SgmntfY_._variables.pushInfo.instanceId
-                    + '&browser=' + _SgmntfY_._variables.pushInfo.agent + '&device=' + _SgmntfY_._variables.ua.type.toUpperCase());
-                  return;
-                }
-              } else if (permissionState === 'granted' || permissionState === 'GRANTED') {
-                _SgmntfY_._variables.pushInfo.promptInteraction = 'granted';
-                if (_SgmntfY_._variables.pushInfo.subscription !== 'GRANTED') {
-                  _SgmntfY_._pushRequestPermissionFunc(isVapid, isFirebase, true);
-                }
-              } else if (permissionState === 'prompt' || permissionState === 'PROMPT') {
-                _SgmntfY_._variables.pushInfo.promptInteraction = 'prompt';
-                if (shouldIShowPopUp) {
-                  _SgmntfY_._pushRenderHtml(campaign, config);
-                  _SgmntfY_._pushBindClickHandlers(true, false);
-                } else {
-                  _SgmntfY_._pushRequestPermissionFunc(isVapid, isFirebase, false);
-                }
-              }
-            }).catch(function (e) {
-              _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting push permission state, isVapid [' + isVapid + "], isFirebase [" + isFirebase + "] " + e);
-              _SgmntfY_._pushFadeUp(1);
-              return;
-            });
-          }
-        }).catch(function (e) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription, isVapid [' + isVapid + "], isFirebase [" + isFirebase + "] " + e);
-          _SgmntfY_._pushFadeUp(1);
-        });
-      }
-    },
-    _pushRequestPermissionFunc: function(isVapid, isFirebase, isSilent){
-      if (isVapid) {
-        _SgmntfY_._pushRequestPermissionVapid(isSilent);
-      } else if (isFirebase) {
-        _SgmntfY_._pushRequestPermission(isSilent);
-      }
-    },
-    _pushFadeUp: function(timeout){
-      _SgmntfY_._getJq()('.seg-popup-push').addClass('seg-fade-up');
-      window.setTimeout(function () {
-        _SgmntfY_._getJq()('.seg-popup-push').remove();
-      }, timeout);
-    },
-    _pushRenderHtml: function(campaign, config){
-      var renderedHtml = _SgmntfY_._getMustache().render(campaign['html'], config);
-      _SgmntfY_._getJq()('body').prepend(renderedHtml);
-      campaign['css'] && _SgmntfY_._getJq()('<style />').html(campaign['css']).prependTo(_SgmntfY_._getJq()('body'));
-      _SgmntfY_.LOG_MESSAGE('DEBUG', 'Push Permission appended to html body for campaign(' + campaign['instanceId'] + ')');
-    },
-    _pushBindClickHandlers: function (bindPermissionToClickEvent, isSilent) {
-      _SgmntfY_._getJq()('.seg-popup-push-bttn-later-new').click(function () {
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'push-permission-impression',
-          instanceId: _SgmntfY_._variables.pushInfo.instanceId,
-          interactionId: _SgmntfY_._variables.pushInfo.instanceId
-        });
-        _SgmntfY_._pushFadeUp(500);
-      });
-      _SgmntfY_._getJq()('.seg-popup-push-bttn-allow-new').click(function () {
-        _SgmntfY_._variables.segmentifyObj('event:interaction', {
-          type: 'push-permission-impression',
-          instanceId: _SgmntfY_._variables.pushInfo.instanceId,
-          interactionId: _SgmntfY_._variables.pushInfo.instanceId
-        });
-        _SgmntfY_._pushFadeUp(500);
-        if (bindPermissionToClickEvent) {
-          if (_SgmntfY_._variables.pushInfo.permissionMethod === 'Firebase') {
-            _SgmntfY_._variables.pushInfo.messaging.requestPermission().then(function () {
-              _SgmntfY_._pushGetFirebasePermission(isSilent);
-            }).catch(function (e) {
-              if (e.code === 'messaging/permission-blocked') {
-                _SgmntfY_._variables.pushInfo.promptInteraction = 'denied';
-                _SgmntfY_.LOG_MESSAGE('WARN', 'Permission requested denied :' + e);
-                if (_SgmntfY_._variables.pushInfo.subscription !== 'DENIED') {
-                  fetch(_SgmntfY_._getPushUrl() + 'subscription/deny?apiKey=' + _SgmntfY_._variables.apiKey
-                    + '&userId=' + _SgmntfY_._getUserId() + '&instanceId=' + _SgmntfY_._variables.pushInfo.instanceId
-                    + '&browser=' + _SgmntfY_._variables.pushInfo.agent + '&device=' + _SgmntfY_._variables.ua.type.toUpperCase());
-                  return;
-                }
-              } else if (e.code === 'messaging/permission-default') {
-                _SgmntfY_._variables.pushInfo.promptInteraction = 'close';
-              } else {
-                _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription details at _pushBindClickHandlers() isFireBase [true]: ' + e);
-                _SgmntfY_._pushFadeUp(1);
-              }
-            });
-          } else if (_SgmntfY_._variables.pushInfo.permissionMethod === 'Vapid') {
-            var subscribeOptions = {
-              userVisibleOnly: true,
-              applicationServerKey: _SgmntfY_._pushUrlBase64ToUint8Array(_SgmntfY_._variables.pushInfo.vapid.publicKey)
-            };
-            _SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.subscribe(subscribeOptions).then(function (subscription) {
-              _SgmntfY_._pushSendSubscription(subscription, true, isSilent);
-              _SgmntfY_._variables.pushInfo.promptInteraction = 'granted';
-            }).catch(function (e) {
-              _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription details at _pushBindClickHandlers() isVapid [true]: ' + e);
-              _SgmntfY_._pushFadeUp(1);
-              _SgmntfY_._pushSetPromptInteractionForVapid();
-            });
-          }
-        }
-        if(_SgmntfY_._variables.pushInfo.agent === 'Safari' && _SgmntfY_._variables.pushInfo.safariEnabled){
-          _SgmntfY_._pushGetSafariPermission();
-        }
-      });
-    },
-    _pushGetSafariPermission: function(){
-      checkRemotePermission(window.safari.pushNotification.permission(_SgmntfY_._variables.pushInfo.safari.webPushId));
-      function checkRemotePermission(permissionData) {
-        if (permissionData.permission === 'default') {
-          window.safari.pushNotification.requestPermission(
-            _SgmntfY_._variables.pushInfo.safari.packageUrl,
-            _SgmntfY_._variables.pushInfo.safari.webPushId,
-            {},
-            checkRemotePermission
-          );
-        } else if (permissionData.permission === 'denied') {
-          _SgmntfY_._variables.pushInfo.promptInteraction = 'denied';
-          if (_SgmntfY_._variables.pushInfo.subscription !== 'DENIED') {
-            fetch(_SgmntfY_._getPushUrl() + 'subscription/deny?apiKey=' + _SgmntfY_._variables.apiKey
-              + '&userId=' + _SgmntfY_._getUserId() + '&instanceId=' + _SgmntfY_._variables.pushInfo.instanceId
-              + '&browser=' + _SgmntfY_._variables.pushInfo.agent + '&device=' + _SgmntfY_._variables.ua.type.toUpperCase());
-            return;
-          }
-        } else if (permissionData.permission === 'granted') {
-          _SgmntfY_._variables.pushInfo.promptInteraction = 'granted';
-          _SgmntfY_._pushSendSafariSubscription(permissionData, false);
-        }
-      }
-    },
-    _pushShouldShowPopUp: function (config) {
-      if(!config.twoStepEnabled) {
-            return false;
-      }
-      var browser = bowser.name.toLowerCase();
-      var version = parseFloat(bowser.version);
-
-      if (browser.indexOf('chrome') >= 0) {
-        if (version >= 80) {
-          return true;
-        }
-      }
-      if (browser.indexOf('firefox') >= 0) {
-        if (version >= 72) {
-          return true;
-        }
-      }
-      if (browser.indexOf('opera') >= 0) {
-        if (version >= 67) {
-          return true;
-        }
-      }
-      if (browser.indexOf('yandex') >= 0) {
-        if (version >= 20) {
-          return true;
-        }
-      }
-      if (browser.indexOf('samsung') >= 0) {
-        if (version >= 12) {
-          return true;
-        }
-      }
-      return false;
-    },
-    _pushGetFirebasePermission: function (isSilent) {
-      _SgmntfY_._variables.pushInfo.messaging.getToken().then(function (currentToken) {
-        if (currentToken) {
-          _SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.getSubscription()
-            .then(function (subscription) {
-              _SgmntfY_._pushSendSubscription(subscription, false, isSilent);
-            })
-            .catch(function (e) {
-              _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription details at _pushGetFirebasePermission() : ' + e);
-            });
-        }
-      }).catch(function (e) {
-        if (e.code && e.code === 'messaging/token-unsubscribe-failed') {
-          _SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.getSubscription()
-            .then(function (subscription) {
-              _SgmntfY_._pushSendSubscription(subscription, false, isSilent);
-            })
-            .catch(function (e) {
-              _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription details at _pushGetFirebasePermission() : ' + e);
-            });
-        } else {
-          _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription token at _pushGetFirebasePermission() :  ' + e);
-        }
-      });
-    },
-    _pushRequestPermission: function (isSilent) {
-      _SgmntfY_._variables.pushInfo.messaging.requestPermission().then(function () {
-        _SgmntfY_._pushGetFirebasePermission(isSilent);
-      }).catch(function (e) {
-        if (e.code === 'messaging/permission-blocked') {
-          _SgmntfY_._variables.pushInfo.promptInteraction = 'denied';
-          _SgmntfY_.LOG_MESSAGE('WARN', 'Permission requested denied :' + e);
-          if (_SgmntfY_._variables.pushInfo.subscription !== 'DENIED') {
-            fetch(_SgmntfY_._getPushUrl() + 'subscription/deny?apiKey=' + _SgmntfY_._variables.apiKey
-              + '&userId=' + _SgmntfY_._getUserId() + '&instanceId=' + _SgmntfY_._variables.pushInfo.instanceId
-              + '&browser=' + _SgmntfY_._variables.pushInfo.agent + '&device=' + _SgmntfY_._variables.ua.type.toUpperCase());
-            return;
-          }
-        } else if (e.code === 'messaging/permission-default') {
-          _SgmntfY_._variables.pushInfo.promptInteraction = 'close';
-        } else {
-          _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription details at _pushRequestPermission() isFireBase [true]: ' + e);
-          _SgmntfY_._pushFadeUp(1);
-        }
-      });
-    },
-    _pushRequestPermissionVapid: function(isSilent){
-      var subscribeOptions = {
-        userVisibleOnly: true,
-        applicationServerKey: _SgmntfY_._pushUrlBase64ToUint8Array(_SgmntfY_._variables.pushInfo.vapid.publicKey)
-      };
-      _SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.subscribe(subscribeOptions).then(function (subscription) {
-        _SgmntfY_._pushSendSubscription(subscription, true, isSilent);
-      }).catch(function (e) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while getting subscription details at _pushRequestPermissionVapid() : ' + e);
-        _SgmntfY_._pushSetPromptInteractionForVapid();
-      });
-    },
-    _pushSendSubscription: function (pushSub, isVapid, isSilent) {
-      var subscriptionId = pushSub['endpoint'].split('/').slice(-1)[0];
-      var endpoint = pushSub['endpoint'].replace(subscriptionId, '').slice(0, -1);
-      var auth = pushSub.getKey ? pushSub.getKey('auth') : '';
-      var key = pushSub.getKey ? pushSub.getKey('p256dh') : '';
-      var userId = _SgmntfY_._getUserId();
-      var dataArray = {
-        subscriptionId: subscriptionId,
-        auth: auth ? btoa(String.fromCharCode.apply(null, new Uint8Array(auth))) : '',
-        key: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : '',
-        userId: userId,
-        agent: _SgmntfY_._variables.pushInfo.agent,
-        endpoint: endpoint,
-        deviceType: _SgmntfY_._variables.ua.type.toUpperCase(),
-        isVapid: isVapid
-      };
-      _SgmntfY_._variables.pushInfo.promptInteraction = 'granted';
-      _SgmntfY_._pushSendFetchSubscriptionAllowRequest(dataArray, isSilent);
-    },
-    _pushSendSafariSubscription: function (permissionData, isSilent) {
-      var dataArray = {
-        subscriptionId: permissionData['deviceToken'],
-        auth: '',
-        key: '',
-        userId: _SgmntfY_._getUserId(),
-        agent: 'Safari',
-        endpoint: '',
-        deviceType: _SgmntfY_._variables.ua.type.toUpperCase(),
-        isVapid: false
-      };
-      _SgmntfY_._pushSendFetchSubscriptionAllowRequest(dataArray, isSilent);
-    },
-    _pushSendFetchSubscriptionAllowRequest: function (dataArray, isSilent) {
-      var fetchUrl = _SgmntfY_._getPushUrl() + 'subscription/push'
-        + '?apiKey=' + _SgmntfY_._variables.apiKey
-        + '&instanceId=' + _SgmntfY_._variables.pushInfo.instanceId
-        + '&isSilent=' + isSilent;
-      fetch(fetchUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dataArray)
-      }).then(function (res) {
-        if (!res.ok) {
-          res.text().then(function (data) {
-            _SgmntfY_._pushSendPermissionError(dataArray['subscriptionId'], data);
-          });
-        }
-      }, function (e) {
-        _SgmntfY_._pushSendPermissionError(dataArray['subscriptionId'], e);
-        _SgmntfY_.LOG_MESSAGE('ERROR', 'Error while sending subscription info to BE: ' + e);
-      });
-    },
-    _pushSendPermissionError: function (subscriptionId, errorMessage) {
-      var url = _SgmntfY_._getPushUrl() + 'subscription/error'
-        + '?apiKey=' + _SgmntfY_._variables.apiKey;
-      var body = {
-        subscriptionId: subscriptionId,
-        userId: _SgmntfY_._getUserId(),
-        message: errorMessage
-      };
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      });
-    },
-    _pushUrlBase64ToUint8Array: function (base64String) {
-      var padding = '='.repeat((4 - base64String.length % 4) % 4);
-      var base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
-
-      var rawData = window.atob(base64);
-      var outputArray = new Uint8Array(rawData.length);
-
-      for (var i = 0; i < rawData.length; ++i) {
-        outputArray[i] = rawData.charCodeAt(i);
-      }
-      return outputArray;
-    },
-    _pushSetPromptInteractionForVapid: function() {
-      if ("Notification" in window) {
-        if (Notification.permission === 'denied') {
-          _SgmntfY_._variables.pushInfo.promptInteraction = 'denied';
-        } else if (Notification.permission === "default") {
-          _SgmntfY_._variables.pushInfo.promptInteraction = 'close';
-        }
-      }
-    },
-    // GA methods
-    GA: {
-      activateTracker: function () {
-        try {
-          ++_SgmntfY_._variables.ga.activateTriedCount;
-          if (_SgmntfY_._variables.ga.activateTriedCount > _SgmntfY_._variables.ga.activateTryCount) {
-            return;
-          }
-          var _tracker = eval(_SgmntfY_._variables.ga.tracker);
-          if (!_tracker) {
-            _SgmntfY_.LOG_MESSAGE('WARN', 'Error evaluating _SgmntfY_._variables.ga.tracker, cannot evaluate ga!');
-          } else {
-            if (_tracker.loaded) {
-              _SgmntfY_._variables.ga.tracker = _tracker;
-              if (_SgmntfY_._variables.ga.trackerName) {
-                _SgmntfY_._variables.ga.activated = true;
-              } else {
-                var trackerList = _SgmntfY_._variables.ga.tracker.getAll();
-                for (var i = 0; i < trackerList.length; i++) {
-                  var tracker = trackerList[i];
-                  if (tracker) {
-                    _SgmntfY_._variables.ga.trackerName = tracker.get('name');
-                    _SgmntfY_._variables.ga.activated = true;
-                    break;
-                  }
-                }
-              }
-            }
-          }
-        } catch (err) {
-          _SgmntfY_.LOG_MESSAGE('ERROR', 'Error evaluating _SgmntfY_._variables.ga.tracker: ' + err);
-        }
-      },
-
-      // dimension setter
-      setDimension: function (name, data) {
-        if (!_SgmntfY_._variables.ga.activated) {
-          _SgmntfY_.GA.activateTracker();
-          if (_SgmntfY_._variables.ga.activateTriedCount < _SgmntfY_._variables.ga.activateTryCount) {
-            _SgmntfY_.GA.setDimension(name, data);
-          }
-        }
-        var trackerName = _SgmntfY_._variables.ga.trackerName;
-        if (trackerName) {
-          _SgmntfY_._variables.ga.tracker(trackerName + '.set', name, data);
-        }
-      },
-      setGroup: function (group) {
-        _SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmGroup, group);
-        _SgmntfY_._variables.ga.activeGroup = group;
-      },
-      setUser: function (user) {
-        _SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmUser, user);
-      },
-      setSession: function (session) {
-        _SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmSession, session);
-      },
-      setPage: function (page) {
-        _SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmPage, page);
-      },
-      setWidget: function (widget) {
-        _SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmWidget, widget);
-      },
-      setProduct: function (product) {
-        _SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmProduct, product);
-      },
-
-      // event sender
-      eventCategory: function () {
-        if (_SgmntfY_._variables.ga.activeGroup) {
-          return "Segmentify." + _SgmntfY_._variables.ga.activeGroup;
-        }
-        if (_SgmntfY_._variables.ga.group && _SgmntfY_._variables.ga.group === 'CHECK') {
-          _SgmntfY_.GA.getGroup(_SgmntfY_._getUserId(), _SgmntfY_.GA.setGroup);
-        } else {
-          var group = _SgmntfY_._variables.ga.groups[_SgmntfY_._variables.ga.group];
-          if (group) {
-            return "Segmentify." + group;
-          } else {
-            return "Segmentify." + _SgmntfY_._variables.ga.groups.unknown;
-          }
-        }
-      },
-      convertAndSend: function (_fields) {
-        // default event fields
-        var fields = {
-          eventCategory: _fields.category || _SgmntfY_.GA.eventCategory(),
-          eventAction: _fields.action,
-          eventLabel: _fields.label,
-          eventValue: _fields.value,
-          nonInteraction: true
-        };
-        // add custom dimensions
-        fields[_SgmntfY_._variables.ga.dimensions.sgmPage] = _SgmntfY_._variables.ga.activePage;
-        if (_fields.sgmWidget) {
-          fields[_SgmntfY_._variables.ga.dimensions.sgmWidget] = _fields.sgmWidget;
-        }
-        if (_fields.sgmProduct) {
-          fields[_SgmntfY_._variables.ga.dimensions.sgmProduct] = _fields.sgmProduct;
-        }
-
-        // send event
-        _SgmntfY_.GA.sendEvent(fields);
-      },
-      sendEvent: function (request) {
-        if (!_SgmntfY_._variables.ga.enabled) {
-          return;
-        }
-        if (!request.eventCategory) {
-          request.eventCategory = _SgmntfY_.GA.eventCategory();
-          // add to segmentify event queue again
-          _SgmntfY_._variables.segmentifyObj("ga:event", request);
-          return;
-        }
-        // if ga not activated try to activate it before adding to queue again
-        if (!_SgmntfY_._variables.ga.activated) {
-          _SgmntfY_.GA.activateTracker();
-        }
-        var gaActivated = _SgmntfY_._variables.ga.activated;
-        if (gaActivated) {
-          // send prepared events to google-analytics with related/selected tracker
-          _SgmntfY_._variables.ga.tracker(_SgmntfY_._variables.ga.trackerName + '.send', 'event', request);
-        } else {
-          if (_SgmntfY_._variables.ga.activateTriedCount < _SgmntfY_._variables.ga.activateTryCount) {
-            // add to segmentify event queue again
-            _SgmntfY_._variables.segmentifyObj("ga:event", request);
-          }
-        }
-      },
-      // general
-      sendPageView: function (category) {
-        _SgmntfY_.GA.convertAndSend({
-          action: "Page View",
-          label: (category || _SgmntfY_._variables.ga.activePage)
-        });
-      },
-      // recommendation
-      sendWidgetImpression: function (widgetName, widgetPosition) {
-        _SgmntfY_.GA.convertAndSend({
-          action: "Widget Impression",
-          label: widgetName,
-          sgmWidget: widgetPosition
-        });
-      },
-      sendWidgetView: function (widgetName, widgetPosition) {
-        _SgmntfY_.GA.convertAndSend({
-          action: "Widget View",
-          label: widgetName,
-          sgmWidget: widgetPosition
-        });
-      },
-      sendWidgetClick: function (widgetName, tabPosition) {
-        _SgmntfY_.GA.convertAndSend({
-          action: "Widget Click",
-          label: widgetName,
-          sgmWidget: tabPosition
-        });
-      },
-      sendArrowClick: function (widgetName, arrow) {
-        _SgmntfY_.GA.convertAndSend({
-          action: "Arrow Click",
-          label: widgetName,
-          sgmWidget: arrow
-        });
-      },
-      sendProductClick: function (widgetName, productId, productPosition) {
-        _SgmntfY_.GA.convertAndSend({
-          action: "Product Click",
-          label: widgetName,
-          sgmWidget: productId,
-          sgmProduct: productPosition
-        });
-      },
-      sendQuickBasket: function (widgetName, productId, productPosition) {
-        _SgmntfY_.GA.convertAndSend({
-          action: "Quick Basket",
-          label: widgetName,
-          sgmWidget: productId,
-          sgmProduct: productPosition
-        });
-      },
-
-      // get current group
-      getGroup: function (userId, callback) {
-        // in case segmentify still not inited then return unknown group
-        if (!_SgmntfY_._variables.apiKey) {
-          return callback(_SgmntfY_._variables.ga.groups.unknown);
-        }
-        var endpoint = _SgmntfY_._getEventUrl() + "/v2/global/user/" + _SgmntfY_._variables.apiKey + "/" + userId;
-        var _successCallback = function (data) {
-          var result = data.customObject === 'REAL' ? _SgmntfY_._variables.ga.groups.groupA : _SgmntfY_._variables.ga.groups.control;
-          _SgmntfY_._storePersistentData(_SgmntfY_._variables.ga.groupCookie, result, 1);
-          callback(result);
-        };
-        var _errorCallback = function () {
-          // default set to Segmentify active
-          callback(_SgmntfY_._variables.ga.groups.unknown);
-        };
-        _SgmntfY_._getRequest(endpoint, {}, _successCallback, _errorCallback);
-      },
-    },
-    // make get request
-    _getRequest: function (_url, _headers, _successCallback, _errorCallback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', _url, true);
-      xhr.responseType = "json";
-      xhr.timeout = 5000;
-      for (var header in (_headers || {})) {
-        xhr.setRequestHeader(header, _headers[header]);
-      }
-      xhr.ontimeout = function (err) {
-        _errorCallback();
-      };
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status >= 200 && xhr.status < 400) {
-            // check response to be json. IE will not automatically parse
-            var responseData = xhr.response;
-            try {
-              if (typeof responseData === 'string') {
-                responseData = JSON.parse(responseData);
-              }
-            } catch (err) {}
-            _successCallback(responseData);
-          }
-          // error - timeout should be status = 0
-          else {
-            _errorCallback();
-          }
-        }
-      };
-      xhr.send();
-    },
-    _sourceOfUrl: function () {
-      var source = '';
-      if (document.URL || document.referrer) {
-        var gclid = _SgmntfY_._getQueryParameter('gclid');
-        if (gclid.length) {
-          return "PAID";
-        }
-        var utm_medium = _SgmntfY_._getQueryParameter('utm_medium');
-        if (utm_medium.length) {
-          switch (utm_medium) {
-            case 'social':
-              source = 'SOCIAL';
-              break;
-            case 'organic':
-              source = 'SEARCH';
-              break;
-            case 'cpc':
-            case 'cpm':
-            case 'ocpm':
-            case 'paid-media':
-            case 'affiliate':
-            case 'banner':
-            case 'retargeting':
-            case 'shopping':
-              source = 'PAID';
-              break;
-            case 'email':
-              source = 'EMAIL';
-              break;
-            default:
-              break;
-          }
-        }
-        if (!source.length) {
-          // extract domain from referrer
-          var referrer = document.referrer.replace('https://', '').replace('http://', '');
-          referrer = referrer.substring(0, referrer.indexOf('/'));
-          if (referrer.indexOf(_SgmntfY_._variables.domain) !== -1) {
-            source = 'INTERNAL';
-          } else if (referrer.indexOf('facebook') !== -1 || referrer.indexOf('twitter') !== -1 || referrer.indexOf('t.co') !== -1
-              || referrer.indexOf('instagram') !== -1 || referrer.indexOf('pinterest') !== -1) {
-            source = 'SOCIAL';
-          } else if (referrer.indexOf('google') !== -1 || referrer.indexOf('g.co') !== -1 || referrer.indexOf('bing') !== -1
-              || referrer.indexOf('yandex') !== -1 || referrer.indexOf('yahoo') !== -1) {
-            source = 'SEARCH';
-          } else if (referrer.indexOf('cimri.com') !== -1 || referrer.indexOf('akakce.com') !== -1 || referrer.indexOf('ucuzcu.com') !== -1
-              || referrer.indexOf('bilio.com') !== -1 || referrer.indexOf('auspreiser.de') !== -1 || referrer.indexOf('billiger.de') !== -1
-              || referrer.indexOf('dooyoo.de') !== -1 || referrer.indexOf('geizhals.de') !== -1 || referrer.indexOf('guenstiger.de') !== -1
-              || referrer.indexOf('idealo.de') !== -1 || referrer.indexOf('kelkoo.de') !== -1 || referrer.indexOf('preis.de') !== -1
-              || referrer.indexOf('preissuchmaschine.de') !== -1 || referrer.indexOf('geizkragen.de') !== -1 || referrer.indexOf('preisvergleich.de') !== -1
-              || referrer.indexOf('preisroboter.de') !== -1 || referrer.indexOf('vergelijk.be') !== -1 || referrer.indexOf('pazaruvaj') !== -1
-              || referrer.indexOf('nabava.net') !== -1 || referrer.indexOf('ceneje.si') !== -1 || referrer.indexOf('heureka') !== -1
-              || referrer.indexOf('pricerunner') !== -1 || referrer.indexOf('hinnavaatlus') !== -1 || referrer.indexOf('skroutz.gr') !== -1
-              || referrer.indexOf('agrep.hu') !== -1 || referrer.indexOf('arukereso.hu') !== -1 || referrer.indexOf('trovaprezzi.it') !== -1
-              || referrer.indexOf('prisjakt.no') !== -1 || referrer.indexOf('prisguiden.no') !== -1 || referrer.indexOf('ceneo.pl') !== -1
-              || referrer.indexOf('kuantokusta.pt') !== -1 || referrer.indexOf('compari.ro') !== -1) {
-            source = 'LISTING';
-          }
-        }
-        if (!source.length) {
-          source = 'OTHER';
-        }
-      }
-
-      return source;
-    },
-    // add serialize form method
-    _enableSerializeForm: function ($) {
-      if ($.fn.sgmSerializeForm) return;
-      $.fn.sgmSerializeForm = function () {
-        "use strict";
-
-        var result = {};
-        var extend = function (i, element) {
-          var node = result[element.name];
-
-          // If node with same name exists already, need to convert it to an array as it
-          // is a multi-value field (i.e., checkboxes)
-
-          if ('undefined' !== typeof node && node !== null) {
-            if ($.isArray(node)) {
-              node.push(element.value);
-            } else {
-              result[element.name] = [node, element.value];
-            }
-          } else {
-            result[element.name] = element.value;
-          }
-        };
-
-        $.each(this.serializeArray(), extend);
-
-        // convert array into joined strings
-        $.each(result, function(key, value) {
-          if ('undefined' !== typeof value && value !== null && $.isArray(value)) {
-            result[key] = value.join();
-          }
-        });
-
-        return result;
-      };
-    },
-    // Initializers
-    init: function () {
-      // get Segmentify object
-      _SgmntfY_._variables.namespace = window['SegmentifyTrackingObject'];
-      _SgmntfY_._variables.segmentifyObj = window[_SgmntfY_._variables.namespace];
-      // check tracking
-      var _tracking = _SgmntfY_._getQueryParameter('_sgm_tracking');
-      if (_SgmntfY_._isNotEmpty(_tracking)) {
-        _SgmntfY_._setTracking(_tracking);
-      }
-      if ('disabled' === _SgmntfY_._getTracking()) {
-        _SgmntfY_.LOG_MESSAGE('DEBUG', 'End-user opted-out Segmentify tracking!');
-        return;
-      }
-      if (!_SgmntfY_._notNull(_SgmntfY_._variables.segmentifyObj) || !_SgmntfY_._notNull(_SgmntfY_._variables.segmentifyObj.q)) {
-        ++_SgmntfY_._variables.initTryCount;
-        if (_SgmntfY_._variables.initTryCount > _SgmntfY_._variables.initTryLimit) {
-          /*console.error("Segmentify initialization code error, namespace: " + _SgmntfY_._variables.namespace);*/
-          window.clearTimeout(_SgmntfY_._variables.initTimer);
-          return;
-        }
-        window.clearTimeout(_SgmntfY_._variables.initTimer);
-        _SgmntfY_._variables.initTimer = window.setTimeout(_SgmntfY_.init, 100);
-      } else {
-        if (_SgmntfY_._variables.initTimer) {
-          window.clearTimeout(_SgmntfY_._variables.initTimer);
-        }
-        _SgmntfY_.modernize();
-        _SgmntfY_.LOG_MESSAGE('DEBUG', '*** Segmentify is loading... ***');
-        // merge defaults with user given parameters
-        _SgmntfY_._extend(true, _SgmntfY_._variables, _SgmntfY_._variables.segmentifyObj.config);
-        _SgmntfY_._functions.setLogLevel(_SgmntfY_._variables.logLevel);
-
-        // check domain is set
-        if (!(_SgmntfY_._variables.domain && document.URL.indexOf(_SgmntfY_._variables.domain) >= 0)) {
-          console.error("Segmentify domain is not set properly: " + _SgmntfY_._variables.domain);
-          return;
-        }
-
-        // initialize variables
-        window.onunload = _SgmntfY_._windowUnload;
-        // load necessary libraries
-        if (_SgmntfY_._variables.jq == null) {
-          _SgmntfY_._loadJavascript(_SgmntfY_._variables.jQueryUrl, true, function () {
-            _SgmntfY_._variables.jq = jQuery.noConflict(true);
-            _SgmntfY_._enableSerializeForm(_SgmntfY_._variables.jq);
-            _SgmntfY_._initializeDelayedActions();
-            _SgmntfY_._initializeDelayedCampaigns();
-            _SgmntfY_._initializePageViewsCampaigns();
-            _SgmntfY_._sendTrackedEvent();
-            _SgmntfY_._setTestMode();
-            _SgmntfY_._setQaMode();
-          });
-        } else {
-          if (!_SgmntfY_._checkVersion("1.7", _SgmntfY_._variables.jq.fn.jquery)) {
-            console.error("Segmentify requires jQuery version >= 1.7");
-            return;
-          }
-          _SgmntfY_._enableSerializeForm(_SgmntfY_._variables.jq);
-          _SgmntfY_._initializeDelayedActions();
-          _SgmntfY_._initializeDelayedCampaigns();
-          _SgmntfY_._initializePageViewsCampaigns();
-          _SgmntfY_._sendTrackedEvent();
-          _SgmntfY_._setTestMode();
-          _SgmntfY_._setQaMode();
-        }
-
-        if (_SgmntfY_._variables.mustache == null) {
-          _SgmntfY_._variables.mustache = {};
-          initializeMustache(_SgmntfY_._variables.mustache);
-          _SgmntfY_._variables.mustache.tags = [ "[[", "]]"];
-        }
-
-        // Get Browser & Device Info
-        _SgmntfY_._updateBrowserAndDeviceInfo();
-
-        // run loop
-        _SgmntfY_.LOG_MESSAGE('DEBUG', '*** Running on a ' + _SgmntfY_._variables.ua.type + ' ***');
-        _SgmntfY_.LOG_MESSAGE('DEBUG', '*** Segmentify loaded and started... ***');
-        _SgmntfY_.run();
-
-        // tell the whole world segmentify is inited
-        _SgmntfY_._dispatchInitEvent();
-      }
-    },
-    _initializeDelayedActions: function () {
-      try {
-        // get delayed actions and reset
-        var delayedActions = _SgmntfY_._getDelayedActions();
-        _SgmntfY_._setDelayedActions([]);
-        // try to re-add them
-        var currentDate = new Date();
-        for (var i = 0; i < delayedActions.length; i++) {
-          delayedActions[i].delayDate = new Date(delayedActions[i].delayDate);
-          if (delayedActions[i].delayDate.getTime() > currentDate.getTime()) {
-            _SgmntfY_._addDelayedAction(delayedActions[i]);
-          }
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't initialize delayed actions: " + err);
-      }
-    },
-    _initializeDelayedCampaigns: function () {
-      try {
-        // get delayed campaigns and reset
-        var delayedCampaigns = _SgmntfY_._getDelayedCampaigns();
-        _SgmntfY_._setDelayedCampaigns([]);
-        // try to re-add them
-        var currentTime = new Date();
-        for (var i = 0; i < delayedCampaigns.length; ++i) {
-          delayedCampaigns[i]['time'] = new Date(delayedCampaigns[i]['time']);
-          if (delayedCampaigns[i]['time'].getTime() > currentTime.getTime()) {
-            _SgmntfY_._addDelayedCampaign(delayedCampaigns[i]);
-          }
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't initialize delayed campaigns: " + err);
-      }
-    },
-    _initializePageViewsCampaigns: function () {
-      try {
-        var pageViewCampaigns = _SgmntfY_._getPageViewsCampaigns();
-        for (var i = 0; i < pageViewCampaigns.length; ++i) {
-          pageViewCampaigns[i]['pageView'] = pageViewCampaigns[i]['pageView'] - 1;
-          _SgmntfY_._setPageViewsCampaigns(pageViewCampaigns);
-          _SgmntfY_._triggerPageViewsCampaign(pageViewCampaigns[i]);
-        }
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', "Can't initialize pageview campaigns: " + err);
-      }
-    },
-    _dispatchInitEvent: function () {
-      try {
-        if (window.dispatchEvent) {
-          var detailObj = {
-            testMode: _SgmntfY_._getTestMode(),
-            qaMode: _SgmntfY_._getQaMode()
-          };
-          window.dispatchEvent(new CustomEvent('segmentifyInited', {detail: detailObj}));
-        }
-      } catch (err) {}
-    },
-    // Request Loggers
-    _ajaxError: function (request, jqXHR, textStatus, errorThrown) {
-      _SgmntfY_.LOG_MESSAGE('WARN',
-          "Error in sending event:\n" +
-          "Event Data: " + JSON.stringify(request.data) + "\n" +
-          "Response: " + jqXHR.responseText + "\n" +
-          "Status: " + textStatus + "\n" +
-          "Error: " + errorThrown);
-    },
-    _ajaxSuccess: function (requestData, responseData, textStatus) {
-      _SgmntfY_.LOG_MESSAGE('DEBUG',
-          "Success in sending event:\n" +
-          "Event Data: " + JSON.stringify(requestData) + "\n" +
-          "Status: " + textStatus + "\n" +
-          "Response Data: " + JSON.stringify(responseData));
-    },
-    // Document Unload Function To Store all events to cookie
-    _windowUnload: function () {
-      // set unload true
-      _SgmntfY_._variables.isUnload = true;
-      // cancel run timer
-      window.clearTimeout(_SgmntfY_._variables.runTimer);
-      // first add normal event queue
-      var q = [];
-      while (_SgmntfY_._variables.segmentifyObj.q.length > 0) {
-        try {
-          var command = _SgmntfY_._variables.segmentifyObj.q.shift();
-          var commandFunction = _SgmntfY_._functions.getFunction(command[0]);
-          var commandArguments = Array.prototype.slice.call(command, 1);
-          var ev = commandFunction.apply(null, commandArguments);
-          ev.originalParams.discardResponse = 'true';
-          q.push(ev);
-        } catch(err) {}
-      }
-      // second add retry queue
-      var rq = _SgmntfY_._getRetryQueue();
-      while (rq.length > 0) {
-        try {
-          var ev = rq.shift();
-          ev.originalParams.discardResponse = 'true';
-          q.push(ev);
-        } catch (err) {}
-      }
-      // store all events in storage
-      _SgmntfY_._setRetryQueue(q);
-    },
-    // run - process messages in queue
-    run: function () {
-      try {
-        // if jQuery not loaded or queue not created, wait for it
-        if (_SgmntfY_._variables.jq && ((_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) || _SgmntfY_._getDataLayer())) {
-          if (!_SgmntfY_._variables.waitingKeys && _SgmntfY_._variables.keysTryCount < 5) {
-            // update user & session id if necessary
-            var requiredKeyCount = 0;
-            var userId = _SgmntfY_._getUserId();
-            var sessionId = _SgmntfY_._getSessionId();
-            if (_SgmntfY_._isEmpty(userId)) requiredKeyCount = 2;
-            else if (_SgmntfY_._isEmpty(sessionId)) requiredKeyCount = 1;
-            else if (_SgmntfY_._isNotEmpty(sessionId) && _SgmntfY_._variables.segmentifyObj.q.length > 0) {
-              _SgmntfY_._storePersistentData(_SgmntfY_._variables.sessionStorageKey, sessionId, 0, _SgmntfY_._variables.storage.session.local);
-              _SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey, userId, 390, _SgmntfY_._variables.storage.user.local);
-            }
-            if (requiredKeyCount > 0) {
-              _SgmntfY_._updateUserAndSessionId(requiredKeyCount);
-            } else {
-              // if not waiting status, normal operation
-              if (_SgmntfY_._variables.segmentifyObj.q && _SgmntfY_._variables.segmentifyObj.q.length > 0) {
-                var commands = _SgmntfY_._variables.segmentifyObj.q.splice(0, _SgmntfY_._variables.segmentifyObj.q.length);
-                _SgmntfY_._functions.callFunction(commands);
-              }
-              if (_SgmntfY_._getDataLayer()) {
-                _SgmntfY_._consumeDataLayer();
-              }
-            }
-          }
-        }
-        // after queue empty invoke again
-        window.clearTimeout(_SgmntfY_._variables.runTimer);
-        _SgmntfY_._variables.runTimer = window.setTimeout(_SgmntfY_.run, _SgmntfY_._variables.constants.frequency);
-      } catch (err) {
-        _SgmntfY_.LOG_MESSAGE('ERROR', 'Error in run: ' + err);
-        // after error invoke again
-        window.clearTimeout(_SgmntfY_._variables.runTimer);
-        _SgmntfY_._variables.runTimer = window.setTimeout(_SgmntfY_.run, _SgmntfY_._variables.constants.frequency);
-      }
-    },
-    modernize: function () {
-      // string startsWith
-      if (typeof String.prototype.startsWith !== 'function') {
-        String.prototype.startsWith = function (prefix) {
-          return this.lastIndexOf(prefix, 0) === 0;
-        };
-      }
-
-      // string endsWith
-      if (typeof String.prototype.endsWith !== 'function') {
-        String.prototype.endsWith = function (suffix) {
-          return this.indexOf(suffix, this.length - suffix.length) !== -1;
-        };
-      }
-
-      // string trim
-      if (typeof String.prototype.trim !== 'function') {
-        String.prototype.trim = function () {
-          return this.replace(/^\s+|\s+$/g, '');
-        }
-      }
-
-      // Array indexOf
-      if (!Array.prototype.indexOf) {
-        Array.prototype.indexOf = function (searchElement, fromIndex) {
-          if (this == null) {
-            throw new TypeError('"this" is null or not defined');
-          }
-
-          var O = Object(this);
-          var len = O.length >>> 0;
-          if (len === 0) { return -1; }
-
-          var n = +fromIndex || 0;
-          if (Math.abs(n) === Infinity) { n = 0; }
-          if (n >= len) { return -1; }
-
-          var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-          while (k < len) {
-            if (k in O && O[k] === searchElement) { return k; }
-            k++;
-          }
-          return -1;
-        };
-      }
-
-      // Array map
-      if (!Array.prototype.map) {
-        Array.prototype.map = function(callback, thisArg) {
-          var T, A, k;
-          if (this == null) {
-            throw new TypeError(' this is null or not defined');
-          }
-          var O = Object(this);
-          var len = O.length >>> 0;
-          if (typeof callback !== 'function') {
-            throw new TypeError(callback + ' is not a function');
-          }
-          if (arguments.length > 1) {
-            T = thisArg;
-          }
-          A = new Array(len);
-          k = 0;
-          while (k < len) {
-            var kValue, mappedValue;
-            if (k in O) {
-              kValue = O[k];
-              mappedValue = callback.call(T, kValue, k, O);
-              A[k] = mappedValue;
-            }
-            k++;
-          }
-          return A;
-        };
-      }
-
-      // JSON stringify ensure
-      var __original_json_stringify__ = JSON.stringify;
-      JSON.stringify = function (value, replacer, space) {
-        // store original
-        var arrayToJSON = Array.prototype.toJSON;
-        var numberToJSON = Number.prototype.toJSON;
-        var stringToJSON = String.prototype.toJSON;
-        // delete them
-        delete Number.prototype.toJSON;
-        delete Array.prototype.toJSON;
-        delete String.prototype.toJSON;
-        // calculate
-        var result = undefined;
-        try {
-          result = __original_json_stringify__(value, replacer, space);
-        }
-        catch (err) {
-          result = undefined;
-        }
-        // restore
-        if (arrayToJSON) Array.prototype.toJSON = arrayToJSON;
-        if (numberToJSON) Number.prototype.toJSON = numberToJSON;
-        if (stringToJSON) String.prototype.toJSON = stringToJSON;
-
-        return result;
-      };
-
-      if (typeof window.CustomEvent !== "function") {
-        function CustomEvent(event, params) {
-          params = params || {bubbles: false, cancelable: false, detail: undefined};
-          var evt = document.createEvent('CustomEvent');
-          evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-          return evt;
-        }
-
-        CustomEvent.prototype = window.Event.prototype;
-
-        window.CustomEvent = CustomEvent;
-      }
-    },
-    LOG_MESSAGE: function (logLevel, message) {
-      var currentLevel = _SgmntfY_._variables.logLevel;
-      var logLevelObject = _SgmntfY_.LOG_LEVELS[logLevel];
-      if (typeof logLevelObject != 'undefined' && logLevelObject <= currentLevel) {
-        console.log('Segmentify[' + logLevel + ']: ' + message);
-      }
-    }
-  };
-
-  // initialize Segmentify
-  _SgmntfY_.init();
-})(window);
+        (()=>{(function(){var _SgmntfY_=window._SgmntfY_={LOG_LEVELS:{SILENT:0,ERROR:1,WARN:2,INFO:3,DEBUG:4},_variables:{jq:window.SegmentifyjQuery||null,mustache:null,domain:window.SegmentifyDomain||window.location.hostname,ua:{agentString:window.navigator.userAgent,type:null,name:null,version:null,os:null,osversion:null},controlGroup:{type:void 0,source:void 0,experimentID:void 0,controlValue:void 0,activeValue:void 0},search:{maxMobileWidth:801,searchMinChar:0,searchDelay:50,input:"",manuelTrigger:"",manuelTriggerEnabledForDesktop:!1,manuelTriggerDesktop:"",cancelText:"Cancel",showAll:"Show All",notFound:"Sorry, there are no results for that search term. ",initialCampaign:null,isExecutable:!1,searchTimer:null,isExecutableForAfter:!1,manuelTriggerClicked:!1,forceRemoveInputVal:!1,queryVerboseLog:!1,queryOverrideKey:"_sgf_search_override_query",bannerTargets:{ASSETS_HEADER:".sgm-search-sidebar",ASSETS_FOOTER:".sgm-search-sidebar",RESULTS_HEADER:".sgm-search-products",RESULTS_FOOTER:".sgm-search-products"}},pa:{loaded:!1,disabled:!1,wait:!1},journey:{},userStorageKey:"_sgf_user_id",sessionStorageKey:"_sgf_session_id",pushPermissionKey:"_sgf_push_permission_asked",testMode:"_sgf_test_mode",tracking:"_sgf_tracking",storage:{delayedActions:{key:"_sgf_delayed_actions",local:!0},delayedCampaigns:{key:"_sgf_delayed_campaigns",local:!0},pageViewCampaigns:{key:"_sgf_pageview_campaigns",local:!0},sessionCampaigns:{key:"_sgf_session_campaigns",local:!1},retryQueue:{key:"_sgf_rq",local:!0},extensionStatus:{key:"segmentifyExtension",local:!0},qaExtensionStatus:{key:"_sgf_qa_ext",local:!0},clickedBanners:{key:"_sgf_clicked_banners",local:!1},nextPageQueue:{key:"_sgf_npq",local:!0},user:{key:"_sgf_user_id",local:!1},session:{key:"_sgf_session_id",local:!1},qaMode:{key:"_sgf_qa_mode",local:!0},searchNoCache:{key:"_sgf_search_no_cache",local:!0},userData:{key:"_sgf_ud",local:!1}},logLevel:"ERROR",segmentifyObj:null,recommendedProducts:[],recommendedPromotions:[],waitingKeys:!1,keysTryCount:0,apiKey:null,skipProductDetail:{device:[]},offerRecommendedProducts:!1,offerRecommendedPromotions:!1,runTimer:null,initTimer:null,initTryCount:0,initTryLimit:50,isPageHide:!1,cssPreload:!1,constants:{frequency:100,redirectDelay:1e3,retryLimit:3,eventTimeout:10,clickedBannersLimit:20,recommendationSelectorFindLimit:50},requiredParams:{PAGE_VIEW:[],PRODUCT_VIEW:["productId"],BASKET_OPERATIONS:["productId","basketId","step"],CHECKOUT:["totalPrice","basketId","step"],USER_OPERATIONS:["step"],FORM:["formName","fields"],CUSTOM_EVENT:["type"],INTERACTION:["type"],BANNER_OPERATIONS:["type","title","group","order"],BANNER_GROUP_VIEW:["group"],INTERNAL_BANNER_GROUP:["group"],PROMOTION:["type","code"],SEARCH:[],FILTER:["source"],COUPON:["type"],JOURNEY:["type"],WISHLIST:["step"],PERSONA_QUIZ:[],GAMIFICATION:[],EMAIL_SUBSCRIPTION:["email"],ALERT:["type","instanceId"]},optionalParams:{PAGE_VIEW:["category","subCategory","external","externalId"],PRODUCT_VIEW:["title","url","mUrl","image","imageXS","imageS","imageM","imageL","imageXL","additionalImages","mainCategory","category","categories","price","oldPrice","specialPrice","lastUpdateTime","inStock","stockCount","stockRatio","stockStatus","brand","gender","labels","sizes","allSizes","colors","publishTime","source","noUpdate","activeBanners","groupId","scoreCount","reviewCount","subSource","paramsList","externalId"],BASKET_OPERATIONS:["price","quantity","size","activeBanners","email","externalId"],CHECKOUT:["productList","orderNo","paymentType","activeBanners","cartUrl","totalDiscount","discounts","shipment","tax","coupon","email","externalId"],USER_OPERATIONS:["username","fullName","phone","gender","birthDate","segments","memberSince","service","isRegistered","isLogin","location","emailNtf","mailTest","pushTest","custom","external","userIysPermissions","lastSearchDeletedKeywords","triggerType","channel","type","identity","source","pushToken","whatsappNtf","externalId"],FORM:[],CUSTOM_EVENT:[],INTERACTION:["interactionId","instanceId","externalId"],BANNER_OPERATIONS:["productId","category","brand","label","externalId"],BANNER_GROUP_VIEW:[],INTERNAL_BANNER_GROUP:["banners","externalId"],PROMOTION:["title","url","mUrl","image","mImage","startDate","endDate","categories","brands","labels","productIds","publishTime","externalId"],SEARCH:["query","type","ordering","filters","trigger","service","mode","externalId"],FILTER:["productId","categories","brands","sizes","prices","externalId"],COUPON:[],JOURNEY:["step","answer","instanceId","externalId"],WISHLIST:["productId","favoritesList","externalId"],PERSONA_QUIZ:["answers","instanceId","externalId"],GAMIFICATION:["type","record","used","externalId"],EMAIL_SUBSCRIPTION:["fullName","gender","externalId"],ALERT:[]},segmentifyApiUrl:"//gandalf.segmentify.com/",segmentifyQaApiUrl:"//gandalf-qa.segmentify.com",segmentifyCDNUrl:"//cdn.segmentify.com/",jQueryUrl:"//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js",paUrl:"https://cdn.sgmntfy.com/pa.js",dataLayer:"sgfLayer",consumeDataLayer:!0,dataLayerConfig:{},categoryHierarchy:!1,disableNextPage:!1,language:"EN",currency:"",region:"",pushInfo:{dataCenter:"",qaDataCenter:"https://gimli-qa.segmentify.com/",promptInteraction:""},ga:{groupCookie:"__SegmentifyGroup__",group:void 0,tracker:"window.ga",tracker4:"window.gtag",trackerName:void 0,activated:!1,enabled:!1,ga4:!1,activateTryCount:100,activateTriedCount:0,activeGroup:void 0,activePage:void 0,groups:{control:"SGM-CG",groupA:"SGM-GA",groupB:"SGM-GB",unknown:"SGM-UN"},dimensions:{sgmGroup:void 0,sgmUser:void 0,sgmSession:void 0,sgmPage:void 0,sgmWidget:void 0,sgmProduct:void 0},gaRequestCount:0},doNotTrack:!1},_doNotPersonalize:function(){var t=_SgmntfY_._variables.doNotPersonalize;if(!t){_SgmntfY_._variables.doNotPersonalize=!1;return}try{_SgmntfY_._variables.doNotPersonalize.enabled=_SgmntfY_._variables.doNotPersonalize.cb()}catch(n){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:`Consent cookie search failed: ${n.message||n.toString()}`,nextPage:!1}})}},_loadJavascript:function(t,n,r){var a=document.createElement("script");return a.type="text/javascript",a.async=n,r&&typeof r=="function"&&(typeof a.onreadystatechange<"u"?a.onreadystatechange=function(){(this.readyState==="loaded"||this.readyState==="complete")&&(r(),a.onreadystatechange=null)}:a.onload=r),a.src=t,document.getElementsByTagName("head")[0].appendChild(a),a},_loadCSS:function(t,n){if(!document.querySelector('link[href*="segmentify.css"]')){var r=document.createElement("link");return r.type="text/css",_SgmntfY_._variables.cssPreload?(r.rel="preload",r.as="style"):r.rel="stylesheet",r.media="screen",n&&typeof n=="function"&&(typeof r.onreadystatechange<"u"?r.onreadystatechange=function(){(this.readyState==="loaded"||this.readyState==="complete")&&(n(),r.onreadystatechange=null)}:r.onload=n),r.href=t,document.getElementsByTagName("head")[0].appendChild(r),r}},_sgfPopupCloseHandler:function(t,n){(t===!1||_SgmntfY_._jbOverFlowOperations._journeyFinished(n))&&(_SgmntfY_._jbOverFlowOperations._enableBodyOverFlowForJBWrapper(),_SgmntfY_._jbTriggerButtonReEnable(),window.setTimeout(function(){var r=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);r&&r.parentNode.removeChild(r)},500))},_actions:{_notificationWindow:function(params){var config={title:params.notificationTitle,vertical:"middle",horizontal:"center"},title=params.notificationTitle;switch(params.windowPosition){case"top":config.vertical="top";break;case"bottom":config.vertical="bottom";break;case"left":config.horizontal="left";break;case"right":config.horizontal="right";break;case"top-left":config.vertical="top",config.horizontal="left";break;case"top-right":config.vertical="top",config.horizontal="right";break;case"bottom-left":config.vertical="bottom",config.horizontal="left";break;case"bottom-right":config.vertical="bottom",config.horizontal="right";break}var outerHtml=_SgmntfY_._getJq()('<div class="seg-popup seg-[[vertical]]-[[horizontal]] segFadeInUp fancybox-segmentify"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div></div></div>'),notificationBody=_SgmntfY_._getJq()('<div class="fancybox-body" />').appendTo(outerHtml.find(".fancybox-inner"));params.html instanceof _SgmntfY_._getJq()?notificationBody.append(params.html):notificationBody.html(params.html);for(var button_overlay=_SgmntfY_._getJq()("<div />").appendTo(notificationBody),buttons=params.buttons||[],i=0;i<buttons.length;i++)_SgmntfY_._getJq()('<button data-newWindow="'+buttons[i].newWindow+'" data-target="'+buttons[i].buttonUrl+'" class="fancybox-button '+buttons[i].buttonColor+'">'+buttons[i].buttonTitle+"</button>").appendTo(button_overlay);params.windowStyle==="seamless"&&(title&&_SgmntfY_._getJq()('<div class="overlay-area-title" ><span>'+title+"</span></div>").appendTo(notificationBody),button_overlay.addClass("overlay-area-buttons").addClass("right"),title=null),params.isModal==="false"&&_SgmntfY_._getJq()('<span class="seg-popup-close"></span>').appendTo(outerHtml);var renderedHtml=_SgmntfY_._getMustache().render(outerHtml.prop("outerHTML"),config);_SgmntfY_._getJq()("body").prepend(renderedHtml),params.overlay==="true"&&(_SgmntfY_._getJq()('<div class="seg-popup-overlay"></div>').prependTo(_SgmntfY_._getJq()("body")),_SgmntfY_._getJq()(".seg-popup-overlay").show()),params.isModal==="false"&&_SgmntfY_._getJq()(".seg-popup-close").bind("click",function(){var t=_SgmntfY_._getJq()(this);t.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){t.parent(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"close",instanceId:params.instanceId,interactionId:params.instanceId})}),params.cssCode&&_SgmntfY_._getJq()("<style />").html(params.cssCode).prependTo(_SgmntfY_._getJq()("body"));try{params.javascriptCode&&eval(params.javascriptCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing javascript code: "+t)}if(_SgmntfY_._getJq()(".seg-popup").find("form")){var $inner=_SgmntfY_._getJq()(".seg-popup .fancybox-body"),$form=$inner.find("form").eq(0);$form.bind("submit",function(t){t.preventDefault(),_SgmntfY_.LOG_MESSAGE("DEBUG","Popup Form button click for actionId: "+params.actionId),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"submit",interactionId:params.formName,instanceId:params.instanceId}),_SgmntfY_._variables.segmentifyObj("user:form",{formName:params.formName,fields:$form.sgmSerializeForm()}),$inner.html(params.successHtml),setTimeout(function(){$inner.parents(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),$inner.parents(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3)})}var redirectFn=function(t){var n=function(r,a){window.open(r.data("target"),a),r.parents(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){r.parent(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3)};t.data("newwindow")==="true"||t.data("newwindow")===!0?n(t,"_blank"):setTimeout(function(){n(t,"_self")},_SgmntfY_._variables.constants.redirectDelay)};_SgmntfY_._getJq()(".seg-popup .fancybox-button").click(function(){_SgmntfY_.LOG_MESSAGE("DEBUG","Notification Window button click for actionId: "+params.actionId),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",interactionId:_SgmntfY_._getJq()(this).text(),instanceId:params.instanceId}),redirectFn(_SgmntfY_._getJq()(this))}),_SgmntfY_._getJq()(".seg-popup a img").bind("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:params.instanceId,interactionId:params.instanceId})}),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:params.instanceId,interactionId:params.instanceId})},notificationBanner:function(t){var n=[];try{t.buttons&&(n=JSON.parse(t.buttons))}catch{_SgmntfY_.LOG_MESSAGE("WARN","Cannot parse buttons json, str: "+t.buttons),n=[]}t.buttons=n,t.html=_SgmntfY_._getJq()('<div><a href="'+t.redirectUrl+'"><img id="sgm_img" src="'+t.imageUrl+'"></a></div>'),_SgmntfY_._actions._notificationWindow(t)},notificationMessage:function(t){var n=[];try{t.buttons&&(n=JSON.parse(t.buttons))}catch{_SgmntfY_.LOG_MESSAGE("WARN","Cannot parse buttons json, str: "+t.buttons),n=[]}t.html=t.notificationText,t.buttons=n,_SgmntfY_._actions._notificationWindow(t)},visitorForm:function(t){function n(){var a=this.params,s=this.selectorCount,o=a.selector;if(!o||!_SgmntfY_._getJq()(o).length){if(_SgmntfY_.LOG_MESSAGE("WARN","Error in finding target element["+target+"], element does not exist"),s<_SgmntfY_._variables.constants.recommendationSelectorFindLimit){++this.selectorCount;var c=n.bind(this);setTimeout(c,100)}}else try{o.addClass("sgm-recommendation sgm-clearcss").html(a.formHtml);var g=o.find("form").eq(0);g.submit(function(_){_.preventDefault(),_SgmntfY_.LOG_MESSAGE("DEBUG","In-page Form button click for actionId: "+a.actionId),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"submit",interactionId:a.formName,instanceId:a.instanceId}),_SgmntfY_._variables.segmentifyObj("user:form",{formName:a.formName,fields:g.sgmSerializeForm()}),setTimeout(function(){o.html(a.successHtml)},1e3)})}catch(_){_SgmntfY_.LOG_MESSAGE("ERROR","Error in filling target element["+a.selector+"] with visitor form: "+_)}}switch(t.actionType){case"INPAGE_WIDGET":{var r=n.bind({params:t,selectorCount:1});r();break}case"POPUP_WINDOW":default:{t.html=t.formHtml,_SgmntfY_._actions._notificationWindow(t);break}}},recommendProducts:function(params,request){var previousMetadata={productId:request.originalParams.productId,productUrl:request.originalParams.productUrl,instanceId:params.instanceId};function dynamicItemKey(t){var n=t.recommendationSource;return typeof t.timeFrame<"u"&&_SgmntfY_._isNotEmpty(t.timeFrame)&&(n+="|"+t.timeFrame,typeof t.score<"u"&&_SgmntfY_._isNotEmpty(t.score)&&(n+="|"+t.score)),n}function checkDynamicItemCount(t,n){for(var r=0;r<t.length;++r)if(dynamicItemKey(t[r])===n)return t[r].itemCount;return null}function checkProductInList(t,n){for(var r=0;r<t.length;r++)if(t[r].productId==n)return!0;return!1}function checkSelectorAndRender(){var params=this.params,selectorCount=this.selectorCount,target=params.selector;if(!target||!_SgmntfY_._getJq()(target).length)if(_SgmntfY_.LOG_MESSAGE("WARN","Error in finding target element["+target+"], element does not exist"),selectorCount<_SgmntfY_._variables.constants.recommendationSelectorFindLimit){++this.selectorCount;var binded=checkSelectorAndRender.bind(this);setTimeout(binded,100)}else _SgmntfY_._variables.segmentifyObj("event:alert",{type:"DIV_SELECTOR_NOT_FOUND",instanceId:params.instanceId});else{var renderIdx=0,reConf={title:notificationTitle,products:productList,index:function(){return++renderIdx},discount:function(){try{var t=this.price,n=this.oldPrice;if(!t||!n||t==n)return null;var r=100-t*100/n;return r>0&&Math.round(r)}catch{return null}},commaFormatPrice:function(){return this.toFixed(2).toString().replace(/\./g,",")},dotFormatPrice:function(){return this.toFixed(2).toString()}},getProductCardPart=function(t){try{var n=JSON.parse(params.productCardDesign);switch(t){case"html":return n.html;case"css":return n.css;case"prejs":return n.prejs;case"postjs":return n.postjs;default:return null}}catch(r){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product card code: "+r)}};try{if(params.preJsCode){eval(params.preJsCode);var retVal=preRenderConf(reConf);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",interactionId:params.actionId,instanceId:params.instanceId}),_SgmntfY_.GA.sendWidgetImpression(params.instanceId)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation pre js code: "+t)}var productCardPreJs=getProductCardPart("prejs");try{if(productCardPreJs){eval(productCardPreJs);var retVal=preRenderConf(reConf);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product card pre js code: "+t)}reConf.brandingEnabled&&(reConf.title+='<a target="_blank" class="seg-rec-logo" href="//www.segmentify.com">Recommended by <img src="//cdn.segmentify.com/images/sgm-logo.svg" /></a>');var recoTemplate=params.recommendationTemplate,productCardHtml=getProductCardPart("html");if(productCardHtml){var productCardPattern=/\[\[#products\]\](.*?)\[\[\/products\]\]/s;recoTemplate=recoTemplate.replace(productCardPattern,`[[#products]]${productCardHtml}[[/products]]`)}var renderedHtml=_SgmntfY_._getMustache().render(recoTemplate,reConf);params.cssCode&&_SgmntfY_._getJq()("<style />").html(params.cssCode).prependTo(_SgmntfY_._getJq()("body")),getProductCardPart("css")&&_SgmntfY_._getJq()("<style />").html(getProductCardPart("css")).prependTo(_SgmntfY_._getJq()("body"));try{var targetElement=_SgmntfY_._getJq()(target).first();if(params.insertType==="SELF")targetElement.html(renderedHtml),wvCB&&wvCB(targetElement);else{var $div=_SgmntfY_._getJq()("<div/>",{class:`seg-reco-wrapper campaign-${params.instanceId} seg-clear`});params.insertType==="AFTER"||params.insertType==="BEFORE"?params.insertType==="AFTER"?$div.html(renderedHtml).insertAfter(targetElement):$div.html(renderedHtml).insertBefore(targetElement):(params.insertType==="APPEND"||params.insertType==="PREPEND")&&(params.insertType==="APPEND"?$div.html(renderedHtml).appendTo(targetElement):$div.html(renderedHtml).prependTo(targetElement)),wvCB&&wvCB($div)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling target element["+target+"] with product recommendations: "+t)}try{params.postJsCode&&eval(params.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation post js code: "+t)}var productCardPostJs=getProductCardPart("postjs");try{productCardPostJs&&eval(productCardPostJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product card post js code: "+t)}_SgmntfY_._bindRecommendationTrackEvents(params.insertType==="SELF"?targetElement:$div,params.recommendationSettings,params.instanceId,0)}}var productList=[],recommendedProducts=structuredClone(params.recommendedProducts||{}),dynamicItems=JSON.parse(params.dynamicItems)||[],recoVersion=params.version||"v1";if(recoVersion==="v1")if(params.ordering==="SHUFFLE"){let t=function(a){for(var s in a)if(a.hasOwnProperty(s)&&(a[s]!==void 0||a[s]!==null))return!1;return!0},n=function(){return parseInt(Math.random()*100)},r=function(a,s){return Math.floor(Math.random()*(s-a))+a};var allNull=t,arrayRandom=n,randomInt=r,itemCounts=[],dynamicLengths=[];for(var idx in dynamicItems)if(dynamicItems.hasOwnProperty(idx)){itemCounts.push(parseInt(dynamicItems[idx].itemCount||0));var source=dynamicItemKey(dynamicItems[idx]);recommendedProducts.hasOwnProperty(source)?dynamicLengths.push(recommendedProducts[source].length):dynamicLengths.push(0)}var firstLevel=[],firstLevelTotal=itemCounts.reduce(function(a,s){return a+s},0);for(idx in itemCounts)if(itemCounts.hasOwnProperty(idx)){var _idx=parseInt(idx);if(_idx===itemCounts.length-1)firstLevel.push(100);else{var pct=parseInt(itemCounts[idx]/firstLevelTotal*100);_idx===0?firstLevel.push(pct):firstLevel.push(firstLevel[firstLevel.length-1]+pct)}}var secondLevel=[];for(var dl in dynamicLengths)if(dynamicLengths.hasOwnProperty(dl)){for(var len=dynamicLengths[dl],sumOfSquares=len*(len+1)*(2*len+1)/6,tmpArr=[],l=len;l>0;--l)l===1?tmpArr.push(100):(pct=parseInt(Math.pow(l,2)/sumOfSquares*100),l===len?tmpArr.push(pct):tmpArr.push(tmpArr[tmpArr.length-1]+pct));secondLevel.push(tmpArr)}for(var dynamicProducts=[],iteration=0;!(++iteration>1e4||dynamicProducts.length>=firstLevelTotal);){var allNullCheck=!0;for(idx in dynamicItems)if(dynamicItems.hasOwnProperty(idx)){source=dynamicItemKey(dynamicItems[idx]);var tmpCheck=!0;if(recommendedProducts.hasOwnProperty(source)&&(tmpCheck=t(recommendedProducts[source])),!tmpCheck){allNullCheck=!1;break}}if(allNullCheck)break;var rand=n(),firstLevelIndex=-1;for(var fl in firstLevel)if(firstLevel.hasOwnProperty(fl)&&rand<firstLevel[fl]){firstLevelIndex=parseInt(fl);break}if(!(firstLevelIndex===-1||!dynamicItems.hasOwnProperty(firstLevelIndex.toString()))){source=dynamicItemKey(dynamicItems[firstLevelIndex]),rand=n();var secondLevelIndex=-1;for(var sl in secondLevel[firstLevelIndex])if(secondLevel[firstLevelIndex].hasOwnProperty(sl)&&rand<secondLevel[firstLevelIndex][sl]){secondLevelIndex=parseInt(sl);break}if(!(secondLevelIndex===-1||!recommendedProducts[source].hasOwnProperty(secondLevelIndex.toString()))){var candidate=recommendedProducts[source].splice(secondLevelIndex,1)[0];if(candidate!=null){recommendedProducts[source].splice(secondLevelIndex,0,null);var eliminationFuncRetVal=!1;if(params.eliminationFunction){var func=_SgmntfY_._getObjectByString(window,params.eliminationFunction);if(typeof func=="function")try{eliminationFuncRetVal=func.call(null,candidate)}catch(a){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation elimination js function: "+a)}}if(!eliminationFuncRetVal){candidate.name=_SgmntfY_._decodeHtml(candidate.name);var sourceLastVisited=dynamicItems[firstLevelIndex].recommendationSource==="RECOMMENDATION_SOURCE_LAST_VISITED"||dynamicItems[firstLevelIndex].recommendationSource==="RECOMMENDATION_EVENT_DATA";switch(params.elimination){case"ELIMINATE_DUPLICATES":case"ELIMINATE_PREVIOUS":checkProductInList(productList,candidate.productId)||(sourceLastVisited||!_SgmntfY_._containsRecommendedProduct(candidate.productId)||_SgmntfY_._variables.offerRecommendedProducts)&&(productList.push(candidate),dynamicProducts.push(candidate),sourceLastVisited||_SgmntfY_._addRecommendedProduct(candidate.productId));break;case"NO_ELIMINATION":default:productList.push(candidate),dynamicProducts.push(candidate),sourceLastVisited||_SgmntfY_._addRecommendedProduct(candidate.productId);break}}}}}}for(var i=0;i<recommendedProducts.RECOMMENDATION_SOURCE_STATIC_ITEMS.length;++i){var elm=recommendedProducts.RECOMMENDATION_SOURCE_STATIC_ITEMS[i];checkProductInList(productList,elm.productId)||productList.splice(r(0,productList.length),0,elm)}}else{for(var missingCount=0,i=0;i<recommendedProducts.RECOMMENDATION_SOURCE_STATIC_ITEMS.length;++i){var elm=recommendedProducts.RECOMMENDATION_SOURCE_STATIC_ITEMS[i];checkProductInList(productList,elm.productId)||productList.push(elm)}for(var ri=0;ri<dynamicItems.length;++ri){var curRecommendationSource=dynamicItemKey(dynamicItems[ri]),curCatItemCount=parseInt(checkDynamicItemCount(dynamicItems,curRecommendationSource));if(isNaN(curCatItemCount)&&(curCatItemCount=0),recommendedProducts.hasOwnProperty(curRecommendationSource)&&curCatItemCount){missingCount+=curCatItemCount;for(var index=0,i=0;i<recommendedProducts[curRecommendationSource].length;++i){var elm=recommendedProducts[curRecommendationSource][i];if(elm.name=_SgmntfY_._decodeHtml(elm.name),index>=curCatItemCount&&missingCount===0)break;var eliminationFnRetVal=!1;if(params.eliminationFunction){var fx=_SgmntfY_._getObjectByString(window,params.eliminationFunction);if(typeof fx=="function")try{eliminationFnRetVal=fx.call(null,elm)}catch(a){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation elimination js function: "+a)}}if(!eliminationFnRetVal){var sourceLastVisited=dynamicItems[ri].recommendationSource==="RECOMMENDATION_SOURCE_LAST_VISITED"||dynamicItems[ri].recommendationSource==="RECOMMENDATION_EVENT_DATA";switch(params.elimination){case"ELIMINATE_DUPLICATES":case"ELIMINATE_PREVIOUS":checkProductInList(productList,elm.productId)||(sourceLastVisited||!_SgmntfY_._containsRecommendedProduct(elm.productId)||_SgmntfY_._variables.offerRecommendedProducts)&&(productList.push(elm),sourceLastVisited||_SgmntfY_._addRecommendedProduct(elm.productId),++index,--missingCount);break;case"NO_ELIMINATION":default:productList.push(elm),sourceLastVisited||_SgmntfY_._addRecommendedProduct(elm.productId),++index,--missingCount;break}}}}}}else if(recoVersion==="v3"&&recommendedProducts.length){for(var staticProducts=recommendedProducts[0]||[],i=0;i<staticProducts.length;++i){var elm=staticProducts[i];checkProductInList(productList,elm.productId)||productList.push(elm)}for(var missingCount=0,ri=1;ri<recommendedProducts.length;++ri){var dynamicItem=dynamicItems[ri-1],curCatItemCount=parseInt(dynamicItem.itemCount);if(isNaN(curCatItemCount)&&(curCatItemCount=0),curCatItemCount){missingCount+=curCatItemCount;for(var index=0,i=0;i<recommendedProducts[ri].length;++i){var elm=recommendedProducts[ri][i];if(elm.name=_SgmntfY_._decodeHtml(elm.name),index>=curCatItemCount&&missingCount===0)break;var sourceLastVisited=dynamicItem.recommendationSource==="RECOMMENDATION_SOURCE_LAST_VISITED"||dynamicItem.recommendationSource==="RECOMMENDATION_EVENT_DATA";switch(params.elimination){case"ELIMINATE_DUPLICATES":case"ELIMINATE_PREVIOUS":checkProductInList(productList,elm.productId)||(sourceLastVisited||!_SgmntfY_._containsRecommendedProduct(elm.productId)||_SgmntfY_._variables.offerRecommendedProducts)&&(productList.push(elm),sourceLastVisited||_SgmntfY_._addRecommendedProduct(elm.productId),++index,--missingCount);break;case"NO_ELIMINATION":default:productList.push(elm),sourceLastVisited||_SgmntfY_._addRecommendedProduct(elm.productId),++index,--missingCount;break}}}}}var notificationTitleMap=JSON.parse(params.notificationTitleMap||"{}"),notificationTitle=notificationTitleMap[request.data.lang]||params.notificationTitle;if(productList.length===0){params.actionType==="CALLBACK"&&request.recommendationCallback&&request.recommendationCallback(notificationTitle,[],previousMetadata,null);return}params.actionType!=="INPAGE_WIDGET"&&params.actionType!=="POPUP_RECO"&&(_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",interactionId:params.actionId,instanceId:params.instanceId}),_SgmntfY_.GA.sendWidgetImpression(params.instanceId));var wvInteractionId=params.interactionId,wvInstanceId=params.instanceId,wvCB=function(t){var n=!1;if(!n&&_SgmntfY_._isElemVisible(t))_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:wvInteractionId,instanceId:wvInstanceId}),_SgmntfY_.GA.sendWidgetView(params.instanceId),n=!0;else if(!n)var r=setInterval(function(){!n&&_SgmntfY_._isElemVisible(t)&&(_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:wvInteractionId,instanceId:wvInstanceId}),_SgmntfY_.GA.sendWidgetView(params.instanceId),n=!0,window.clearInterval(r))},100)};switch(params.actionType){case"CALLBACK":{request.recommendationCallback&&request.recommendationCallback(notificationTitle,productList,previousMetadata,wvCB);break}case"INPAGE_WIDGET":{var binded_context=checkSelectorAndRender.bind({params,selectorCount:1});binded_context();break}case"JAVASCRIPT_FUNCTION":{var fx=_SgmntfY_._getObjectByString(window,params.jsFunction);if(typeof fx=="function")try{fx.call(null,notificationTitle,productList,previousMetadata,wvCB)}catch(n){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation js function: "+n)}else _SgmntfY_.LOG_MESSAGE("WARN","Product Recommendation javascript function("+params.jsFunction+") does not exist");break}case"POPUP_RECO":{var title="",language=request.data.lang,isSingleLanguage=params.notificationTitle&&params.notificationTitle!==""?params.notificationTitle:notificationTitle||"",isMultiLanguage=params.notificationTitleMap&&params.notificationTitleMap!=="";isMultiLanguage?title=JSON.parse(params.notificationTitleMap)[language]:title=isSingleLanguage;var config={title,vertical:params.verticalPosition,horizontal:params.horizontalPosition,button:_SgmntfY_._jbGetButtonText("DELIVERY")},isJourney=_SgmntfY_._jbOverFlowOperations._journeyFinished(request);if(isJourney===!1&&productList.length<3)return;var campaignType=params.type;config.products=productList;try{if(params.preJsCode){eval(params.preJsCode);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",interactionId:params.actionId,instanceId:params.instanceId}),_SgmntfY_.GA.sendWidgetImpression(params.instanceId)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var _products=[],_productId="";request.originalParams&&request.originalParams.params&&(_productId=request.originalParams.params.productId||"");for(var i=0;i<config.products.length&&!(isJourney===!1&&_products.length===3&&campaignType!=="POPUP_BUILDER");++i){var _product=config.products[i];_product.productId!==_productId&&_products.push(_product)}if(isJourney===!1&&_products.length!==3&&campaignType!=="POPUP_BUILDER")return;config.products=_products;var renderedHtml=_SgmntfY_._getMustache().render(params.recommendationTemplate,config);campaignType==="POPUP_BUILDER"?(params.html=renderedHtml,_SgmntfY_._campaigns.POPUP_BUILDER(params)):(_SgmntfY_._getJq()("body").prepend(renderedHtml),params.cssCode&&_SgmntfY_._getJq()("<style />").html(params.cssCode).prependTo(_SgmntfY_._getJq()("body")),_SgmntfY_._jbDeliveryOnBindEventHandler(),params.overlay==="true"&&_SgmntfY_._getJq()(".seg-popup-overlay").show(),_SgmntfY_._getJq()(".seg-popup-close").bind("click",function(){var t=_SgmntfY_._getJq()(this);t.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){_SgmntfY_._sgfPopupCloseHandler(!0,request),t.parent(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3)}));try{params.postJsCode&&eval(params.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:params.interactionId,instanceId:params.instanceId}),_SgmntfY_.GA.sendWidgetView(params.instanceId);break}case"WEB_NOTIFICATION":case"SEND_MAIL":break;case"POPUP_WINDOW":default:break}},recommendPromotion:function(params,request){var metadata={title:params.notificationTitle};function checkDynamicItemCount(t,n){for(var r=0;r<t.length;++r)if(t[r].recommendationSource+"|"+t[r].timeFrame+"|"+t[r].score===n)return t[r].itemCount;return null}function checkPromotionInList(t,n){for(var r=0;r<t.length;r++)if(t[r].code===n)return!0;return!1}function checkSelectorAndRender(){var params=this.params,selectorCount=this.selectorCount,target=params.selector;if(!target||!_SgmntfY_._getJq()(target).length){if(_SgmntfY_.LOG_MESSAGE("WARN","Error in finding target element["+target+"], element does not exist"),selectorCount<_SgmntfY_._variables.constants.recommendationSelectorFindLimit){++this.selectorCount;var binded=checkSelectorAndRender.bind(this);setTimeout(binded,100)}}else{var renderIdx=0,reConf={title:params.notificationTitle,promotionList,index:function(){return++renderIdx}};try{if(params.preJsCode){eval(params.preJsCode);var retVal=preRenderConf(reConf);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing promotion recommendation pre js code: "+t)}reConf.brandingEnabled&&(reConf.title+='<a target="_blank" class="seg-rec-logo" href="//www.segmentify.com">Recommended by <img src="//cdn.segmentify.com/images/sgm-logo.svg" /></a>');var renderedHtml=_SgmntfY_._getMustache().render(params.recommendationTemplate,reConf);try{var targetElement=_SgmntfY_._getJq()(target).first();if(params.insertType==="SELF")targetElement.addClass("seg-promotion-wrapper").html(renderedHtml),targetElement.attr("data-sgf-scenario-id",params.instanceId),wvCB&&wvCB(targetElement);else{var $div=_SgmntfY_._getJq()("<div/>",{class:"seg-promotion-wrapper"});$div.attr("data-sgf-scenario-id",params.instanceId),params.insertType==="AFTER"||params.insertType==="BEFORE"?params.insertType==="AFTER"?$div.html(renderedHtml).insertAfter(targetElement):$div.html(renderedHtml).insertBefore(targetElement):(params.insertType==="APPEND"||params.insertType==="PREPEND")&&(params.insertType==="APPEND"?$div.html(renderedHtml).appendTo(targetElement):$div.html(renderedHtml).prependTo(targetElement)),wvCB&&wvCB($div)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling target element["+target+"] with promotion recommendations: "+t)}try{params.postJsCode&&eval(params.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing promotion recommendation post js code: "+t)}_SgmntfY_._bindRecommendationTrackEvents(params.insertType==="SELF"?targetElement:$div,params.recommendationSettings,params.instanceId,0)}}for(var promotionList=[],recommendedPromotions=params.recommendedPromotions||{},dynamicItems=JSON.parse(params.dynamicItems)||[],i=0;i<recommendedPromotions.RECOMMENDATION_SOURCE_STATIC_ITEMS.length;++i){var elm=recommendedPromotions.RECOMMENDATION_SOURCE_STATIC_ITEMS[i];checkPromotionInList(promotionList,elm.code)||promotionList.push(elm)}for(var missingCount=0,ri=0;ri<dynamicItems.length;++ri){typeof dynamicItems[ri].timeFrame>"u"&&(dynamicItems[ri].timeFrame="null");var curRecommendationSource=dynamicItems[ri].recommendationSource+"|"+dynamicItems[ri].timeFrame+"|"+dynamicItems[ri].score,curCatItemCount=parseInt(checkDynamicItemCount(dynamicItems,curRecommendationSource));if(isNaN(curCatItemCount)&&(curCatItemCount=0),recommendedPromotions.hasOwnProperty(curRecommendationSource)&&curCatItemCount){missingCount+=curCatItemCount;for(var index=0,i=0;i<recommendedPromotions[curRecommendationSource].length;++i){var elm=recommendedPromotions[curRecommendationSource][i];if(elm.name=_SgmntfY_._decodeHtml(elm.name),index>=curCatItemCount&&missingCount==0)break;var eliminationFnRetVal=!1;if(params.eliminationFunction){var fx=_SgmntfY_._getObjectByString(window,params.eliminationFunction);if(typeof fx=="function")try{eliminationFnRetVal=fx.call(null,elm)}catch(r){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing promotion recommendation elimination js function: "+r)}}if(!eliminationFnRetVal)switch(params.elimination){case"ELIMINATE_DUPLICATES":case"ELIMINATE_PREVIOUS":checkPromotionInList(promotionList,elm.code)||(!_SgmntfY_._containsRecommendedPromotion(elm.code)||_SgmntfY_._variables.offerRecommendedPromotions)&&(promotionList.push(elm),_SgmntfY_._addRecommendedPromotion(elm.code),++index,--missingCount);break;case"NO_ELIMINATION":default:promotionList.push(elm),_SgmntfY_._addRecommendedPromotion(elm.code),++index,--missingCount;break}}}}if(promotionList.length===0){params.actionType==="CALLBACK"&&request.recommendationCallback&&request.recommendationCallback([],metadata,null);return}else params.ordering==="SHUFFLE"&&(promotionList=_SgmntfY_._shuffle(promotionList));_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",interactionId:params.actionId,instanceId:params.instanceId});var wvInteractionId=params.interactionId,wvInstanceId=params.instanceId,wvCB=function(t){var n=!1;if(!n&&_SgmntfY_._isElemVisible(t))_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:wvInteractionId,instanceId:wvInstanceId}),n=!0;else if(!n)var r=setInterval(function(){!n&&_SgmntfY_._isElemVisible(t)&&(_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:wvInteractionId,instanceId:wvInstanceId}),n=!0,window.clearInterval(r))},100)};switch(params.actionType){case"CALLBACK":{request.recommendationCallback&&request.recommendationCallback(promotionList,metadata,wvCB);break}case"INPAGE_WIDGET":{var binded_context=checkSelectorAndRender.bind({params,selectorCount:1});binded_context();break}default:break}},recommendKeyword:function(params,request){var metadata={title:params.notificationTitle};function checkDynamicItemCount(t,n){for(var r=0;r<t.length;++r)if(t[r].recommendationSource+"|"+t[r].timeFrame==n)return t[r].itemCount;return null}function checkKeywordInList(t,n){for(var r=0;r<t.length;r++)if(t[r]==n)return!0;return!1}function checkSelectorAndRender(){var params=this.params,keywordList=this.keywordList,selectorCount=this.selectorCount,target=params.selector;if(!target||!_SgmntfY_._getJq()(target).length){if(_SgmntfY_.LOG_MESSAGE("WARN","Error in finding target element["+target+"], element does not exist"),selectorCount<_SgmntfY_._variables.constants.recommendationSelectorFindLimit){++this.selectorCount;var binded=checkSelectorAndRender.bind(this);setTimeout(binded,100)}}else{for(var keywords=[],k=0;k<keywordList.length;++k)keywords.push({name:keywordList[k],url:""});var recoTitle=params.notificationTitle,renderIdx=0,reConf={title:recoTitle,keywords,index:function(){return++renderIdx}};try{if(params.preJsCode){eval(params.preJsCode);var retVal=preRenderConf(reConf);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(params.recommendationTemplate,reConf);try{var targetElement=_SgmntfY_._getJq()(target).first();if(params.insertType==="SELF")targetElement.html(renderedHtml),targetElement.attr("data-sgf-scenario-id",params.instanceId),wvCB&&wvCB(targetElement);else{var $div=_SgmntfY_._getJq()("<div/>",{class:`seg-reco-wrapper campaign-${params.instanceId} seg-clear`});$div.attr("data-sgf-scenario-id",params.instanceId),params.insertType==="AFTER"||params.insertType==="BEFORE"?params.insertType==="AFTER"?$div.html(renderedHtml).insertAfter(targetElement):$div.html(renderedHtml).insertBefore(targetElement):(params.insertType==="APPEND"||params.insertType==="PREPEND")&&(params.insertType==="APPEND"?$div.html(renderedHtml).appendTo(targetElement):$div.html(renderedHtml).prependTo(targetElement)),wvCB&&wvCB($div)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling target element["+target+"] with product recommendations: "+t)}try{params.postJsCode&&eval(params.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation post js code: "+t)}_SgmntfY_._bindRecommendationTrackEvents(params.insertType==="SELF"?targetElement:$div,params.recommendationSettings,params.instanceId,0),_SgmntfY_._getJq()(".seg-label a").on("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",interactionId:params.actionId,instanceId:params.instanceId})})}}for(var keywordList=[],recommendedKeywords=params.recommendedKeywords||{},dynamicItems=JSON.parse(params.dynamicItems)||[],i=0;i<recommendedKeywords.RECOMMENDATION_SOURCE_STATIC_ITEMS.length;++i){var elm=recommendedKeywords.RECOMMENDATION_SOURCE_STATIC_ITEMS[i];checkKeywordInList(keywordList,elm)||keywordList.push(elm)}for(var missingCount=0,ri=0;ri<dynamicItems.length;++ri){typeof dynamicItems[ri].timeFrame>"u"&&(dynamicItems[ri].timeFrame="null");var curRecommendationSource=dynamicItems[ri].recommendationSource+"|"+dynamicItems[ri].timeFrame,curCatItemCount=parseInt(checkDynamicItemCount(dynamicItems,curRecommendationSource));if(isNaN(curCatItemCount)&&(curCatItemCount=0),recommendedKeywords.hasOwnProperty(curRecommendationSource)&&curCatItemCount){missingCount+=curCatItemCount;for(var index=0,i=0;i<recommendedKeywords[curRecommendationSource].length;++i){var elm=recommendedKeywords[curRecommendationSource][i];if(elm.name=_SgmntfY_._decodeHtml(elm.name),index>=curCatItemCount&&missingCount==0)break;keywordList.push(elm),++index,--missingCount}}}if(keywordList.length===0){request.recommendationCallback&&request.recommendationCallback([],metadata,null);return}else params.ordering==="SHUFFLE"&&(keywordList=_SgmntfY_._shuffle(keywordList));_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",interactionId:params.actionId,instanceId:params.instanceId});var wvInteractionId=params.interactionId,wvInstanceId=params.instanceId,wvCB=function(t){var n=!1;if(!n&&_SgmntfY_._isElemVisible(t))_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:wvInteractionId,instanceId:wvInstanceId}),n=!0;else if(!n)var r=setInterval(function(){!n&&_SgmntfY_._isElemVisible(t)&&(_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:wvInteractionId,instanceId:wvInstanceId}),n=!0,window.clearInterval(r))},100)};switch(params.actionType){case"CALLBACK":{request.recommendationCallback&&request.recommendationCallback(keywordList,metadata,wvCB);break}case"INPAGE_WIDGET":{var binded_context=checkSelectorAndRender.bind({params,keywordList,selectorCount:1});binded_context();break}default:break}},webNotification:function(t){},redirectUrl:function(t){_SgmntfY_.LOG_MESSAGE("DEBUG","Redirecting action to url: "+t.redirectUrl),window.location=t.redirectUrl},jsFunctionCall:function(t){t.actionType="JAVASCRIPT_FUNCTION",_SgmntfY_._actions.jsAction(t)},jsAction:function(params){var actionType=params.actionType;switch(actionType){case"JAVASCRIPT_EVENT":{var event=params.event,parameters=[];try{params.parameters&&(parameters=JSON.parse(params.parameters))}catch{_SgmntfY_.LOG_MESSAGE("WARN","Js Action (Event Trigger) - Cannot parse parameters json, str: "+params.parameters),parameters=[]}parameters.push(function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"js_success",interactionId:params.actionId,instanceId:params.instanceId})}),parameters.push(function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"js_reject",interactionId:params.actionId,instanceId:params.instanceId})}),_SgmntfY_._getJq()(document).trigger(event,parameters),_SgmntfY_.LOG_MESSAGE("DEBUG","Js Action (Event Trigger) - Triggered Event: "+event);break}case"JAVASCRIPT_CODE":{try{eval(params.javascriptCode),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"js_success",interactionId:params.actionId,instanceId:params.instanceId}),_SgmntfY_.LOG_MESSAGE("DEBUG","Js Action (Execute Code) successfully executed")}catch(t){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"js_reject",interactionId:params.actionId,instanceId:params.instanceId}),_SgmntfY_.LOG_MESSAGE("WARN","Error in JS Action (Execute Code): "+t)}break}case"JAVASCRIPT_FUNCTION":default:{var fx=window[params.function],parameters=[];if(typeof fx=="function"){try{params.parameters&&(parameters=JSON.parse(params.parameters))}catch{_SgmntfY_.LOG_MESSAGE("WARN","Js Action (Function Call) - Cannot parse parameters json, str: "+params.parameters),parameters=[]}parameters.push(function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"js_success",interactionId:params.actionId,instanceId:params.instanceId})}),parameters.push(function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"js_reject",interactionId:params.actionId,instanceId:params.instanceId})}),fx.apply(null,parameters),_SgmntfY_.LOG_MESSAGE("DEBUG","Js Action (Function Call) successfully run for function: "+params.function)}else _SgmntfY_.LOG_MESSAGE("WARN","Js Action (Function Call) failed, non existing function: "+params.function);break}}},jsCountdownTimer:function(t){var n=t.timeout;_SgmntfY_.LOG_MESSAGE("DEBUG","Starting countdown timer with "+(n||0)*1e3+" second(s)"),setTimeout(function(){_SgmntfY_.LOG_MESSAGE("DEBUG","Countdown timer finished after "+(n||0)*1e3+" second(s)"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"timeout",interactionId:t.actionId,instanceId:t.instanceId})},(n||0)*1e3)},sendBannerDetails:function(t,n){var r=n.originalParams;r.group=t.group;var a=[],s=_SgmntfY_._functions.bannerGroupDetail(r);s&&a.push(s),_SgmntfY_._sendRequestToServer(a)},showPopup:function(params,request){var config={instanceId:params.instanceId,title:params.notificationTitle,vertical:params.verticalPosition,horizontal:params.horizontalPosition};try{if(params.preJsCode&&params.preJsCode!=""){eval(params.preJsCode);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing jb trigger pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(params.recommendationTemplate,config);_SgmntfY_._getJq()("body").prepend(renderedHtml);var styleDataId=_SgmntfY_._variables.journey.instanceId+"_trigger";params.cssCode&&_SgmntfY_._getJq()("<style data-id="+styleDataId+"/>").html(params.cssCode).prependTo(_SgmntfY_._getJq()("body")),params.overlay==="true"&&(_SgmntfY_._getJq()('<div class="seg-popup-overlay"></div>').prependTo(_SgmntfY_._getJq()("body")),_SgmntfY_._getJq()(".seg-popup-overlay").show()),document.getElementById("sgm-journey-trigger-"+config.instanceId).addEventListener("click",_SgmntfY_._jbTriggerClickHandler.bind(this,config.instanceId));try{params.postJsCode&&eval(params.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing jb trigger post js code: "+t)}},buildJourney:function(t,n){var r;if(t.discovery&&(r=JSON.parse(t.discovery)||[]),r.length>0&&r[0].type){_SgmntfY_._jbOnInitJourneyFlowExecution(t.instanceId,r),_SgmntfY_._variables.journey.isCategoryTree=t.isCategoryTree?t.isCategoryTree:"true";var a={step:_SgmntfY_._variables.journey.currentStep,instanceId:_SgmntfY_._variables.journey.instanceId,answer:JSON.stringify(_SgmntfY_._variables.journey.answer)};_SgmntfY_._variables.segmentifyObj("journey:start",a);var s={steps:r,tree:t.tree};_SgmntfY_._jbCalculatePagesCount(s),_SgmntfY_._jbOnStepViewHandler(s)}},giveCoupon:function(params,request){if(params&&params.coupon){var notificationTitleMap=JSON.parse(params.notificationTitleMap||"{}"),notificationTitle=notificationTitleMap[request.data.lang]||params.notificationTitle,config={coupon:params.coupon,button:_SgmntfY_._jbGetButtonText("DELIVERY"),couponTitle:notificationTitle,instanceId:params.instanceId};try{if(params.preJsCode&&params.preJsCode!==""){if(eval(params.preJsCode),preRenderConf)var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing jb trigger pre js code: "+t)}var domparser=new DOMParser,hasPopupRecoTemplate=!1;try{if(_SgmntfY_._getJq()("#sgm-journey-coupon-template").length===0){var renderedHtml=_SgmntfY_._getMustache().render(params.recommendationTemplate,config);_SgmntfY_._getJq()("body").prepend(renderedHtml)}else hasPopupRecoTemplate=!0;var couponWrapperTemplate=domparser.parseFromString(params.recommendationTemplate,"text/html").getElementById("sgm-journey-coupon-template"),renderedHtml=_SgmntfY_._getMustache().render(couponWrapperTemplate.innerHTML,config);_SgmntfY_._getJq()("#sgm-journey-coupon-template").html(renderedHtml),_SgmntfY_._getJq()("#sgm-journey-coupon-wrapper").removeClass("sgm-journey-none");var copyButton=document.querySelector(".sgm-journey-discovery-action.sgm-journey-discovery-action-copy");copyButton&&copyButton.classList.remove("sgm-journey-none"),_SgmntfY_._jbDeliveryOnBindEventHandler(hasPopupRecoTemplate),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:params.actionId,instanceId:_SgmntfY_._variables.journey.instanceId});var styleDataId=_SgmntfY_._variables.journey.instanceId+"_delivery";params.cssCode&&_SgmntfY_._getJq()("<style data-id="+styleDataId+"/>").html(params.cssCode).prependTo(_SgmntfY_._getJq()(".sgm-journey-delivery.seg-popup"))}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in rendering jb coupon: "+t)}try{params.postJsCode&&params.postJsCode!==""&&eval(params.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing jb trigger post js code: "+t)}}},landingPage:function(params,request){if(params&&params.landingPageUrl){var notificationTitleMap=JSON.parse(params.notificationTitleMap||"{}"),notificationTitle=notificationTitleMap[request.data.lang]||params.notificationTitle;_SgmntfY_._variables.journey.landingPageUrl=params.landingPageUrl;var config={button:_SgmntfY_._jbGetButtonText("DELIVERY")};config.button.redirect=notificationTitle;try{if(params.preJsCode&&params.preJsCode!==""){if(eval(params.preJsCode),preRenderConf)var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing jb trigger pre js code: "+t)}var domparser=new DOMParser;try{var redirectButtonTemplate=domparser.parseFromString(params.recommendationTemplate,"text/html").getElementById("sgm-journey-action-redirect"),renderedHtml=_SgmntfY_._getMustache().render(redirectButtonTemplate.innerHTML,config);_SgmntfY_._getJq()("#sgm-journey-action-redirect").html(renderedHtml),params.cssCode&&_SgmntfY_._getJq()("<style />").html(params.cssCode).prependTo(_SgmntfY_._getJq()(".sgm-journey-delivery.seg-popup"));var redirectButton=document.getElementById("sgm-journey-action-redirect");redirectButton&&redirectButton.classList.remove("sgm-journey-none"),_SgmntfY_._jbDeliveryOnBindEventHandler(!0)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in rendering jb landing Page: "+t)}try{params.postJsCode&&params.postJsCode!==""&&eval(params.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing jb trigger post js code: "+t)}}}},_jbOverFlowOperations:{_disableBodyOverFlowForJBWrapper:function(){_SgmntfY_._evalSearchBodyScrollLockPreJs();var t=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);t&&bodyScrollLock.disableBodyScroll(t)},_enableBodyOverFlowForJBWrapper:function(){var t=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);t&&window.setTimeout(function(){bodyScrollLock.enableBodyScroll(t)},100)},_journeyFinished:function(t){return t&&t.originalParams&&(t.originalParams.type==="SUCCESS"||t.originalParams.type==="sfy-jb-finish")}},_jbCalculatePagesCount:function(t){_SgmntfY_._variables.journey.allPageCount=t.steps.length,_SgmntfY_._variables.journey.barRatio=0,_SgmntfY_._variables.journey.allPageCount>0&&(_SgmntfY_._variables.journey.barRatio=100/_SgmntfY_._variables.journey.allPageCount)},_jbTriggerClickHandler:function(t){_SgmntfY_._variables.segmentifyObj("journey:init",{instanceId:t})},_jbOnInitJourneyFlowExecution:function(t,n){_SgmntfY_._jbSetInitialVariables(t,n),_SgmntfY_._getJq()(".seg-popup-overlay").remove();var r=_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.journey.maxMobileWidth?"sgm-journey-mobile":"sgm-journey-desktop";document.getElementById("sgm-journey-main-wrapper")||_SgmntfY_._getJq()('<div id="sgm-journey-main-wrapper" class="'+r+'" ></div>').prependTo(_SgmntfY_._getJq()("body")),_SgmntfY_._jbOverFlowOperations._disableBodyOverFlowForJBWrapper();var a=document.querySelectorAll(".sgm-journey-trigger");a&&a.length>0&&a.forEach(function(s){s.classList.add("sgm-journey-none")})},_jbOnDestroyJourneyFlowExecution:function(t){var n={step:_SgmntfY_._variables.journey.currentStep,instanceId:_SgmntfY_._variables.journey.instanceId,answer:JSON.stringify(_SgmntfY_._variables.journey.answer)};try{var r=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector);t===!1?(_SgmntfY_._jbOverFlowOperations._enableBodyOverFlowForJBWrapper(),_SgmntfY_._jbTriggerButtonReEnable(),r&&r.parentNode.removeChild(r)):(_SgmntfY_._variables.segmentifyObj("journey:finish",n),r&&r.classList.add("sgm-journey-none"))}catch(a){_SgmntfY_.LOG_MESSAGE("WARN","Error in destroying jb flow: "+a)}},_jbTriggerButtonReEnable:function(){var t=document.querySelectorAll(".sgm-journey-trigger");t&&t.length>0&&t.forEach(function(n){n.classList.remove("sgm-journey-none")})},_jbSetInitialVariables:function(t,n){_SgmntfY_._variables.journey={answer:{},closed:!1,instanceId:t,currentStep:null,nextStep:n[0].type,previousStep:void 0,allSteps:n.map(function(r){return r.type}),maxMobileWidth:801,priceRange:{min:void 0,max:void 0},buttonTextMap:_SgmntfY_._variables.journey.buttonTextMap||{EN:{copy:"Copy",next:"Next",previous:"Go Back",close:"Close",skip:"Skip",finish:"Finish",start:"Let's Start",customize:"Customize",skipAndFinish:"Skip & Finish"},TR:{copy:"Kopyala",next:"Sonraki",previous:"Geri D\xF6n",close:"Kapat",skip:"Atla",finish:"Bitir",start:"Hadi Ba\u015Flayal\u0131m",customize:"\xD6zelle\u015Ftir",skipAndFinish:"Atla ve Bitir"}},wrapperSelector:"#sgm-journey-main-wrapper",pageCount:0,allPageCount:0,barRatio:0,barWidth:0,isTriggeredBackButton:!1,progressBar:{EN:{label:"Step ",separator:" of "},TR:{label:"Ad\u0131m ",separator:" / "}}}},_jbTransformStepItems:function(t,n){return n},_jbTransformCategoryStepItems:function(t,n){var r=_SgmntfY_._variables.journey.isCategoryTree;return n.map(function(a){var s={};if(s.originalData=a,s.lastChild=a,r&&r==="false"){var o=a.split(">");s.lastChild=o[o.length-1].trim()}return s})},_jbGetStepItems:function(t,n,r){try{var a=_SgmntfY_._variables.journey.answer;if(t==="MAIN_CATEGORY")return _SgmntfY_._jbTransformStepItems(t,Object.keys(r));if(t==="CATEGORY")return _SgmntfY_._jbTransformCategoryStepItems(t,Object.keys(r[a.mainCategory]));if(t==="BRAND")return _SgmntfY_._jbTransformStepItems(t,Object.keys(r[a.mainCategory][a.category]));if(t==="SIZE"||t==="COLOR"||t==="PRICE_RANGE"||t==="CUSTOM_PRICE_RANGE"){var s={SIZE:"s",COLOR:"c",PRICE_RANGE:"p",CUSTOM_PRICE_RANGE:"p"},o=[];if(_SgmntfY_._variables.journey.allSteps.indexOf("BRAND")>-1){var c=Object.keys(r[a.mainCategory][a.category]);a.brand&&a.brand.length>0&&(c=a.brand),c.forEach(function(d){var h=r[a.mainCategory][a.category][d];o.push.apply(o,h[s[t]]||[])})}else{var g=r[a.mainCategory][a.category];o.push.apply(o,g[s[t]]||[])}if(t==="PRICE_RANGE"||t==="CUSTOM_PRICE_RANGE"){var _=o.map(S.bind(null,!1)).sort(E),m=o.map(S.bind(null,!0)).sort(E);return _&&_.length>0&&m&&m.length>0?t==="CUSTOM_PRICE_RANGE"?[_[0],m[m.length-1]]:_SgmntfY_._jbGetPriceRangeData(_[0],m[m.length-1]):[]}else{var f=0;return n.forEach(function(d){d&&d.itemCount&&(f=f+d.itemCount)}),_SgmntfY_._getDistinctArray(o.sort(v).map(Y)).slice(0,f)}}}catch{_SgmntfY_.LOG_MESSAGE("WARN","Error occurred while preparing journey items")}return[];function v(d,h){return Object.entries(h)[0][1]-Object.entries(d)[0][1]}function Y(d){var h=Object.entries(d);return h&&h[0]&&h[0][0]?h[0][0]:void 0}function S(d,h){var C=d===!0?1:0;if(h&&h.split("-")&&h.split("-")[C]){var p=h.split("-")[C].trim();return p===""?0:parseFloat(p)}}function E(d,h){return d-h}},_jbGetPriceRangeData:function(t,n){if(t===0&&n===0)return[];var r=h(t,!0),a=h(n,!1);if(r==a)return t===n?[t.toString()]:[t+" - "+n];var s=a-r,o=s/6,c=r+o,g=a-o,_=(c+g)/2,m=C(c),f=C(_),v=C(g);m<t&&(m=Math.ceil(t)),v>n&&(v=Math.floor(n));var Y="0 - "+m,S=m+" - "+f,E=f+" - "+v,d=v+"+";return[Y,S,E,d];function h(p,I){var y;if(p>1e5){var u=p%1e3;I===!0&&(p+=1e3),y=p-u}else if(p>1e4){var u=p%500;I===!0&&(p+=500),y=p-u}else if(p>1e3){var u=p%100;I===!0&&(p+=100),y=p-u}else if(p>100){var u=p%10;I===!0&&(p+=10),y=p-u}else if(p>50){var u=p%5;I===!0&&(p+=5),y=p-u}else y=C(p);return y}function C(p){var I=p%5;return I>=2.5&&(p+=5),Math.floor(p-I)}},_jbGetButtonText:function(t,n){var r={};if(_SgmntfY_._variables.journey&&_SgmntfY_._variables.journey.buttonTextMap){var a=_SgmntfY_._variables.journey.buttonTextMap[_SgmntfY_._variables.language]?_SgmntfY_._variables.language:"EN";n&&n[_SgmntfY_._variables.language]?r.next=n[_SgmntfY_._variables.language]:t==="WELCOME"?r.next=_SgmntfY_._variables.journey.buttonTextMap[a].start:r.next=_SgmntfY_._variables.journey.buttonTextMap[a].next,r.skip=_SgmntfY_._variables.journey.buttonTextMap[a].skip,r.skipAndFinish=_SgmntfY_._variables.journey.buttonTextMap[a].skipAndFinish,r.finish=_SgmntfY_._variables.journey.buttonTextMap[a].finish,r.copy=_SgmntfY_._variables.journey.buttonTextMap[a].copy,r.close=_SgmntfY_._variables.journey.buttonTextMap[a].close,r.customize=_SgmntfY_._variables.journey.buttonTextMap[a].customize}return r},_jbOnStepViewHandler:function(jbDiscoveryData){var currentStep;if(_SgmntfY_._variables.journey.isTriggeredBackButton?currentStep=_SgmntfY_._jbGetPrevStepData(jbDiscoveryData):currentStep=_SgmntfY_._jbGetCurrentStepData(jbDiscoveryData,!0),currentStep){shiftStep(currentStep);var config={title:currentStep.titleMap[_SgmntfY_._variables.language],step:currentStep.type.toLowerCase(),button:_SgmntfY_._jbGetButtonText(currentStep.type,currentStep.buttonTextMap),items:_SgmntfY_._jbGetStepItems(currentStep.type,currentStep.items,jbDiscoveryData.tree),currencyCode:_SgmntfY_._variables.currency},params={step:_SgmntfY_._variables.journey.currentStep,instanceId:_SgmntfY_._variables.journey.instanceId};_SgmntfY_._variables.segmentifyObj("journey:view",params);try{if(currentStep.preJsCode&&currentStep.preJsCode!=""){if(eval(currentStep.preJsCode),preRenderConf)var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing jb trigger pre js code: "+t)}if(_SgmntfY_._jbSetPageCountAndProgressBarWidth(),_SgmntfY_._variables.journey.currentStep!=="WELCOME"&&config.items.length===0)_SgmntfY_._jbOnStepViewHandler(jbDiscoveryData);else{var renderedHtml=_SgmntfY_._getMustache().render(currentStep.recommendationTemplate,config);_SgmntfY_._getJq()("#sgm-journey-main-wrapper").html(renderedHtml),_SgmntfY_._jbOnBindEventHandler(jbDiscoveryData,config.items);var styleDataId=_SgmntfY_._variables.journey.instanceId+"_"+currentStep.type;currentStep.cssCode&&_SgmntfY_._getJq()("<style data-id="+styleDataId+"/>").html(currentStep.cssCode).prependTo(_SgmntfY_._getJq()(_SgmntfY_._variables.journey.wrapperSelector)),_SgmntfY_._jbSetProgressBar(),_SgmntfY_._variables.journey.nextStep?_SgmntfY_._variables.journey.currentStep==="WELCOME"?_SgmntfY_._jbActionButtonHandler("next",currentStep,!0):_SgmntfY_._jbActionButtonHandler("skip",currentStep,!0):_SgmntfY_._jbActionButtonHandler("skipAndFinish",currentStep,!0),_SgmntfY_._variables.journey.isTriggeredBackButton&&_SgmntfY_._jbIsSingleDataSelect()===!1&&(reselectItems(_SgmntfY_._variables.journey.currentStep.toLowerCase()),_SgmntfY_._jbActionButtonHandler("next",currentStep,!0)),_SgmntfY_._variables.journey.isTriggeredBackButton=!1,_SgmntfY_._jbActionButtonHandler("previous",currentStep,!!_SgmntfY_._variables.journey.previousStep);try{currentStep.postJsCode&&eval(currentStep.postJsCode)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product recommendation post js code: "+t)}}}else _SgmntfY_._variables.segmentifyObj("journey:success",{instanceId:_SgmntfY_._variables.journey.instanceId,answer:JSON.stringify(_SgmntfY_._variables.journey.answer)});function shiftStep(t){_SgmntfY_._variables.journey.currentStep=t.type;for(var n=0;n<jbDiscoveryData.steps.length;n++){if(jbDiscoveryData.steps[n]&&jbDiscoveryData.steps[n].type===t.type){jbDiscoveryData.steps[n-1]?_SgmntfY_._variables.journey.previousStep=jbDiscoveryData.steps[n-1].type:_SgmntfY_._variables.journey.previousStep=void 0,jbDiscoveryData.steps[n+1]?_SgmntfY_._variables.journey.nextStep=jbDiscoveryData.steps[n+1].type:_SgmntfY_._variables.journey.nextStep=void 0;break}n===jbDiscoveryData.steps.length-1&&(_SgmntfY_._variables.journey.nextStep=void 0)}}function reselectItems(t){var n=_SgmntfY_._jbIsCheckMarkDataSelect()?"sgm-journey-checkmark":"sgm-journey-content-selected",r=document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-content-item"),a=_SgmntfY_._variables.journey.answer[t];r&&r.length>0&&a&&a.length>0&&r.forEach(function(s){a.forEach(function(o){s.hasAttribute("data-original-value")&&o&&s.getAttribute("data-original-value")===o&&s.classList.add(n)})})}},_jbSetPageCountAndProgressBarWidth:function(){_SgmntfY_._variables.journey.isTriggeredBackButton?_SgmntfY_._variables.journey.pageCount>0&&(_SgmntfY_._variables.journey.pageCount-=1,_SgmntfY_._variables.journey.barWidth-=_SgmntfY_._variables.journey.barRatio):_SgmntfY_._variables.journey.pageCount<_SgmntfY_._variables.journey.allPageCount&&(_SgmntfY_._variables.journey.pageCount+=1,_SgmntfY_._variables.journey.barWidth+=_SgmntfY_._variables.journey.barRatio)},_jbSetProgressBar:function(){var t=document.getElementById("sgm-journey-bar");if(t){var n=_SgmntfY_._variables.journey.barWidth;n+_SgmntfY_._variables.journey.barRatio>100?t.style.width="100%":t.style.width=n+"%";var r="EN";_SgmntfY_._variables.language==="TR"&&(r=_SgmntfY_._variables.language);var a=_SgmntfY_._variables.journey.progressBar[r];document.getElementById("sgm-journey-progress-label").innerHTML=a.label+_SgmntfY_._variables.journey.pageCount+a.separator+_SgmntfY_._variables.journey.allPageCount}},_jbGetPrevStepData:function(t){var n=t.steps.filter(r);if(n)return n[0];function r(a){return a.type===_SgmntfY_._variables.journey.previousStep}},_jbGetCurrentStepData:function(t,n){var r=t.steps.filter(a);if(r)return r[0];function a(s){return s.type===(n===!0?_SgmntfY_._variables.journey.nextStep:_SgmntfY_._variables.journey.currentStep)}},_jbOnBindEventHandler:function(t,n){var r=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-topbar span.sgm-journey-close");r&&r.addEventListener("click",_SgmntfY_._jbExitHandler);var a=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-action .sgm-journey-discovery-action");a&&a.addEventListener("click",_SgmntfY_._jbOnStepChangeHandler.bind(this,t));var s=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-action .sgm-journey-discovery-prev-action");s&&s.addEventListener("click",_SgmntfY_._jbOnPrevStepChangeHandler.bind(this,t));var o=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-content .sgm-journey-price-range-customize-button");o&&o.addEventListener("click",_SgmntfY_._jbOnPriceRangeCustomizeHandler.bind(this,n,t));var c=document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-content .sgm-journey-content-item");c&&c.length>0&&c.forEach(g);function g(_){_.addEventListener("click",_SgmntfY_._jbOnDataSelectHandler.bind(this,t),!1)}},_jbDeliveryOnBindEventHandler:function(t){var n=document.querySelectorAll(".sgm-journey-delivery .sgm-journey-discovery-action");n&&n.length>0&&(n.forEach(r),t===!1&&_SgmntfY_._getJq()(".seg-popup-close").bind("click",function(){var a=_SgmntfY_._getJq()(this);a.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){_SgmntfY_._sgfPopupCloseHandler(!1),a.parent(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3)}));function r(a){a.getAttribute("data-type")==="copy"?a.addEventListener("click",_SgmntfY_._textCopyToClipBoard.bind(this,"sgm-journey-delivery-coupon")):a.getAttribute("data-type")==="close"?a.addEventListener("click",_SgmntfY_._jbOnCloseDelivery):a.getAttribute("data-type")==="redirect"&&a.addEventListener("click",_SgmntfY_._jbOnLandingPage)}},_jbOnLandingPage:function(){window.location=_SgmntfY_._variables.journey.landingPageUrl},_jbOnCloseDelivery:function(){var t=document.querySelector(".sgm-journey-delivery.seg-popup");t&&(t.classList.remove("segFadeInUp"),t.classList.add("segFadeOutDown"),window.setTimeout(function(){_SgmntfY_._sgfPopupCloseHandler(!1),t.parentNode.removeChild(t)},1e3))},_jbOnPriceRangeCustomizeHandler:function(t,n){var r=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-content-price-range-select"),a=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-content-price-range-custom");if(r&&a){let S=function(d,h){d.type==="input"&&(d=d.currentTarget),!h&&h!==0&&(h=Math.min(d.value,document.getElementById("sgm-journey-slider-range-input-value-max").value));var C=parseInt(d.min),p=parseInt(d.max),I=100/(p-C)*h-100/(p-C)*C;document.getElementsByClassName("sgm-journey-slider-range-point-min")[0].style.left=I+"%",document.getElementsByClassName("sgm-journey-slider-inverse-left")[0].style.width=I+"%",document.getElementsByClassName("sgm-journey-slider-range-fill")[0].style.left=I+"%",document.getElementsByClassName("sgm-journey-slider-range-fill")[0].min=I,document.getElementById("sgm-journey-slider-range-point-value-min").parentElement.style.left=I+"%",document.getElementById("sgm-journey-slider-range-point-value-min").innerHTML=""+h,document.getElementById("price-range-min").value=h;var y=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-content-item-custom");y&&(y.classList.add("sgm-journey-content-selected"),y.setAttribute("data-original-value",document.getElementById("price-range-min").value+" - "+document.getElementById("price-range-max").value))},E=function(d,h){d.type==="input"&&(d=d.currentTarget),!h&&h!==0&&(h=Math.max(d.value,document.getElementById("sgm-journey-slider-range-input-value-min").value));var C=parseInt(d.min),p=parseInt(d.max),I=100/(p-C)*parseInt(h)-100/(p-C)*C;document.getElementsByClassName("sgm-journey-slider-inverse-right")[0].style.width=100-I+"%",document.getElementsByClassName("sgm-journey-slider-range-fill")[0].style.right=100-I+"%",document.getElementsByClassName("sgm-journey-slider-range-fill")[0].max=I,document.getElementsByClassName("sgm-journey-slider-range-point-max")[0].style.left=I+"%",document.getElementById("sgm-journey-slider-range-point-value-max").parentElement.style.left=I+"%",document.getElementById("sgm-journey-slider-range-point-value-max").innerHTML=""+h,document.getElementById("price-range-max").value=h;var y=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-content-item-custom");y&&(y.classList.add("sgm-journey-content-selected"),y.setAttribute("data-original-value",document.getElementById("price-range-min").value+" - "+document.getElementById("price-range-max").value))};var v=S,Y=E;r.classList.add("sgm-journey-none"),a.classList.remove("sgm-journey-none");var s=_SgmntfY_._jbGetCurrentStepData(n,!1);_SgmntfY_._jbActionButtonHandler("finish",s,!0);var o=document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector+".sgm-journey-content-selected");o&&o.length>0&&o.forEach(function(d){d.classList.remove("sgm-journey-content-selected")});var c=_SgmntfY_._jbGetStepItems("CUSTOM_PRICE_RANGE",null,n.tree),g,_;c&&c.length===2?(g=c[0],_=c[1]):(g=parseInt(t&&t.length>0?t[0].replace("-","").trim():0),_=parseInt(t&&t.length>0?t[t.length-1].replace("-","").trim():0)),g=g-g%10,_=_-_%10+10;var m=_SgmntfY_._variables.journey.priceRange.min||(g>=2?g-2:g),f=_SgmntfY_._variables.journey.priceRange.max||_+(_>10?20:5);document.getElementById("sgm-journey-slider-range-input-value-min").min=m,document.getElementById("sgm-journey-slider-range-input-value-min").max=f,document.getElementById("sgm-journey-slider-range-input-value-min").value=g,document.getElementById("sgm-journey-slider-range-input-value-max").min=m,document.getElementById("sgm-journey-slider-range-input-value-max").max=f,document.getElementById("sgm-journey-slider-range-input-value-max").value=_,S(document.getElementById("sgm-journey-slider-range-input-value-max"),g),E(document.getElementById("sgm-journey-slider-range-input-value-min"),_),document.getElementById("sgm-journey-slider-range-input-value-min").addEventListener("input",S.bind(this)),document.getElementById("sgm-journey-slider-range-input-value-max").addEventListener("input",E.bind(this))}},_jbOnDataSelectHandler:function(t,n){var r=_SgmntfY_._jbIsCheckMarkDataSelect()?"sgm-journey-checkmark":"sgm-journey-content-selected";if(_SgmntfY_._jbIsSingleDataSelect()){var a=document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector+" ."+r);a&&a.length>0&&a.forEach(function(g){g.classList.remove("sgm-journey-content-selected")}),n.currentTarget.classList.add("sgm-journey-content-selected"),_SgmntfY_._jbIsAllowedToChangeStepAfterSelect()&&_SgmntfY_._jbOnStepChangeHandler(t)}else{n.currentTarget.classList.contains(r)?n.currentTarget.classList.remove(r):n.currentTarget.classList.add(r);var s=document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector+" ."+r),o=s&&s.length>0,c=_SgmntfY_._jbGetCurrentStepData(t,!1);!_SgmntfY_._variables.journey.nextStep&&o&&_SgmntfY_._jbActionButtonHandler("finish",c,!0),!_SgmntfY_._variables.journey.nextStep&&!o&&_SgmntfY_._jbActionButtonHandler("skipAndFinish",c,!0),_SgmntfY_._variables.journey.nextStep&&o&&_SgmntfY_._jbActionButtonHandler("next",c,!0),_SgmntfY_._variables.journey.nextStep&&!o&&_SgmntfY_._jbActionButtonHandler("skip",c,!0)}},_jbActionButtonHandler:function(t,n,r){var a=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-action .sgm-journey-discovery-action");if(t==="previous"&&(a=document.querySelector(_SgmntfY_._variables.journey.wrapperSelector+" .sgm-journey-action .sgm-journey-discovery-prev-action")),a)if(r===!0)if(a.classList.remove("sgm-journey-none"),a.setAttribute("data-type",t),t==="previous"){var s;_SgmntfY_._variables.language==="TR"?s=_SgmntfY_._variables.language:s="EN",a.textContent=_SgmntfY_._variables.journey.buttonTextMap[s].previous}else a.textContent=_SgmntfY_._jbGetButtonText(n.type,n.buttonTextMap)[t]||"";else a.classList.add("sgm-journey-none")},_jbIsSingleDataSelect:function(){return _SgmntfY_._variables.journey.currentStep==="MAIN_CATEGORY"||_SgmntfY_._variables.journey.currentStep==="CATEGORY"},_jbIsCheckMarkDataSelect:function(){return _SgmntfY_._variables.journey.currentStep==="COLOR"},_jbIsAllowedToChangeStepAfterSelect:function(){return _SgmntfY_._variables.journey.currentStep==="MAIN_CATEGORY"||_SgmntfY_._variables.journey.currentStep==="CATEGORY"},_jbOnStepChangeHandler:function(t){var n=_SgmntfY_._jbIsCheckMarkDataSelect()?"sgm-journey-checkmark":"sgm-journey-content-selected",r=[],a=document.querySelectorAll(_SgmntfY_._variables.journey.wrapperSelector+" ."+n);a&&a.length>0&&a.forEach(function(o){o.hasAttribute("data-original-value")&&r.push(o.getAttribute("data-original-value"))}),_SgmntfY_._jbPrepareJourneyAnswer(r);var s={step:_SgmntfY_._variables.journey.currentStep,instanceId:_SgmntfY_._variables.journey.instanceId,answer:JSON.stringify(_SgmntfY_._variables.journey.answer)};_SgmntfY_._variables.segmentifyObj("journey:select",s),_SgmntfY_._jbOnStepViewHandler(t)},_jbPrepareJourneyAnswer:function(t){switch(_SgmntfY_._variables.journey.currentStep){case"MAIN_CATEGORY":_SgmntfY_._variables.journey.answer.mainCategory=t[0];break;case"CATEGORY":_SgmntfY_._variables.journey.answer.category=t[0];break;case"BRAND":_SgmntfY_._variables.journey.answer.brand=t;break;case"SIZE":_SgmntfY_._variables.journey.answer.size=t;break;case"COLOR":_SgmntfY_._variables.journey.answer.color=t;break;case"PRICE_RANGE":t&&t.length>0&&(t=t.map(function(n){return n.replace("+"," - ")})),_SgmntfY_._variables.journey.answer.priceRange=t;break}},_jbOnPrevStepChangeHandler:function(t){_SgmntfY_._variables.journey.isTriggeredBackButton=!0,_SgmntfY_._jbRecalculateJourneyAnswer(t);var n={step:_SgmntfY_._variables.journey.currentStep,instanceId:_SgmntfY_._variables.journey.instanceId,answer:JSON.stringify(_SgmntfY_._variables.journey.answer)};_SgmntfY_._variables.segmentifyObj("journey:select",n),_SgmntfY_._jbOnStepViewHandler(t)},_jbRecalculateJourneyAnswer:function(t){if(_SgmntfY_._variables.journey.previousStep==="MAIN_CATEGORY")_SgmntfY_._variables.journey.answer={};else if(_SgmntfY_._variables.journey.previousStep==="CATEGORY"){var n=_SgmntfY_._variables.journey.answer.mainCategory;_SgmntfY_._variables.journey.answer={},_SgmntfY_._variables.journey.answer.mainCategory=n}else for(var r={},a=0;a<t.steps.length;a++){var s=t.steps[a].type,o=s.toLowerCase();if(s==="MAIN_CATEGORY"?o="mainCategory":s==="PRICE_RANGE"&&(o="priceRange"),_SgmntfY_._variables.journey.currentStep!==s)_SgmntfY_._variables.journey.answer[o]&&(r[o]=_SgmntfY_._variables.journey.answer[o]);else{_SgmntfY_._variables.journey.answer={},_SgmntfY_._variables.journey.answer=r;break}}},_jbExitHandler:function(){var t={step:_SgmntfY_._variables.journey.currentStep,instanceId:_SgmntfY_._variables.journey.instanceId,answer:JSON.stringify(_SgmntfY_._variables.journey.answer)};_SgmntfY_._variables.segmentifyObj("journey:exit",t),_SgmntfY_._jbOnDestroyJourneyFlowExecution(!1)},_getDistinctArray:function(t){return t&&t.length>0?t.filter(function(n,r){return n&&t.indexOf(n)===r}):[]},_campaigns:{NEWSLETTER:function(campaign,request){var config={title:campaign.title,description:campaign.description,placeholder:campaign.placeholder,fullNamePlaceHolder:campaign.fullNamePlaceHolder,termsUrl:campaign.termsUrl,termsText:campaign.termsText,buttonSubmitText:campaign.buttonSubmitText,buttonThanksText:campaign.buttonThanksText,buttonBgColor:campaign.buttonBgColor,buttonTextColor:campaign.buttonTextColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,overlay:campaign.overlay==="true"};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","Newsletter popup appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.overlay&&(_SgmntfY_._getJq()('<div class="seg-popup-overlay"></div>').prependTo(_SgmntfY_._getJq()("body")),_SgmntfY_._getJq()(".seg-popup-overlay").show()),_SgmntfY_._getJq()(".seg-popup-close").bind("click",function(){var t=_SgmntfY_._getJq()(this);t.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){t.parent(".seg-popup").remove(),config.overlay&&_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3)});var emailCollectionIdSelector=_SgmntfY_._getJq()("#seg-email-collection-"+campaign.instanceId),generalSelector=_SgmntfY_._getJq()(".seg-email-collection"),bindContainer=emailCollectionIdSelector.length>0?emailCollectionIdSelector:generalSelector;_SgmntfY_._getJq()(bindContainer).find(".seg-form-submit").bind("click",function(t){var n=_SgmntfY_._getJq()(t.currentTarget).parents(".seg-email-collection");_SgmntfY_._getJq()(n).find(".seg-form-input").removeClass("seg-form-invalid"),_SgmntfY_._getJq()(n).find(".seg-email-collection .seg-checkbox").removeClass("seg-form-invalid"),t.preventDefault();var r=_SgmntfY_._getJq()(n).find('.seg-form-input[name="email"]'),a=_SgmntfY_._getJq()(n).find('.seg-form-input[name="fullName"]'),s=_SgmntfY_._getJq()(n).find('.seg-form-footer input[type="checkbox"]');let o;if(a.length>0?o=isEmail(r.val())&&!_SgmntfY_._isEmpty(a.val())&&s.is(":checked")===!0:o=isEmail(r.val())&&s.is(":checked")===!0,o){_SgmntfY_._getJq()(this).addClass("seg-sending"),_SgmntfY_._getJq()(this).css({"pointer-events":"none"}),setTimeout(function(){config.overlay&&_SgmntfY_._getJq()(".seg-popup-overlay").remove(),_SgmntfY_._getJq()(n).addClass("seg-popup-thanks").removeClass("segFadeInUp"),_SgmntfY_._getJq()(this).parent(".seg-popup").remove()},1300),setTimeout(function(){_SgmntfY_._getJq()(n).addClass("segFadeOutDown")},3e3),setTimeout(function(){_SgmntfY_._getJq()(n).remove()},6e3);var c=_SgmntfY_._getJq()(n).find("form");c.length>0&&(_SgmntfY_._variables.segmentifyObj("user:form",{formName:campaign.name,fields:c.sgmSerializeForm(),params:{instanceId:campaign.instanceId}}),_SgmntfY_._variables.segmentifyObj("user:update",{email:c.sgmSerializeForm().email,source:"email-collection"}),_SgmntfY_._variables.segmentifyObj("user:iyspermissions",{email:c.sgmSerializeForm().email,emailNtf:!0}))}isEmail(r.val())||r.addClass("seg-form-invalid"),_SgmntfY_._isEmpty(a.val())&&a.addClass("seg-form-invalid"),s.is(":checked")==!1&&_SgmntfY_._getJq()(n).find(".seg-terms .seg-checkbox").addClass("seg-form-invalid")});var isEmail=function(t){var n=/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;return n.test(t)}},FORM:function(campaign,request){for(var config={title:campaign.title,description:campaign.description,buttonSubmitText:campaign.buttonSubmitText,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition},fields=campaign.fields||[],i=0;i<fields.length;++i){var field=fields[i];config["ff"+i+"_required"]=field.required,field.type==="INPUT"?(config["ff"+i+"_name"]=field.name,config["ff"+i+"_placeholder"]=field.placeholder,config["ff"+i+"_inputType"]=field.inputType,field.name?config["ff"+i+"_fieldName"]=field.name:config["ff"+i+"_fieldName"]="input-"+i):field.type==="TEXT_AREA"?(config["ff"+i+"_name"]=field.name,config["ff"+i+"_placeholder"]=field.placeholder,field.name?config["ff"+i+"_fieldName"]=field.name:config["ff"+i+"_fieldName"]="textarea-"+i):(field.type==="CHECKBOX"||field.type==="RADIO_BUTTON")&&(config["ff"+i+"_groupTitle"]=field.groupTitle,config["ff"+i+"_options"]=field.options,field.groupTitle?config["ff"+i+"_fieldName"]=field.groupTitle:field.type==="CHECKBOX"?config["ff"+i+"_fieldName"]="checkbox-"+i:config["ff"+i+"_fieldName"]="radiobutton-"+i)}try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","Form popup appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),_SgmntfY_._getJq()(".seg-form-survey").each(function(){var t=_SgmntfY_._getJq()(this);t.attr("class").indexOf("cmp_")===-1&&t.addClass(campaign.instanceId)}),campaign.overlay==="true"&&_SgmntfY_._getJq()(".seg-popup-overlay").show(),_SgmntfY_._getJq()("."+campaign.instanceId+" .seg-popup-close").bind("click",function(){var t=_SgmntfY_._getJq()(this);t.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){t.parent(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3)}),_SgmntfY_._getJq()("."+campaign.instanceId+" .seg-form-submit").bind("click",function(t){t.preventDefault();var n=_SgmntfY_._getJq()(this),r=_SgmntfY_._getJq()("."+campaign.instanceId+".seg-form-survey"),a=r.find(".seg-form");checkValidity(a)&&(n.addClass("seg-sending"),n.css({"pointer-events":"none"}),setTimeout(function(){r.addClass("seg-popup-thanks").removeClass("segFadeInUp")},1300),setTimeout(function(){r.addClass("segFadeOutDown")},3e3),setTimeout(function(){r.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},6e3),a.length>0&&_SgmntfY_._variables.segmentifyObj("user:form",{formName:campaign.name,fields:a.sgmSerializeForm(),params:{instanceId:campaign.instanceId}}))});var checkValidity=function(t){try{t.find(".seg-form-invalid").removeClass("seg-form-invalid");for(var n=t.find("input,textarea"),r=!0,a=0;a<n.length;++a){var s=n[a],o=_SgmntfY_._getJq()(s);o.attr("type")!=="checkbox"&&(s.checkValidity()||(o.attr("type")==="radio"?o.parent().addClass("seg-form-invalid"):o.addClass("seg-form-invalid"),r=!1))}var c=t.find('input[type="checkbox"]'),g=[];c.each(function(){g.indexOf(this.name)==-1&&g.push(this.name)});for(var _=0;_<g.length;++_)t.find('input[name="'+g[_]+'"]:required').length>0&&t.find('input[name="'+g[_]+'"]:checked').length==0&&(t.find('input[name="'+g[_]+'"]').parent().addClass("seg-form-invalid"),r=!1);return r}catch{return!0}}},POPUP_BANNER:function(campaign,request){var config={title:campaign.title,image:campaign.image,url:campaign.url,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}campaign.overlay==="true"&&_SgmntfY_._getJq()(".seg-popup-overlay").show(),_SgmntfY_._getJq()(".seg-popup-close").bind("click",function(){var t=_SgmntfY_._getJq()(this);t.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){t.parent(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"close",instanceId:campaign.instanceId,interactionId:campaign.instanceId})}),_SgmntfY_._getJq()(".seg-banner-container-v2 img").bind("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId})}),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId})},PERSONA_QUIZ:function(t,n){if(!(typeof t>"u")){var r=_SgmntfY_._getJq(),a=_SgmntfY_._getMustache(),s=_SgmntfY_._variables.segmentifyObj,o=_SgmntfY_.LOG_MESSAGE,c={quizTitle:t.quizTitle,responses:t.responses,resultButton:t.resultButton,vertical:t.verticalPosition,horizontal:t.horizontalPosition,instanceId:t.instanceId,onlyOneSelected:t.onlyOneSelected};if(t.hasOwnProperty("preJs")===!0)try{var g=Function('"use strict";return ('.concat(t.preJs,")"))(),_=g(c);if(typeof _<"u"&&!_){o("WARN","preRenderConf returned false exiting!");return}}catch(S){o("WARN","Error in executing campaign pre js code: ".concat(S))}if(t.hasOwnProperty("html")===!0){var m=a.render(t.html,c),f=document.createElement("div");f.innerHTML=m,document.body.appendChild(f)}if(t.hasOwnProperty("css")===!0){var v=document.createElement("style");v.innerHTML=t.css,document.head.appendChild(v)}var Y=(function(S,E){var d=S.instanceId,h=S.onlyOneSelected,C=S.successTimeout||5e3,p=document.querySelectorAll(".seg-my-persona-".concat(d," .seg-persona-item")),I=document.querySelector(".seg-my-persona-".concat(d," .seg-persona-submit--button")),y=document.querySelectorAll(".seg-my-persona-".concat(d," .seg-persona-item .seg-persona-item--checkbox")),u=document.querySelector(".seg-my-persona-".concat(d)),b=document.getElementById("seg-my-persona-".concat(d,"--close"));if(p===null||I===null||y===null||u===null||b===null)return!1;var T=function(R){var w=R.currentTarget,O=w.querySelector(".seg-persona-item--checkbox");return h===!0&&(y.forEach(function(A){A.classList.remove("selected")}),p.forEach(function(A){A.classList.remove("selected")})),O.classList.contains("selected")?(w.querySelector(".seg-persona-item--checkbox").classList.remove("selected"),w.classList.remove("selected")):(w.querySelector(".seg-persona-item--checkbox").classList.add("selected"),w.classList.add("selected")),!0};p.forEach(function(R){R.addEventListener("click",T)}),I.addEventListener("click",function(){const R=[];y.forEach(function(w){w.classList.contains("selected")!==!1&&R.push({segmentName:w.getAttribute("segment-name"),segmentId:w.getAttribute("segment-id")})}),R.length===0?u.classList.add("seg-persona-error"):(u.classList.remove("seg-persona-error"),u.classList.add("seg-persona-success"),setTimeout(function(){b.click()},C),E("select:persona",{answers:R,instanceId:t.instanceId}))})})(c,s);if(typeof Y<"u"&&Y===!1&&o("WARN","Persona Quiz logic returned false, please checkout the required elements!"),t.hasOwnProperty("postJs")===!0)try{Function('"use strict";return ('.concat(t.postJs,")"))()}catch(S){o("WARN","Error in executing campaign post js code: ".concat(S))}t.overlay==="true"&&r(".seg-popup-overlay").show(),r(".seg-popup-close").bind("click",function(){var S=r(this);S.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){S.parent(".seg-popup").remove(),r(".seg-popup-overlay").remove()},1e3),s("event:interaction",{type:"close",instanceId:t.instanceId,interactionId:t.instanceId})}),s("event:interaction",{type:"impression",instanceId:t.instanceId,interactionId:t.instanceId})}},NOTIFICATION_BAR:function(campaign,request){var config={title:campaign.title,image:campaign.image,bgColor:campaign.bgColor,textColor:campaign.textColor,url:campaign.url,instanceId:campaign.instanceId,divClass:"sgf-notif-bar-"+(campaign.verticalPosition||"top")};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","Notification Bar appended to html body for campaign("+campaign.instanceId+")"),campaign.sticky==="true"&&(_SgmntfY_._getJq()(".seg-notification-bar").addClass("seg-notification-bar-sticky"),_SgmntfY_._getJq()(".seg-notification-bar-sticky:not([data-loaded])").each(function(){var t=_SgmntfY_._getJq()(this);if(t.attr("data-loaded","true"),t.find("img").length){var n=t.find("img:first"),r=n.attr("src")||n.attr("data-src");n.on("load",function(){var a=_SgmntfY_._getJq()(this).parents(".seg-notification-bar:first"),s=parseInt(_SgmntfY_._getJq()("body").css("padding-top").replace("px","")),o=parseInt(_SgmntfY_._getJq()("body").css("padding-bottom").replace("px",""));a.hasClass("sgf-notif-bar-top")?s+=a.height():a.hasClass("sgf-notif-bar-bottom")&&(o+=a.height()),_SgmntfY_._getJq()("body").css("padding-top",s).css("padding-bottom",o)}),n[0].src=r}})),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),_SgmntfY_._getJq()(".seg-notification-bar-v2-"+campaign.instanceId).length?_SgmntfY_._getJq()(".seg-notification-bar-v2-"+campaign.instanceId).bind("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId})}):_SgmntfY_._getJq()(".sgf-link").bind("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId})})},PUSH_PERMISSION:function(campaign,request){var config={title:campaign.title,text:campaign.text,icon:campaign.icon,buttonLaterText:campaign.buttonLaterText,buttonAllowText:campaign.buttonAllowText,safariEnabled:campaign.safariEnabled,swPath:campaign.serviceWorkerPath,twoStepEnabled:campaign.twoStepEnabled};window.location.origin.indexOf("www")>0&&config.swPath.indexOf("www")<0?config.swPath=config.swPath.replace("https://","https://www."):window.location.origin.indexOf("www")<0&&config.swPath.indexOf("www")>0&&(config.swPath=config.swPath.replace("https://www.","https://"));try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}try{var _pushPermissionKey=_SgmntfY_._getPersistentData(_SgmntfY_._variables.pushPermissionKey),exdays=-1,frequency=campaign.frequency;if(frequency&&(frequency.type==="SESSION"?exdays=0:frequency.type==="LIFETIME"?exdays=390:frequency.type==="DAYS"&&(exdays=frequency.param)),_SgmntfY_._storePersistentData(_SgmntfY_._variables.pushPermissionKey,"true",exdays),_SgmntfY_._isNotEmpty(_pushPermissionKey)&&_pushPermissionKey==="true")return}catch(t){_SgmntfY_.LOG_MESSAGE("ERROR","Error while checking campaign frequency:"+t),_SgmntfY_._storePersistentData(_SgmntfY_._variables.pushPermissionKey,"true",0)}try{campaign.postJs&&eval(campaign.postJs),/OPR/i.test(navigator.userAgent)?_SgmntfY_._variables.pushInfo.agent="Opera":/YaBrowser/i.test(navigator.userAgent)||/Yowser/i.test(navigator.userAgent)?_SgmntfY_._variables.pushInfo.agent="Yandex":/SamsungBrowser/i.test(navigator.userAgent)?_SgmntfY_._variables.pushInfo.agent="Samsung":/ucbrowser/i.test(navigator.userAgent)?_SgmntfY_._variables.pushInfo.agent="UCBrowser":/Chrome/i.test(navigator.userAgent)?_SgmntfY_._variables.pushInfo.agent="Chrome":/Firefox/i.test(navigator.userAgent)&&(_SgmntfY_._variables.pushInfo.agent="Firefox"),"safari"in window&&"pushNotification"in window.safari&&(_SgmntfY_._variables.pushInfo.agent="Safari"),(_SgmntfY_._variables.pushInfo.agent==="Chrome"||_SgmntfY_._variables.pushInfo.agent==="Opera"||_SgmntfY_._variables.pushInfo.agent==="Yandex"||_SgmntfY_._variables.pushInfo.agent==="Samsung"||_SgmntfY_._variables.pushInfo.agent==="UCBrowser"||_SgmntfY_._variables.pushInfo.agent==="Firefox")&&(_SgmntfY_._variables.pushInfo.isFirebaseCompatible=!0),_SgmntfY_._variables.pushInfo.agent!=="Safari"&&(_SgmntfY_._variables.pushInfo.permissionMethod==="Firebase"||_SgmntfY_._variables.pushInfo.permissionMethod==="FirebaseV2")&&_SgmntfY_._variables.pushInfo.isFirebaseCompatible&&(_SgmntfY_._variables.pushInfo.useV2?(_SgmntfY_._variables.pushInfo.fcm.getToken={},_SgmntfY_._pushInitFCM(campaign,config)):_SgmntfY_._getJq().getScript(_SgmntfY_._variables.pushInfo.firebase.scriptUrl,function(){_SgmntfY_._variables.pushInfo.isFirebaseCompatible&&(firebase.apps.length||firebase.initializeApp({apiKey:_SgmntfY_._variables.pushInfo.firebase.apiKey,messagingSenderId:_SgmntfY_._variables.pushInfo.firebase.messagingSenderId}),_SgmntfY_._variables.pushInfo.messaging=firebase.messaging()),"serviceWorker"in navigator&&navigator.serviceWorker.register(config.swPath,{updateViaCache:"none"}).then(function(t){_SgmntfY_._variables.pushInfo.isFirebaseCompatible&&firebase.messaging().useServiceWorker(t),_SgmntfY_._variables.pushInfo.serviceWorkerReg=t,_SgmntfY_._pushInitPermissionCampaign(campaign,config)}).catch(function(t){_SgmntfY_.LOG_MESSAGE("ERROR","Error while registering service worker "+t)})})),_SgmntfY_._variables.pushInfo.agent==="Safari"&&_SgmntfY_._pushInitPermissionCampaign(campaign,config),_SgmntfY_._variables.pushInfo.agent!=="Safari"&&_SgmntfY_._variables.pushInfo.permissionMethod==="Vapid"&&"serviceWorker"in navigator&&navigator.serviceWorker.register(config.swPath,{updateViaCache:"none"}).then(function(t){_SgmntfY_._variables.pushInfo.serviceWorkerReg=t,_SgmntfY_._pushInitPermissionCampaign(campaign,config)}).catch(function(t){_SgmntfY_.LOG_MESSAGE("ERROR","Error while registering service worker in vapid method"+t)})}catch(t){_SgmntfY_.LOG_MESSAGE("ERROR","Error while executing PUSH_PERMISSION campaign "+t)}},HERO_BANNER:function(campaign){var config={title:campaign.title,url:campaign.url,image:campaign.image,instanceId:campaign.instanceId},_instanceId=campaign.instanceId,wvCB=function(t){var n=!1;if(!n&&_SgmntfY_._isElemVisible(t))_SgmntfY_._interaction("widget-view",_instanceId,_instanceId),n=!0;else if(!n)var r=setInterval(function(){!n&&_SgmntfY_._isElemVisible(t)&&(_SgmntfY_._interaction("widget-view",_instanceId,_instanceId),n=!0,window.clearInterval(r))},100)};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);try{var _target=campaign.targetSelector,targetElement=_SgmntfY_._getJq()(_target).first(),_targetPosition=campaign.targetPosition;if(_targetPosition==="SELF")targetElement.html(renderedHtml),wvCB&&wvCB(targetElement);else{var $div=_SgmntfY_._getJq()("<div/>",{class:"seg-hero-banner-wrapper seg-clear"});_targetPosition==="AFTER"||_targetPosition==="BEFORE"?_targetPosition==="AFTER"?$div.html(renderedHtml).insertAfter(targetElement):$div.html(renderedHtml).insertBefore(targetElement):(_targetPosition==="APPEND"||_targetPosition==="PREPEND")&&(_targetPosition==="APPEND"?$div.html(renderedHtml).appendTo(targetElement):$div.html(renderedHtml).prependTo(targetElement)),wvCB&&wvCB($div)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling target element ["+_target+"] for banner: "+t)}campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","Hero Banner inserted to html for campaign("+_instanceId+")"),_SgmntfY_._interaction("impression",_instanceId,_instanceId),_SgmntfY_._getJq()(".seg-hero-banner-link-"+_instanceId).length&&_SgmntfY_._getJq()(".seg-hero-banner-link-"+_instanceId).bind("click",function(){_SgmntfY_._interaction("click",_instanceId,_instanceId)})},ADDED_TO_BASKET:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,iconUrl:campaign.iconUrl,horizontal:campaign.horizontalPosition,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","AddedToBasket appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},LAST_BOUGHT_TIME:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","LastBoughtTime appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},PRODUCT_PURCHASE_COUNTER:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","ProductPurchaseCounter appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},PRODUCT_VIEW_COUNTER:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","ProductViewCounter appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},SAVING_OVER:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","SavingOver appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},SCORE_AND_REVIEW:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","ScoreAndReview appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},STOCK_COUNT:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","StockCount appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},PREVIOUSLY_ADDED_TO_BASKET:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","PreviouslyAddedToBasket appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},LAST_VISIT_TIME:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","LastVisitTime appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},FAVORITE_ACTIVITY:function(campaign){var config={instanceId:campaign.instanceId,campaignMessage:campaign.campaignMessage,bgColor:campaign.bgColor,textColor:campaign.textColor,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition,iconUrl:campaign.iconUrl,fadeOut:campaign.fadeOut,runFadeOut:!0};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}(config.fadeOut===void 0||config.fadeOut===0)&&(config.fadeOut=1,config.runFadeOut=!1)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}if(_SgmntfY_.LOG_MESSAGE("DEBUG","FavoriteActivity appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),config.runFadeOut===!1)_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(this);window.setTimeout(function(){t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)});else{var $this=_SgmntfY_._getJq()(_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId));window.setTimeout(function(){$this.removeClass("segFadeInUp").addClass("segFadeOutDown"),$this.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},config.fadeOut*1e3)}_SgmntfY_._getJq()(".seg-social-proof-close-"+config.instanceId).bind("click",function(){var t=_SgmntfY_._getJq()(".seg-social-proof-popup-close-"+config.instanceId);t.removeClass("segFadeInUp").addClass("segFadeOutDown"),t.remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()})},SEE_ALL:function(campaign){var config={instanceId:campaign.instanceId,buttonText:campaign.buttonText,buttonUrl:campaign.buttonUrl,bgColor:campaign.bgColor,textColor:campaign.textColor},_instanceId=campaign.instanceId,wvCB=function(t){var n=!1;if(!n&&_SgmntfY_._isElemVisible(t))_SgmntfY_._interaction("widget-view",_instanceId,_instanceId),n=!0;else if(!n)var r=setInterval(function(){!n&&_SgmntfY_._isElemVisible(t)&&(_SgmntfY_._interaction("widget-view",_instanceId,_instanceId),n=!0,window.clearInterval(r))},100)};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);try{var _target=campaign.targetSelector,targetElement=_SgmntfY_._getJq()(_target).first(),_targetPosition=campaign.targetPosition;if(_targetPosition==="SELF")targetElement.html(renderedHtml),wvCB&&wvCB(targetElement);else{var $div=_SgmntfY_._getJq()("<div/>",{class:"sgm-see-all-button-wrapper seg-clear"});_targetPosition==="AFTER"||_targetPosition==="BEFORE"?_targetPosition==="AFTER"?$div.html(renderedHtml).insertAfter(targetElement):$div.html(renderedHtml).insertBefore(targetElement):(_targetPosition==="APPEND"||_targetPosition==="PREPEND")&&(_targetPosition==="APPEND"?$div.html(renderedHtml).appendTo(targetElement):$div.html(renderedHtml).prependTo(targetElement)),wvCB&&wvCB($div)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling target element ["+_target+"] for banner: "+t)}campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","SeeAll campaign inserted to html for campaign("+_instanceId+")"),_SgmntfY_._interaction("impression",_instanceId,_instanceId),_SgmntfY_._getJq()(".seg-see-all-link-"+_instanceId).length&&_SgmntfY_._getJq()(".seg-see-all-link-"+_instanceId).bind("click",function(){location.href=config.buttonUrl})},WHEEL_OF_FORTUNE:function(campaign){var config={slices:campaign.possibleRewards,reward:campaign.reward,instanceId:campaign.instanceId,wofBackGroundImg:campaign.bgImage,wofHeader:campaign.campaignTitle,wofModalHeader:campaign.resultTitle,pointerColor:campaign.pointerColor,wheelBaseColor:campaign.baseColor,pointerImage:campaign.pointerImage,contentOfButton:campaign.ctaButtonContent,contentButtonColor:campaign.ctaButtonColor,contentButtonTextColor:campaign.ctaButtonTextColor,overlay:campaign.overlay};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","FavoriteActivity appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId});function getScreenWidth(){return window.innerWidth}var slicesLength=config.slices.length,wofHeader=document.querySelector(".seg-wof-header"),elSpin=document.querySelector(".seg-wof-content-of-button"),wheelBaseRectangle=document.querySelector("#seg-wheel-base-circle"),wheelBaseCircle=document.querySelector("#seg-wheel-circle"),wheelPointer=document.querySelector("#seg-wof-pointer-svg"),wheelCenterPointImg=document.querySelector(".seg-wof-center-point-image"),contentOfButton=document.querySelector(".seg-wof-content-of-button"),overlay=document.querySelector(".seg-drop-layout"),modalClose=document.querySelector(".seg-modal-bg .seg-wof-modal-close"),winModalClose=document.querySelector(".seg-wof-win-bg .seg-wof-modal-close"),wheelBg=document.querySelector(".seg-modal-bg"),winModalBackGround=document.querySelector(".seg-wof-win-bg"),winModalHeader=document.querySelector(".seg-wof-win-bg .seg-wof-header"),windDescription=document.querySelector(".seg-wof-win-description"),winCoupon=document.querySelectorAll(".seg-wof-win-coupon"),anchorButton=document.querySelector(".seg-wof-win-description-button"),couponBtn=document.querySelectorAll(".seg-wof-copy-coupon"),btnCouponInitialState=document.querySelectorAll(".seg-copy-btn-initial-state"),btnCouponFinalState=document.querySelectorAll(".seg-copy-btn-final-state"),couponReady=document.querySelector(".seg-coupon-ready-icon"),couponReadyIcon=document.querySelector(".seg-coupon-ready-icon"),couponReadyModal=document.querySelector(".seg-coupon-ready-modal"),couponReadyContainer=document.querySelector(".seg-coupon-ready-container"),couponReadyCloseIcon=document.querySelector(".seg-arrow-close-icon"),segCouponReadyHeader=document.querySelector(".seg-coupon-ready-header"),couponReadyContent=document.querySelector(".seg-coupon-ready-header-content"),pointerImageContainer=document.querySelector(".seg-wof-icon"),wheelRotateContainer=document.querySelector(".sfy-wheel-container");function drawWheelBase(){document.body.classList.add("seg-overflow-lock"),overlay.style["background-color"]=config.overlay==="true"?"rgba(53,44,44,0.8)":"transparent",wheelBg.style.backgroundImage=`url(${config.wofBackGroundImg})`,wofHeader.innerHTML=config.wofHeader,wheelPointer.style.fill=config.pointerColor,wheelBaseRectangle.style.fill=config.wheelBaseColor,wheelBaseCircle.style.fill=config.wheelBaseColor,contentOfButton.innerHTML=config.contentOfButton,contentOfButton.setAttribute("style","background-color: "+config.contentButtonColor+"!important"),contentOfButton.style.color=config.contentButtonTextColor,config.pointerImage&&config.pointerImage!==""?wheelCenterPointImg.src=config.pointerImage:(wheelCenterPointImg.remove(),pointerImageContainer.style.backgroundColor=config.wheelBaseColor)}var PI=Math.PI,tot=slicesLength,TAU=2*PI,arc=TAU/tot,isSpinning=!1,isAccelerating=!1,freeSpinning=!0,finishDegree=0,isReadyToFinish=!1,differenceDegreeForFinish=360*8,angleForOneSlice=360/slicesLength,userHasSpinWheelWonReward=config.reward.assignedToUser;function randomInRange(t,n){return Math.random()*(n-t)+t}function winHandler(){config.pointerImage||(wheelCenterPointImg.style.display="none"),wheelBg.remove(),wheelBg.style.display="none",winModalBackGround.style.backgroundImage=`url(${config.wofBackGroundImg})`,winModalBackGround.style.display="block",windDescription.innerHTML=config.reward.description,winModalHeader.innerHTML=config.wofModalHeader;for(var t=0;t<winCoupon.length;t++)winCoupon[t].value=config.reward.coupon;anchorButton.href=config.reward.couponUrl,_SgmntfY_._variables.segmentifyObj("gamification:wof",{type:"win",interactionId:config.instanceId,instanceId:config.instanceId,used:"true",record:config.reward}),anchorButton.addEventListener("click",function(){winModalBackGround.style.display="none"})}modalClose.addEventListener("click",function(t){_SgmntfY_._variables.segmentifyObj("gamification:wof",{type:"win",interactionId:config.instanceId,instanceId:config.instanceId,used:"false",record:config.reward}),document.body.classList.remove("seg-overflow-lock"),wheelBg.remove(),overlay.remove()}),winModalClose.addEventListener("click",function(t){winModalBackGround.style.display="none",overlay.style.display="none",couponReadyContainer.style.display="inline-flex",document.body.classList.remove("seg-overflow-lock")});function degreesToRadians(t){return t*Math.PI/180}anchorButton.style.backgroundColor=config.contentButtonColor,couponReadyIcon.style.backgroundColor=config.contentButtonColor,segCouponReadyHeader.style.backgroundColor=config.contentButtonColor;for(var cp=0;cp<couponBtn.length;cp++)couponBtn[cp].style.backgroundColor=config.contentButtonColor,couponBtn[cp].addEventListener("click",function(t){document.body.classList.remove("seg-overflow-lock"),navigator.clipboard.writeText(config.reward.coupon);for(let n=0;n<btnCouponInitialState.length;n++)btnCouponInitialState[n].style.display="none",btnCouponFinalState[n].style.display="block";setTimeout(function(){for(let n=0;n<btnCouponInitialState.length;n++)btnCouponFinalState[n].style.display="none",btnCouponInitialState[n].style.display="block"},1e3)});function frame(){if(isSpinning){if(!isReadyToFinish){var t=randomInRange(2,angleForOneSlice-2);differenceDegreeForFinish+=t,finishDegree=(config.reward.index*angleForOneSlice+differenceDegreeForFinish)*-1}isReadyToFinish=!0,isReadyToFinish&&(wheelRotateContainer.style.transition="none",wheelRotateContainer.style.transform="rotate(0deg)",wheelRotateContainer.style.transition="transform 5s ease-out 0s",wheelRotateContainer.style.transform=`rotate(${finishDegree}deg)`,isSpinning=!1,setTimeout(function(){winHandler()},6750))}}function wheelEngine(){frame(),requestAnimationFrame(wheelEngine)}elSpin.addEventListener("click",function(t){isSpinning||(isSpinning=!0,isAccelerating=!0,wheelRotateContainer.style.transition="transform 15s cubic-bezier(0.1, 0, 1, 1) 0s",wheelRotateContainer.style.transform="rotate(10800deg)",_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),setTimeout(function(){freeSpinning=!1},3e3))}),couponReadyIcon.addEventListener("click",function(t){var n=getScreenWidth();n<=600&&(couponReadyIcon.style.setProperty("display","none","important"),couponReadyContainer.top="15%",couponReadyContainer.style.marginLeft="-30px",couponReadyContent.innerHTML=config.reward.description),couponReadyModal.style.display="flex",couponReadyContent.innerHTML=config.reward.description}),couponReadyCloseIcon.addEventListener("click",function(t){getScreenWidth()<=600&&(couponReadyModal.style.display="none",couponReadyContainer.top="0%",couponReadyContainer.style.marginLeft="0px",couponReadyIcon.style.display="flex"),couponReadyModal.style.display="none",couponReadyIcon.style.display="flex"}),userHasSpinWheelWonReward?(overlay.style.display="none",couponReadyContainer.style.display="flex",couponReadyContent.innerHTML=config.reward.description,winCoupon[1].value=config.reward.coupon):(drawWheelBase(),wheelEngine())},POP_UP_BANNER_COUNTDOWN:function(campaign){var config={targetUrl:campaign.targetUrl,name:campaign.name,title:campaign.title,description:campaign.description,seperator:campaign.seperator,showOnWebsite:campaign.showOnWebsite,bgColor:campaign.bgColor,textColor:campaign.textColor,imageUrl:campaign.imageUrl,overlay:campaign.overlay,endDate:campaign.endDate,vertical:campaign.verticalPosition,horizontal:campaign.horizontalPosition};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","FavoriteActivity appended to html body for campaign("+campaign.instanceId+")"),config.overlay&&_SgmntfY_._getJq()(".seg-popup-overlay").show(),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),_SgmntfY_._getJq()(".seg-popup-countdown-close").bind("click",function(){window.clearInterval(popUpInterval);var t=_SgmntfY_._getJq()(this);t.parent(".seg-popup").removeClass("segFadeInUp").addClass("segFadeOutDown"),window.setTimeout(function(){t.parent(".seg-popup").remove(),_SgmntfY_._getJq()(".seg-popup-overlay").remove()},1e3),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"close",instanceId:campaign.instanceId,interactionId:campaign.instanceId})}),_SgmntfY_._getJq()(".seg-banner-container-v2 img").bind("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId})});var mainElement=document.querySelector(".seg-countdown-timeWrapper");function createCountDownItem(t){var n=0;n++;var r;n>1?(r="<div id="+t.type+' class="seg-flexCol-center '+t.activate+`CountdownP">
+<h3 style="color:`+config.textColor+'" id="seg-countdown-'+t.type+`n"></h3>
+<span style="color:`+config.textColor+'" id="seg-countdown-'+t.type+'t">'+t.text+`</span>
+</div>
+`,mainElement.innerHTML+=r):(r="<div id="+t.type+' class="seg-flexCol-center '+t.activate+`CountdownP">
+<h3 style="color:`+config.textColor+'" id="seg-countdown-'+t.type+`n"></h3>
+<span style="color:`+config.textColor+'" id="seg-countdown-'+t.type+'t">'+t.text+`</span>
+</div>
+<h3 style="color:`+config.textColor+'" class="seg-countdown-seperator '+t.activate+'CountdownP">'+config.seperator+"</h3>",mainElement.innerHTML+=r)}countdownRenderer(config.showOnWebsite);function countdownRenderer(t){t.forEach(n=>{createCountDownItem(n)}),Array.from(document.querySelectorAll(".trueCountdownP")).slice(-1)[0].style.display="none"}var popUpInterval=setInterval(function(){var t=document.querySelector("#seg-countdown-DAYn"),n=document.querySelector("#seg-countdown-HOURn"),r=document.querySelector("#seg-countdown-MINUTEn"),a=document.querySelector("#seg-countdown-SECONDn"),s=new Date(config.endDate)-new Date,o=Math.floor(s/1e3/60/60/24),c=Math.floor(s/1e3/60/60)%24,g=Math.floor(s/1e3/60)%60,_=Math.floor(s/1e3)%60;if(_<0){window.clearInterval(popUpInterval);return}c<10?n.innerHTML="0"+c:n.innerHTML=c,g<10?r.innerHTML="0"+g:r.innerHTML=g,_<10?a.innerHTML="0"+_:a.innerHTML=_,t.innerHTML=o},1e3)},SCRATCH:function(campaign){var config={bgBgColor:campaign.bgBgColor,bgImage:campaign.bgImage,bgTextColor:campaign.bgTextColor,campaignTitle:campaign.campaignTitle,description:campaign.description,contentOfResultButton:campaign.contentOfResultButton,contentButtonColor:campaign.scratchTextColor,contentBgColor:campaign.scratchBgColor,reward:campaign.reward,overlay:campaign.overlay,instanceId:campaign.instanceId};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","Scratch modal appended to html body for scratch campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId,nextPage:"false"});var screenWidth=window.innerWidth;function getScreenWidth(){return screenWidth}var autoCloseModal={isTrue:!1,timing:5e3},scratchHeader=document.querySelector(".seg-scratch-header"),scratchDescription=document.querySelector(".seg-scratch-description"),scratchCanvas=document.getElementById("seg-scratch-canvas"),scratchContext=scratchCanvas.getContext("2d",{willReadFrequently:!0}),scratchOverlay=document.querySelector(".seg-scratch-drop-layout"),scratchCoupon=document.querySelector(".seg-scratch-coupon"),scratchContainer=document.querySelector(".seg-scratch-container"),modalClose=document.querySelector(".seg-scratch-modal-bg .seg-scratch-modal-close"),winModalClose=document.querySelector(".seg-scratch-win-bg .seg-scratch-modal-close"),scratchBg=document.querySelector(".seg-scratch-modal-bg"),winModalBackGround=document.querySelector(".seg-scratch-win-bg"),windDescription=document.querySelector(".seg-scratch-win-description"),winScratchHeader=document.querySelector(".seg-scratch-win-bg .seg-scratch-header"),winCoupon=document.querySelectorAll(".seg-scratch-win-coupon"),anchorButton=document.querySelector(".seg-scratch-win-description-button"),segScratch=document.querySelector(".seg-scratch-modal-bg .seg-scratch"),segWinScratch=document.querySelector(".seg-scratch-win-bg .seg-scratch"),couponBtn=document.querySelectorAll(".seg-scratch-copy-coupon"),btnCouponInitialState=document.querySelectorAll(".seg-copy-btn-initial-state"),btnCouponFinalState=document.querySelectorAll(".seg-copy-btn-final-state"),couponReady=document.querySelector(".seg-coupon-ready-icon"),couponReadyIcon=document.querySelector(".seg-coupon-ready-icon"),couponReadyModal=document.querySelector(".seg-coupon-ready-modal"),couponReadyContainer=document.querySelector(".seg-coupon-ready-container"),couponReadyCloseIcon=document.querySelector(".seg-arrow-close-icon"),couponReadyContent=document.querySelector(".seg-coupon-ready-header-content"),dynamicWidth=440,dynamicHeight=85;getScreenWidth()<=576?(scratchContext.canvas.width=300,dynamicWidth=300,scratchContext.canvas.height=50,dynamicHeight=50):(scratchContext.canvas.width=440,scratchContext.canvas.height=85);function getCanvasArea(){return dynamicHeight*dynamicWidth}function drawScratchBase(){segScratch.style.backgroundImage=`url(${config.bgImage})`,segScratch.style["background-color"]=config.bgBgColor,segScratch.style.color=`${config.bgTextColor} !important`,scratchDescription.style.color=config.bgTextColor||"#989898",scratchHeader.style.color=config.bgTextColor||"black",scratchCoupon.style.color=config.bgTextColor||"black",scratchOverlay.style["background-color"]=config.overlay==="true"?"rgba(53,44,44,0.8)":"transparent",scratchHeader.innerHTML=config.campaignTitle,scratchDescription.innerHTML=config.description,scratchCoupon.innerHTML=config.reward.coupon,anchorButton.innerHTML=config.contentOfResultButton,anchorButton.style["background-color"]=config.contentBgColor,anchorButton.style.color=config.contentButtonColor,scratchContext.globalCompositeOperation="source-over";var t,n;t=n=0;var r=scratchContext.createLinearGradient(100,0,0,0);r.addColorStop(0,"#B9B9B9"),r.addColorStop(1,"#E4E4E4"),scratchContext.fillStyle=r,scratchContext.fillRect(t,n,dynamicWidth,dynamicHeight)}function getMobileOffset(t){var n=t.target.getBoundingClientRect(),r=t.touches[0].clientX-n.left,a=t.touches[0].clientY-n.top,s={offsetX:r,offsetY:a};return s}var PI=Math.PI,isDrag=!1,isEventSent=!1,couponHasBeenAssigned=config.reward.assignedToUser,isWinEventSent=!1,allMobileOffsets=null;function clearArc(t,n){scratchContext.globalCompositeOperation="destination-out",scratchContext.beginPath(),scratchContext.arc(t,n,15,0,PI*2,!1),scratchContext.fill()}scratchCanvas.addEventListener("mousedown",function(t){isDrag=!0,clearArc(t.offsetX,t.offsetY),judgeVisible(),isEventSent||(_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId,nextPage:"false"}),isEventSent=!0)},!1),scratchCanvas.addEventListener("mousemove",function(t){isDrag&&(clearArc(t.offsetX,t.offsetY),judgeVisible())},!1),scratchCanvas.addEventListener("mouseup",function(t){isDrag=!1},!1),scratchCanvas.addEventListener("mouseleave",function(t){isDrag=!1},!1),scratchCanvas.addEventListener("touchstart",function(t){t.targetTouches.length===1&&(t.cancelable&&t.preventDefault(),allMobileOffsets=getMobileOffset(t),isDrag=!0,clearArc(allMobileOffsets.offsetX,allMobileOffsets.offsetY),judgeVisible())},!1),scratchCanvas.addEventListener("touchmove",function(t){!isDrag||t.targetTouches.length!==1||(t.cancelable&&t.preventDefault(),allMobileOffsets=getMobileOffset(t),clearArc(allMobileOffsets.offsetX,allMobileOffsets.offsetY),judgeVisible())},!1),scratchCanvas.addEventListener("touchend",function(t){isDrag=!1},!1);for(var cp=0;cp<couponBtn.length;cp++)couponBtn[cp].addEventListener("click",function(t){navigator.clipboard.writeText(config.reward.coupon);for(let n=0;n<btnCouponInitialState.length;n++)btnCouponInitialState[n].style.display="none",btnCouponFinalState[n].style.display="block";setTimeout(function(){for(let n=0;n<btnCouponInitialState.length;n++)btnCouponFinalState[n].style.display="none",btnCouponInitialState[n].style.display="block"},1e3)});function judgeVisible(){var t=.85;getScreenWidth()<=596&&(t=.7);var n=scratchContext.getImageData(0,0,dynamicWidth,dynamicHeight),r=n.data,a={},s,o;for(s=3,o=r.length;s<o;s+=4)a[r[s]]||(a[r[s]]=0),a[r[s]]++;a[255]<getCanvasArea()*t&&setTimeout(function(){winHandler()},5e3)}function winHandler(){scratchBg.style.display="none",winModalBackGround.style.display="block",segWinScratch.style.backgroundImage=`url(${config.bgImage})`,segWinScratch.style["background-color"]=config.bgBgColor,segWinScratch.style.color=`${config.bgTextColor} !important`,winScratchHeader.style.color=config.bgTextColor||"black",windDescription.style.color=config.bgTextColor||"black",windDescription.innerHTML=config.reward.description;for(var t=0;t<winCoupon.length;t++)winCoupon[t].value=config.reward.coupon,winCoupon[t].style.color=config.bgTextColor||"black";isWinEventSent||(_SgmntfY_._variables.segmentifyObj("gamification:scratch",{type:"win",interactionId:config.instanceId,instanceId:config.instanceId,used:"true",record:config.reward}),isWinEventSent=!0),anchorButton.href=config.reward.couponUrl,anchorButton.addEventListener("click",function(){winModalBackGround.style.display="none"}),autoCloseModal.isTrue&&setTimeout(function(){winModalBackGround.style.display="none"},autoCloseModal.timing)}modalClose.addEventListener("click",function(t){_SgmntfY_._variables.segmentifyObj("gamification:scratch",{type:"win",interactionId:campaign.instanceId,instanceId:campaign.instanceId,used:"false",record:config.reward}),scratchBg.style.display="none",scratchOverlay.style.display="none"}),winModalClose.addEventListener("click",function(t){winModalBackGround.style.display="none",scratchOverlay.style.display="none",couponReadyContainer.style.display="inline-flex"}),couponReadyIcon.addEventListener("click",function(t){getScreenWidth()<=576&&(couponReadyIcon.style.display="none",couponReadyModal.style.display="flex",couponReadyContainer.top="15%",couponReadyContainer.style.marginLeft="-30px",couponReadyContent.innerHTML=config.reward.description),couponReadyModal.style.display="flex",couponReadyContent.innerHTML=config.reward.description}),couponReadyCloseIcon.addEventListener("click",function(t){getScreenWidth()<=576&&(couponReadyModal.style.display="none",couponReadyContainer.top="0%",couponReadyContainer.style.marginLeft="0px",couponReadyIcon.style.display="flex"),couponReadyModal.style.display="none",couponReadyIcon.style.display="flex"}),couponHasBeenAssigned?(scratchOverlay.style.display="none",couponReadyContainer.style.display="flex",couponReadyContent.innerHTML=config.reward.description,winCoupon[1].value=config.reward.coupon):drawScratchBase()},HERO_BANNER_COUNTDOWN:function(campaign){var config={targetUrl:campaign.targetUrl,name:campaign.name,title:campaign.title,description:campaign.description,seperator:campaign.seperator,showOnWebsite:campaign.showOnWebsite,bgColor:campaign.bgColor,textColor:campaign.textColor,imageUrl:campaign.imageUrl,endDate:campaign.endDate,targetSelector:campaign.targetSelector,instanceId:campaign.instanceId,targetPosition:campaign.targetPosition},wvCB=function(t){var n=!1;if(!n&&_SgmntfY_._isElemVisible(t))_SgmntfY_._interaction("widget-view",config.instanceId,config.instanceId),n=!0;else if(!n)var r=setInterval(function(){!n&&_SgmntfY_._isElemVisible(t)&&(_SgmntfY_._interaction("widget-view",config.instanceId,config.instanceId),n=!0,window.clearInterval(r))},100)};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}try{var _target=campaign.targetSelector,targetElement=_SgmntfY_._getJq()(_target).first(),_targetPosition=campaign.targetPosition;if(_targetPosition==="SELF")targetElement.html(renderedHtml),wvCB&&wvCB(targetElement);else{var $div=_SgmntfY_._getJq()("<div/>",{class:"seg-hero-banner-wrapper seg-clear"});_targetPosition==="AFTER"||_targetPosition==="BEFORE"?_targetPosition==="AFTER"?$div.html(renderedHtml).insertAfter(targetElement):$div.html(renderedHtml).insertBefore(targetElement):(_targetPosition==="APPEND"||_targetPosition==="PREPEND")&&(_targetPosition==="APPEND"?$div.html(renderedHtml).appendTo(targetElement):$div.html(renderedHtml).prependTo(targetElement)),wvCB&&wvCB($div)}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling target element ["+_target+"] for banner: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","HeroBannerCountCown appended to html body for campaign("+campaign.instanceId+")"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),_SgmntfY_._getJq()(".seg-banner-container-v2 img").bind("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId})});var mainElement=document.querySelector(".seg-countdown-timeWrapperH");function createCountDownItem(t){var n=0;n++;var r;n>1?(r="<div id="+t.type+' class="seg-flexCol-center '+t.activate+`CountdownH">
+<h3 style="color:`+config.textColor+'" id="seg-countdown-'+t.type+`nhero"></h3>
+<span style="color:`+config.textColor+'" id="seg-countdown-'+t.type+'t">'+t.text+`</span>
+</div>
+`,mainElement.innerHTML+=r):(r="<div id="+t.type+' class="seg-flexCol-center '+t.activate+`CountdownH">
+<h3 style="color:`+config.textColor+'" id="seg-countdown-'+t.type+`nhero"></h3>
+<span style="color:`+config.textColor+'" id="seg-countdown-'+t.type+'t">'+t.text+`</span>
+</div>
+<h3 style="color:`+config.textColor+'" class="seg-countdown-seperator '+t.activate+'CountdownH">'+config.seperator+"</h3>",mainElement.innerHTML+=r)}countdownRenderer(config.showOnWebsite);function countdownRenderer(t){t.forEach(n=>{createCountDownItem(n)}),Array.from(document.querySelectorAll(".trueCountdownH")).slice(-1)[0].style.display="none"}var heroInterval=setInterval(function(){var t=document.querySelector("#seg-countdown-DAYnhero"),n=document.querySelector("#seg-countdown-HOURnhero"),r=document.querySelector("#seg-countdown-MINUTEnhero"),a=document.querySelector("#seg-countdown-SECONDnhero"),s=new Date(config.endDate)-new Date,o=Math.floor(s/1e3/60/60/24),c=Math.floor(s/1e3/60/60)%24,g=Math.floor(s/1e3/60)%60,_=Math.floor(s/1e3)%60;if(_<0){window.clearInterval(heroInterval);return}c<10?n.innerHTML="0"+c:n.innerHTML=c,g<10?r.innerHTML="0"+g:r.innerHTML=g,_<10?a.innerHTML="0"+_:a.innerHTML=_,t.innerHTML=o},1e3)},NOTIFICATION_BAR_COUNTDOWN:function(campaign){var config={targetUrl:campaign.targetUrl,name:campaign.name,title:campaign.title,description:campaign.description,seperator:campaign.seperator,showOnWebsite:campaign.showOnWebsite,bgColor:campaign.bgColor,textColor:campaign.textColor,sticky:campaign.sticky,imageUrl:campaign.imageUrl,endDate:campaign.endDate,divClass:"sgf-notif-bar-"+(campaign.verticalPosition.toLowerCase()||"top")};try{if(campaign.preJs){eval(campaign.preJs);var retVal=preRenderConf(config);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign pre js code: "+t)}var renderedHtml=_SgmntfY_._getMustache().render(campaign.html,config);_SgmntfY_._getJq()("body").prepend(renderedHtml),campaign.css&&_SgmntfY_._getJq()("<style />").html(campaign.css).prependTo(_SgmntfY_._getJq()("body"));try{campaign.postJs&&eval(campaign.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing campaign post js code: "+t)}_SgmntfY_.LOG_MESSAGE("DEBUG","NotificationBarCountDown appended to html body for campaign("+campaign.instanceId+")"),config.sticky&&_SgmntfY_._getJq()(".seg-notification-bar").addClass("seg-notification-bar-sticky"),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",instanceId:campaign.instanceId,interactionId:campaign.instanceId}),_SgmntfY_._getJq()(".seg-banner-container-v2 img").bind("click",function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"click",instanceId:campaign.instanceId,interactionId:campaign.instanceId})});var mainElement=document.querySelector(".seg-countdown-timeWrapperN");function createCountDownItem(t){var n=0;n++;var r;n>1?(r="<div id="+t.type+' class="seg-flexCol-center '+t.activate+`CountdownN">
+<h3 style="color:`+config.textColor+'" id="seg-countdown-'+t.type+`ntf"></h3>
+<span style="color:`+config.textColor+'" id="seg-countdown-'+t.type+'t">'+t.text+`</span>
+</div>
+`,mainElement.innerHTML+=r):(r="<div id="+t.type+' class="seg-flexCol-center '+t.activate+`CountdownN">
+<h3 style="color:`+config.textColor+'" id="seg-countdown-'+t.type+`ntf"></h3>
+<span style="color:`+config.textColor+'" id="seg-countdown-'+t.type+'t">'+t.text+`</span>
+</div>
+<h3 style="color:`+config.textColor+'" class="seg-countdown-seperator '+t.activate+'CountdownN">'+config.seperator+"</h3>",mainElement.innerHTML+=r)}countdownRenderer(config.showOnWebsite);function countdownRenderer(t){t.forEach(n=>{createCountDownItem(n)}),Array.from(document.querySelectorAll(".trueCountdownN")).slice(-1)[0].style.display="none"}var ntfCountdownInterval=setInterval(function(){var t=document.querySelector("#seg-countdown-DAYntf"),n=document.querySelector("#seg-countdown-HOURntf"),r=document.querySelector("#seg-countdown-MINUTEntf"),a=document.querySelector("#seg-countdown-SECONDntf"),s=new Date(config.endDate)-new Date,o=Math.floor(s/1e3/60/60/24),c=Math.floor(s/1e3/60/60)%24,g=Math.floor(s/1e3/60)%60,_=Math.floor(s/1e3)%60;if(_<0){window.clearInterval(ntfCountdownInterval);return}c<10?n.innerHTML="0"+c:n.innerHTML=c,g<10?r.innerHTML="0"+g:r.innerHTML=g,_<10?a.innerHTML="0"+_:a.innerHTML=_,t.innerHTML=o},1e3)},POPUP_BUILDER:function(t){var n={name:t.name,html:t.html,css:t.css||t.cssCode,subType:t.subType,instanceId:t.instanceId},r=Object.freeze({CUSTOM:"CUSTOM",EMAIL_COLLECTION:"EMAIL_COLLECTION",SALES_POPUP:"SALES_POPUP"}),a=Object.freeze({POPUP_CONTENT:2147483647,POPUP_OVERLAY:2147483646}),s=Object.freeze({UNIQUE_POPUP_ID:`segmentify-popup-builder_${n.instanceId}`,POPUP_CONTAINER:"u-popup-container",POPUP_OVERLAY:"u-popup-overlay",CLOSE_BUTTON:"u-close-button",POPUP_CONTENT:"u-popup-main",SUBMIT_BUTTON:'button[type="submit"]'}),o=Object.freeze({POPUP_CONTAINER:"position: fixed; z-index:"+a.POPUP_CONTENT});const g=new DOMParser().parseFromString(n.html,"text/html"),_=g.querySelector('input[name="warning_text"]'),m=_?_.value:"",f=g.querySelector('button[type="submit"]');if(f&&m){const O=`<p style="margin-top: 10px; color: #FF0000; text-align: left; font-style: italic;">${m}</p>`;f.insertAdjacentHTML("afterend",O),n.html=g.body.innerHTML}var v=document.body.style.overflow,Y=_SgmntfY_._variables.segmentifyObj,S=document.createElement("div");S.classList.add(s.POPUP_CONTAINER),S.id=s.UNIQUE_POPUP_ID,S.style.cssText=o.POPUP_CONTAINER;var E;if(n.css){var d=document.createElement("style");d.id=`segmentify-popup-builder-css_${n.instanceId}`,d.innerHTML=n.css,E=d}var h;h=document.createElement("div"),h.classList.add(s.POPUP_OVERLAY),h.style.zIndex=a.POPUP_OVERLAY,document.body.appendChild(S),document.getElementById(s.UNIQUE_POPUP_ID).innerHTML=n.html,S.append(h),S.querySelector(`.${s.POPUP_CONTENT}`).style.zIndex=a.POPUP_CONTENT,E&&n.css&&S.appendChild(E);var C=S.querySelector(`.${s.CLOSE_BUTTON}`);C&&(C.removeAttribute("href"),C.addEventListener("click",function(){Y("event:interaction",{type:"close",instanceId:t.instanceId,interactionId:t.instanceId}),document.body.style.overflow=v,S.remove()}));var p=S.querySelector("form");p&&(p.id=n.instanceId,p.querySelector(s.SUBMIT_BUTTON).setAttribute("form",n.instanceId),["method","action","target"].forEach(A=>p.removeAttribute(A))),Y("event:interaction",{type:"impression",instanceId:t.instanceId,interactionId:t.instanceId});function I(O){Y("user:update",{email:O.email,source:"email-collection"}),Y("user:signup",{email:O.email,emailNtf:!0,isRegistered:!0}),Y("user:iyspermissions",{email:O.email,emailNtf:!0})}function y(O){Y("user:form",{formName:n.name,fields:O,params:{instanceId:n.instanceId}})}function u(O,A){var P={};A&&A.forEach((q,L)=>{P[L]=q}),Object.keys(P).length>0&&y(P),P.email&&O===r.EMAIL_COLLECTION&&I(P),document.querySelector(".u-close-button").click()}function b(){p.addEventListener("submit",function(O){O.preventDefault(),O.stopPropagation();var A=new FormData(p);u(r.EMAIL_COLLECTION,A)})}function T(){}function R(){p&&p.addEventListener("submit",function(O){O.preventDefault(),O.stopPropagation();var A=new FormData(p);u(r.CUSTOM,A)})}var w=document.querySelectorAll("#segmentify-popup-builder_"+t.instanceId+' a:not([href*="sgm_campaign"]):not(.u-close-button)');switch(w.length&&w.forEach(O=>{O.addEventListener("click",function(){_SgmntfY_._interaction("click",t.instanceId,t.instanceId)})}),n.subType){case r.CUSTOM:return R();case r.EMAIL_COLLECTION:return b();case r.SALES_POPUP:return void 0;default:break}}},_functions:{getFunction:function(t){switch(t.toLowerCase()){case"apikey":return _SgmntfY_._functions.setApiKey;case"loglevel":return _SgmntfY_._functions.setLogLevel;case"variables":return _SgmntfY_._functions.setVariables;case"userid":return _SgmntfY_._functions.setUserId;case"view:page":return _SgmntfY_._functions.pageView;case"view:product":return _SgmntfY_._functions.productView;case"basket:add":return _SgmntfY_._functions.addToBasket;case"basket:remove":return _SgmntfY_._functions.removeFromBasket;case"basket:clear":return _SgmntfY_._functions.clearBasket;case"checkout:basket":return _SgmntfY_._functions.checkoutViewBasket;case"checkout:customer":return _SgmntfY_._functions.checkoutCustomerInfo;case"checkout:payment":return _SgmntfY_._functions.checkoutPaymentInfo;case"checkout:purchase":return _SgmntfY_._functions.checkoutPurchase;case"user:signin":return _SgmntfY_._functions.userSignIn;case"user:signout":return _SgmntfY_._functions.userSignOut;case"user:signup":return _SgmntfY_._functions.userSignUp;case"user:subscribe":return _SgmntfY_._functions.userSubscribe;case"user:unsubscribe":return _SgmntfY_._functions.userUnsubscribe;case"user:update":return _SgmntfY_._functions.userInfoUpdate;case"user:iyspermissions":return _SgmntfY_._functions.userIysPermissions;case"user:lastsearchdeletedkeywords":return _SgmntfY_._functions.lastSearchDeletedKeywords;case"user:identify":return _SgmntfY_._functions.userIdentify;case"event:custom":return _SgmntfY_._functions.customEvent;case"event:interaction":return _SgmntfY_._functions.interaction;case"user:form":return _SgmntfY_._functions.userForm;case"banner:impression":return _SgmntfY_._functions.bannerImpression;case"banner:click":return _SgmntfY_._functions.bannerClick;case"banner:update":return _SgmntfY_._functions.bannerUpdate;case"bannergroup:view":return _SgmntfY_._functions.bannerGroupView;case"bannergroup:detail":return _SgmntfY_._functions.bannerGroupDetail;case"impression:promotion":return _SgmntfY_._functions.promotionImpression;case"view:promotion":return _SgmntfY_._functions.promotionView;case"push:click:interaction":return _SgmntfY_._functions.pushInteraction;case"search":return _SgmntfY_._functions.search;case"search:instant":return _SgmntfY_._functions.search;case"search:faceted":return _SgmntfY_._functions.facetedSearch;case"filter":return _SgmntfY_._functions.filter;case"coupon":return _SgmntfY_._functions.coupon;case"email:click":return _SgmntfY_._functions.mailClickInteraction;case"ga:event":return _SgmntfY_.GA.sendEvent;case"journey:init":return _SgmntfY_._functions.initJourney;case"journey:success":return _SgmntfY_._functions.successJourney;case"journey:start":return _SgmntfY_._functions.startJourney;case"journey:view":return _SgmntfY_._functions.viewJourney;case"journey:select":return _SgmntfY_._functions.selectJourney;case"journey:exit":return _SgmntfY_._functions.exitJourney;case"journey:skip":return _SgmntfY_._functions.skipJourney;case"journey:finish":return _SgmntfY_._functions.finishJourney;case"favorite:add":return _SgmntfY_._functions.favoriteAdd;case"favorite:remove":return _SgmntfY_._functions.favoriteRemove;case"favorite:detail":return _SgmntfY_._functions.favoriteDetail;case"view:favorites":return _SgmntfY_._functions.favoritesView;case"select:persona":return _SgmntfY_._functions.personaSelect;case"gamification:wof":return _SgmntfY_._functions.wheelOfFortune;case"gamification:scratch":return _SgmntfY_._functions.scratch;case"event:alert":return _SgmntfY_._functions.alert;default:return function(n){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected Command: "+t)}}},getDataLayerFunction:function(t,n){try{switch(typeof t>"u"&&(t=""),typeof n>"u"&&(n={}),typeof n.step>"u"&&(n.step=""),typeof n.type>"u"&&(n.type=""),t.toLowerCase()){case"page":return _SgmntfY_._functions.pageView;case"product":return _SgmntfY_._functions.productView;case"basket":switch(n.step.toLowerCase()){case"add":return _SgmntfY_._functions.addToBasket;case"remove":return _SgmntfY_._functions.removeFromBasket;case"clear":return _SgmntfY_._functions.clearBasket;default:return function(r){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected Basket Operations Step: "+r.step)}}case"checkout":switch(n.step.toLowerCase()){case"basket":return _SgmntfY_._functions.checkoutViewBasket;case"customer":return _SgmntfY_._functions.checkoutCustomerInfo;case"payment":return _SgmntfY_._functions.checkoutPaymentInfo;case"purchase":return _SgmntfY_._functions.checkoutPurchase;default:return function(r){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected Checkout Step: "+r.step)}}case"user":switch(n.step.toLowerCase()){case"signin":return _SgmntfY_._functions.userSignIn;case"signout":return _SgmntfY_._functions.userSignOut;case"signup":return _SgmntfY_._functions.userSignUp;case"subscribe":return _SgmntfY_._functions.userSubscribe;case"unsubscribe":return _SgmntfY_._functions.userUnsubscribe;case"update":return _SgmntfY_._functions.userInfoUpdate;case"iyspermissions":return _SgmntfY_._functions.userIysPermissions;case"lastsearchdeletedkeywords":return _SgmntfY_._functions.lastSearchDeletedKeywords;case"identify":return _SgmntfY_._functions.userIdentify;default:return function(r){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected User Operations Step: "+r.step)}}case"interaction":return _SgmntfY_._functions.interaction;case"form":return _SgmntfY_._functions.userForm;case"banners":return _SgmntfY_._functions.bannerGroupView;case"banner":switch(n.type.toLowerCase()){case"impression":return _SgmntfY_._functions.bannerImpression;case"click":return _SgmntfY_._functions.bannerClick;case"update":return _SgmntfY_._functions.bannerUpdate;default:return function(r){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected Banner Operations Type: "+r.type)}}case"custom":return _SgmntfY_._functions.customEvent;case"promotion":switch(n.type.toLowerCase()){case"impression":return _SgmntfY_._functions.promotionImpression;case"view":return _SgmntfY_._functions.promotionView;default:return function(r){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected Promotion Type: "+r.type)}}default:return function(r){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected Command: "+t)}}}catch(r){return function(){_SgmntfY_.LOG_MESSAGE("WARN","Unexpected Command: "+r)}}},callFunction:function(t){var n=[];t=t||[];for(var r=0;r<t.length;r++){var a=t[r],s=_SgmntfY_._functions.getFunction(a[0]),o=Array.prototype.slice.call(a,1);try{var c=s.apply(null,o);c&&(n=n.concat(c)),_SgmntfY_.LOG_MESSAGE("INFO","Event triggered: "+a[0])}catch(g){_SgmntfY_.LOG_MESSAGE("Error","Can't convert command("+a[0]+") into request data. Details: "+g)}}_SgmntfY_._sendRequestToServer(n)},setApiKey:function(t,n){if(_SgmntfY_._variables.apiKey=t,_SgmntfY_.LOG_MESSAGE("DEBUG","Api Key: "+t),n)_SgmntfY_.LOG_MESSAGE("INFO","Account specific style is disabled, skipping...");else{var r=_SgmntfY_._variables.segmentifyCDNUrl+t+"/segmentify.css";_SgmntfY_.LOG_MESSAGE("INFO","Loading account specific css file: "+r),_SgmntfY_._loadCSS(r)}_SgmntfY_._isNotEmpty(_SgmntfY_._variables.apiKey)&&(_SgmntfY_._consumeNextPageQueue(),_SgmntfY_._consumeRetryQueue()),_SgmntfY_._variables.ga.enabled&&_SgmntfY_.GA&&_SgmntfY_.GA.activate&&_SgmntfY_.GA.activate(),window.Segmentify&&window.Segmentify.config&&window.Segmentify.config.searchify&&_SgmntfY_._initSearchify()},setLogLevel:function(t){var n=_SgmntfY_.LOG_LEVELS[t];typeof n<"u"&&(_SgmntfY_._variables.logLevel=n,_SgmntfY_.LOG_MESSAGE("DEBUG","Segmentify Log Level Changed to: "+t))},setVariables:function(t){t=t||{},_SgmntfY_._extend(_SgmntfY_._variables,t),_SgmntfY_.LOG_MESSAGE("DEBUG","Segmentify Variables are updated - New Values: "+t)},setUserId:function(t,n){console.warn("User Id change is deprecated. Please migrate to newer structure."),_SgmntfY_.LOG_MESSAGE("ERROR","User Id change is deprecated. Please migrate to newer structure.")},pageView:function(t){return t=t||{},_SgmntfY_._variables.pa.loaded===!0&&_SgmntfY_._variables.pa.disabled===!1&&(t.external=_SgmntfY_._variables.pa.data.output),_SgmntfY_.GA.sendPageView(t.category||""),setTimeout(function(){_SgmntfY_._initializeSessionCampaigns()},0),_SgmntfY_._prepareRequest(t,"PAGE_VIEW")},productView:function(t){if(t=t||{},t.url=_SgmntfY_._clearProductUrl(t.url||document.URL),t.productUrl=t.productUrl||t.url||document.URL,typeof t.productId=="number"&&(t.productId=t.productId.toString()),typeof t.categories=="string")if(t.categories.indexOf("|")!==-1){var n=t.categories.split("|");t.categories=[];for(var r in n)n.hasOwnProperty(r)&&t.categories.push(n[r].trim())}else t.categories=[t.categories];else for(var a in t.categories)t.categories.hasOwnProperty(a)&&typeof t.categories[a]=="string"&&(t.categories[a]=t.categories[a].trim());t.categories=(t.categories||[]).filter(_SgmntfY_._null),t.paramsList=t.paramsList||{},t.source=_SgmntfY_._sourceOfUrl().source==="SOCIAL"?_SgmntfY_._sourceOfUrl().source:_SgmntfY_._sourceOfUrl(),t.subSource=_SgmntfY_._sourceOfUrl().subSource?_SgmntfY_._sourceOfUrl().subSource:null;var s=_SgmntfY_._getClickedBanners();if(s.length>0){for(var o=[],a=0;a<s.length;++a){var c=_SgmntfY_._split(s[a],":",4);c.length===4&&!isNaN(parseInt(c[2]))&&o.push({title:c[0],group:c[1],order:parseInt(c[2])})}t.activeBanners=o}return _SgmntfY_._variables.skipProductDetail.device.indexOf(_SgmntfY_._variables.ua.type)>=0&&(t.noUpdate=["all"]),_SgmntfY_._prepareRequest(t,"PRODUCT_VIEW")},addToBasket:function(t){t=t||{},t.step="add",t.async="false",t.quantity=t.quantity||1;var n=_SgmntfY_._getClickedBanners();if(n.length>0){for(var r=[],a=0;a<n.length;++a){var s=_SgmntfY_._split(n[a],":",4);s.length===4&&!isNaN(parseInt(s[2]))&&r.push({title:s[0],group:s[1],order:parseInt(s[2])})}t.activeBanners=r}return!_SgmntfY_._variables.disableNextPage&&typeof t.nextPage>"u"&&(t.nextPage=!0),t.basketId=t.basketId||"basket_"+_SgmntfY_._getUserId(),_SgmntfY_._prepareRequest(t,"BASKET_OPERATIONS")},removeFromBasket:function(t){return t=t||{},t.step="remove",t.async="false",!_SgmntfY_._variables.disableNextPage&&typeof t.nextPage>"u"&&(t.nextPage=!0),t.basketId=t.basketId||"basket_"+_SgmntfY_._getUserId(),_SgmntfY_._prepareRequest(t,"BASKET_OPERATIONS")},clearBasket:function(t){return t=t||{},t.step="clear",t.async="false",!_SgmntfY_._variables.disableNextPage&&typeof t.nextPage>"u"&&(t.nextPage=!0),t.basketId=t.basketId||"basket_"+_SgmntfY_._getUserId(),_SgmntfY_._prepareRequest(t,"BASKET_OPERATIONS")},checkoutViewBasket:function(t){if(t=t||{},t.step="view-basket",t.hasOwnProperty("productList"))for(var n=0;n<t.productList.length;++n)t.productList[n].quantity=t.productList[n].quantity||1;return t.basketId=t.basketId||"basket_"+_SgmntfY_._getUserId(),_SgmntfY_._prepareRequest(t,"CHECKOUT")},checkoutCustomerInfo:function(t){return t=t||{},t.step="customer-info",t.basketId=t.basketId||"basket_"+_SgmntfY_._getUserId(),_SgmntfY_._prepareRequest(t,"CHECKOUT")},checkoutPaymentInfo:function(t){return t=t||{},t.step="payment-info",t.basketId=t.basketId||"basket_"+_SgmntfY_._getUserId(),_SgmntfY_._prepareRequest(t,"CHECKOUT")},checkoutPurchase:function(t){if(t=t||{},t.step="purchase",t.basketId=t.basketId||"basket_"+_SgmntfY_._getUserId(),t.hasOwnProperty("productList"))for(var n=0;n<t.productList.length;++n)t.productList[n].quantity=t.productList[n].quantity||1;var r=_SgmntfY_._getClickedBanners();if(r.length>0){for(var a=[],s=0;s<r.length;++s){var o=_SgmntfY_._split(r[s],":",4);o.length===4&&!isNaN(parseInt(o[2]))&&a.push({title:o[0],group:o[1],order:parseInt(o[2])})}t.activeBanners=a}return _SgmntfY_._prepareRequest(t,"CHECKOUT")},userSignIn:function(t){return t=t||{},t.step="signin",t.async="false",t.isLogin=!0,t.isRegistered=!0,_SgmntfY_._variables.pa.loaded===!0&&_SgmntfY_._variables.pa.disabled===!1&&(t.external=_SgmntfY_._variables.pa.data.output),_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userSignOut:function(t){t=t||{},t.step="signout",t.async="false",t.isLogin=!1,t.isRegistered=!0;var n=_SgmntfY_._getPersistentData("sgfUserUpdateData",!0);return n&&_SgmntfY_._storePersistentData("sgfUserUpdateData","",-1,!0),_SgmntfY_._variables.pa.loaded===!0&&_SgmntfY_._variables.pa.disabled===!1&&(t.external=_SgmntfY_._variables.pa.data.output),_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userSignUp:function(t){return t=t||{},t.step="signup",t.async="false",t.isRegistered=!0,_SgmntfY_._variables.pa.loaded===!0&&_SgmntfY_._variables.pa.disabled===!1&&(t.external=_SgmntfY_._variables.pa.data.output),_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userSubscribe:function(t){return t=t||{},t.step="subscribe",t.async="false",_SgmntfY_._variables.pa.loaded===!0&&_SgmntfY_._variables.pa.disabled===!1&&(t.external=_SgmntfY_._variables.pa.data.output),_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userUnsubscribe:function(t){return t=t||{},t.step="unsubscribe",t.async="false",_SgmntfY_._variables.pa.loaded===!0&&_SgmntfY_._variables.pa.disabled===!1&&(t.external=_SgmntfY_._variables.pa.data.output),_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userInfoUpdate:function(t){t=t||{},t.step="update",t.async="false",typeof t.isLogin<"u"&&(t.isRegistered=t.isLogin==="true"||t.isLogin===!0?"true":t.isRegistered),_SgmntfY_._variables.pa.loaded===!0&&_SgmntfY_._variables.pa.disabled===!1&&(t.external=_SgmntfY_._variables.pa.data.output),t.source&&t.source==="email-collection"&&(t.emailNtf=!0),t.source&&t.source==="whatsapp-collection"&&(t.whatsappNtf=!0);var n=JSON.stringify(t),r=_SgmntfY_._getPersistentData("sgfUserUpdateData",!0);if(r===void 0||n!==r)return _SgmntfY_._storePersistentData("sgfUserUpdateData",n,-1,!0),_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userIysPermissions:function(t){t=t||{},t.step="iyspermissions",t.async="false";var n=_SgmntfY_._variables.ua.type==="PC"?"HS_WEB":"HS_MOBIL",r="BIREYSEL",a=new Date().getTime();return t.userIysPermissions={emailIysReceiptType:r,emailIysSource:n,emailIysAllowDate:a},_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},lastSearchDeletedKeywords:function(t){return t=t||{},t.step="delete_last_search",t.async="false",_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userIdentify:function(t){var n=_SgmntfY_._getQueryParameter("utm_source"),r=_SgmntfY_._getQueryParameter("utm_medium"),a=_SgmntfY_._getQueryParameter("_sgm_action");return t=t||{},t.step="identify",t.async="false",t.channel=n==="segmentify"?r:a,t.triggerType==="override"?t.type="plain":t.triggerType==="withUtmCode"&&(t.identity=_SgmntfY_._getQueryParameter("utm_code"),t.type="sgm-hash"),delete t.triggerType,_SgmntfY_._prepareRequest(t,"USER_OPERATIONS")},userForm:function(t){return t=t||{},t.async="false",_SgmntfY_._prepareRequest(t,"FORM")},customEvent:function(t){return t=t||{},_SgmntfY_._prepareRequest(t,"CUSTOM_EVENT")},search:function(t){t=t||{};var n=t.params||{};return n=_SgmntfY_._getSearchVerboseParams(n),t.params=n,t.type="instant",_SgmntfY_._prepareRequest(t,"SEARCH")},facetedSearch:function(t){t=t||{};var n=t.params||{};return n=_SgmntfY_._getSearchVerboseParams(n),t.params=n,t.type="faceted",t.query=_SgmntfY_._prepareSearchQuery(t.query),_SgmntfY_._prepareRequest(t,"SEARCH")},interaction:function(t){return t=t||{},t.async="false",!_SgmntfY_._variables.disableNextPage&&typeof t.nextPage>"u"&&(t.nextPage=!0),(t.type==="impression"||t.type==="widget-view"||t.type==="push-permission-impression"||t.type==="push"||t.type==="email"||t.type==="slider:arrow:left"||t.type==="slider:arrow:right")&&(t.nextPage=!1),t.type==="impression"&&t.instanceId&&_SgmntfY_._removeSessionCampaign(t.instanceId),_SgmntfY_._prepareRequest(t,"INTERACTION")},bannerImpression:function(t){return t=t||{},t.async="false",t.type="impression",_SgmntfY_._prepareRequest(t,"BANNER_OPERATIONS")},bannerClick:function(t){return t=t||{},t.async="false",t.type="click",!_SgmntfY_._variables.disableNextPage&&typeof t.nextPage>"u"&&(t.nextPage=!0),_SgmntfY_._addClickedBanner(t.title,t.group,t.order,t.url),_SgmntfY_._prepareRequest(t,"BANNER_OPERATIONS")},bannerUpdate:function(t){return t=t||{},t.async="false",t.type="update",_SgmntfY_._prepareRequest(t,"BANNER_OPERATIONS")},bannerGroupView:function(t){return t=t||{},_SgmntfY_._prepareRequest(t,"BANNER_GROUP_VIEW")},bannerGroupDetail:function(t){return t=t||{},t.async="false",_SgmntfY_._prepareRequest(t,"INTERNAL_BANNER_GROUP")},promotionImpression:function(t){return t=t||{},t.type="impression",typeof t.categories=="string"&&(t.categories=[t.categories]),t.categories=(t.categories||[]).filter(_SgmntfY_._null),typeof t.brands=="string"&&(t.brands=[t.brands]),t.brands=(t.brands||[]).filter(_SgmntfY_._null),typeof t.labels=="string"&&(t.labels=[t.labels]),t.labels=(t.labels||[]).filter(_SgmntfY_._null),typeof t.productIds=="string"&&(t.productIds=[t.productIds]),t.productIds=(t.productIds||[]).filter(_SgmntfY_._null),_SgmntfY_._prepareRequest(t,"PROMOTION")},promotionView:function(t){return t=t||{},t.type="view",typeof t.categories=="string"&&(t.categories=[t.categories]),t.categories=(t.categories||[]).filter(_SgmntfY_._null),typeof t.brands=="string"&&(t.brands=[t.brands]),t.brands=(t.brands||[]).filter(_SgmntfY_._null),typeof t.labels=="string"&&(t.labels=[t.labels]),t.labels=(t.labels||[]).filter(_SgmntfY_._null),typeof t.productIds=="string"&&(t.productIds=[t.productIds]),t.productIds=(t.productIds||[]).filter(_SgmntfY_._null),_SgmntfY_._prepareRequest(t,"PROMOTION")},pushInteraction:function(t){return t=t||{},t.async="false",t.nextPage="false",_SgmntfY_._storePersistentData(t.instanceId,"1",.006),_SgmntfY_.LOG_MESSAGE("DEBUG","Push campaign interaction is sent for campaign: "+t.instanceId),_SgmntfY_._prepareRequest(t,"INTERACTION")},filter:function(t){return t=t||{},t.categories=(t.categories||[]).filter(_SgmntfY_._null),t.brands=(t.brands||[]).filter(_SgmntfY_._null),t.sizes=(t.sizes||[]).filter(_SgmntfY_._null),t.prices=(t.prices||[]).filter(_SgmntfY_._null),_SgmntfY_._prepareRequest(t,"FILTER")},coupon:function(t){return t=t||{},t.nextPage="false",_SgmntfY_._prepareRequest(t,"COUPON")},mailClickInteraction:function(t){return t=t||{},t.async="false",t.nextPage="false",_SgmntfY_._storePersistentData(t.instanceId+"_email","1",.006),_SgmntfY_._prepareRequest(t,"INTERACTION")},initJourney:function(t){return t=t||{},t.type="INIT",_SgmntfY_._prepareRequest(t,"JOURNEY")},successJourney:function(t){return t=t||{},t.type="SUCCESS",_SgmntfY_._prepareRequest(t,"JOURNEY")},startJourney:function(t){return t=t||{},t.type="START",_SgmntfY_._prepareRequest(t,"JOURNEY")},viewJourney:function(t){return t=t||{},t.type="VIEW",_SgmntfY_._prepareRequest(t,"JOURNEY")},selectJourney:function(t){return t=t||{},t.type="SELECT",_SgmntfY_._prepareRequest(t,"JOURNEY")},exitJourney:function(t){return t=t||{},t.type="EXIT",_SgmntfY_._prepareRequest(t,"JOURNEY")},skipJourney:function(t){return t=t||{},t.type="SKIP",_SgmntfY_._prepareRequest(t,"JOURNEY")},finishJourney:function(t){return t=t||{},t.type="FINISH",_SgmntfY_._prepareRequest(t,"JOURNEY")},favoriteAdd:function(t){return t=t||{},t.async="false",t.step="add",_SgmntfY_._prepareRequest(t,"WISHLIST")},favoriteRemove:function(t){return t=t||{},t.async="false",t.step="remove",_SgmntfY_._prepareRequest(t,"WISHLIST")},favoriteDetail:function(t){return t=t||{},t.async="false",t.step="detail",_SgmntfY_._prepareRequest(t,"WISHLIST")},favoritesView:function(t){return t=t||{},t.async="false",t.step="view-favorites",_SgmntfY_._prepareRequest(t,"WISHLIST")},personaSelect:function(t){return t=t||{},_SgmntfY_._prepareRequest(t,"PERSONA_QUIZ")},wheelOfFortune:function(t){return t=t||{},t.used=t.used,t.record=t.record,t.nextPage="false",_SgmntfY_._prepareRequest(t,"GAMIFICATION")},scratch:function(t){return t=t||{},t.used=t.used,t.record=t.record,_SgmntfY_._prepareRequest(t,"GAMIFICATION")},alert:function(t){return t=t||{},t.async="false",t.nextPage="false",_SgmntfY_._prepareRequest(t,"ALERT")}},helpers:{setCookie:(t,n,r)=>{try{window._SgmntfY_._storePersistentData(t,n,r,!1)}catch(a){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:a.toString(),nextPage:!1}})}},getCookie:t=>{try{return window._SgmntfY_._getPersistentData(t,!1)}catch(n){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:n.toString(),nextPage:!1}})}},getQueryParameter:(t,n)=>{try{return window._SgmntfY_._getQueryParameter(t,n)}catch(r){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:r.toString(),nextPage:!1}})}},toCapitalize:t=>{try{return t.toLowerCase().replace(/(^\w|\s\w)/g,n=>n.toUpperCase())}catch(n){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:n.toString(),nextPage:!1}})}},formatPrice:(t,n)=>{try{return n===","?Number(t.toString().replace(/[^\d,-]/g,"").replace(/,/g,".")).toFixed(2):Number(t.toString().replace(/[^\d.-]/g,"")).toFixed(2)}catch(r){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:r.toString(),nextPage:!1}})}},getBreadcrumb:t=>{try{let n=[];return document.querySelectorAll(t).forEach(r=>{n.push(r.textContent.trim())}),n}catch(n){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:n.toString(),nextPage:!1}})}},waitObj:({conditions:t,successCallback:n,timeout:r,errorCallback:a})=>{let s=0,o=()=>{t()?n():s<100?(s++,setTimeout(o,r/100)):a()};o()},watchHttp:t=>{try{(function(){const n=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.send=function(){return this.addEventListener("load",function(){try{t(this)}catch{}}),n.apply(this,arguments)}})()}catch(n){Segmentify("event:custom",{type:"error_handler",params:{errorMessage:n.toString(),nextPage:!1}})}},extendDatalayer:t=>{let n=()=>{try{var r=window.dataLayer.push;window.dataLayer.push=function(a){try{t(a)}catch{}return r.apply(window.dataLayer,arguments)}}catch{}};_SgmntfY_.helpers.waitObj({conditions:()=>window.dataLayer,successCallback:n,timeout:2e3,errorCallback:()=>!1})},abEvents:t=>{try{let n=()=>{let r=window._SgmntfY_._getUserMode();t==="gtag"?window.gtag("event","sgf_group_"+r):window.dataLayer.push({event:"sgf_group_"+r})};_SgmntfY_.helpers.waitObj({conditions:()=>{let r;return t==="gtag"?r=typeof window.gtag=="function":r=typeof window.dataLayer=="object",r&&window._SgmntfY_&&window._SgmntfY_._getUserMode()&&window._SgmntfY_._getPersistentData("_sgf_ud")&&window._SgmntfY_._variables.apiKey},successCallback:n,timeout:2e3,errorCallback:()=>!1})}catch{}}},_bindRecommendationTrackEvents:function(t,n,r,a){if(!(a>10)){a=a+1;var s=n&&n.sliderClick,o=s&&n.sliderClick.leftArrowSelector,c=s&&n.sliderClick.rightArrowSelector;if(!(!o||!c)){var g=t.find(o),_=t.find(c);g.length===0||_.length===0?setTimeout(_SgmntfY_._bindRecommendationTrackEvents,200,t,n,r,a):(g.on("click",function(){_SgmntfY_._sendSliderClick(r,"left")}),_.on("click",function(){_SgmntfY_._sendSliderClick(r,"right")}))}}},_sendSliderClick:function(t,n){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"slider:arrow:"+n,interactionId:"slider:arrow:"+n,instanceId:t}),_SgmntfY_.GA.sendArrowClick(t,n)},_prepareRequest:function(t,n,r){if(typeof t.noSend<"u"&&t.noSend==="true"){_SgmntfY_.LOG_MESSAGE("DEBUG","No send flag is set for event: "+n+", ignoring event");return}if(_SgmntfY_._getJq()("html").hasClass("translated-ltr")||_SgmntfY_._getJq()("html").hasClass("translated-rtl")){_SgmntfY_.LOG_MESSAGE("DEBUG","Page is translated, ignoring event");return}if(navigator&&navigator.language&&navigator.language==="c"){_SgmntfY_.LOG_MESSAGE("DEBUG","This is a bot, ignoring event");return}if(_SgmntfY_._isEmpty(_SgmntfY_._variables.apiKey)){_SgmntfY_.LOG_MESSAGE("ERROR","Api Key is not set, not sending event: "+n);return}if(_SgmntfY_._isEmpty(_SgmntfY_._getUserId())){_SgmntfY_.LOG_MESSAGE("ERROR","userId is not set, not sending event: "+n);return}if(_SgmntfY_._isEmpty(_SgmntfY_._getSessionId())){_SgmntfY_.LOG_MESSAGE("ERROR","sessionId is not set, not sending event: "+n);return}if(typeof r>"u"&&(r=!1),!r&&typeof t.nextPage=="boolean"&&t.nextPage===!0)return _SgmntfY_._addToNextPageQueue({eventName:n,params:t}),null;var a=new Date,s={data:{name:n,userId:_SgmntfY_._getUserId(),sessionId:_SgmntfY_._getSessionId(),testMode:_SgmntfY_._getTestMode()||"false",device:_SgmntfY_._variables.ua.type||"PC",noProcess:t.noProcess||!1,tryCount:0,nextPage:t.nextPage||!1,dnt:_SgmntfY_._variables.doNotTrack,dnp:_SgmntfY_._variables?.doNotPersonalize?.enabled||!1,params:t.params||{},recommendIds:(t.recommendIds||[]).filter(_SgmntfY_._null),pageUrl:_SgmntfY_._getRequestParam(t.pageUrl,document.URL,!1),referrer:_SgmntfY_._getRequestParam(t.referrer,document.referrer,!1),browser:_SgmntfY_._getRequestParam(t.browser,_SgmntfY_._variables.ua.name,!1),os:_SgmntfY_._getRequestParam(t.os,_SgmntfY_._variables.ua.os,!1),osversion:_SgmntfY_._getRequestParam(t.osversion,_SgmntfY_._variables.ua.osversion,!1),userAgent:_SgmntfY_._getRequestParam(t.userAgent,_SgmntfY_._variables.ua.agentString,!1),lang:_SgmntfY_._getRequestParam(t.lang,_SgmntfY_._variables.language,!0),currency:_SgmntfY_._getRequestParam(t.currency,_SgmntfY_._variables.currency,!0),region:_SgmntfY_._getRequestParam(t.region,_SgmntfY_._variables.region,!0),async:t.async||"true",globalMode:_SgmntfY_._getControlGroup(),experiments:_SgmntfY_._experiment.init()||{},email:t.email||"",ft:_SgmntfY_._getFireTime(a)||"",tz:_SgmntfY_._getTimeZone(a)||""},originalParams:t,eventName:n};t.hasOwnProperty("bypassControlGroup")&&(s.data.bypassControlGroup=t.bypassControlGroup===!0),typeof t.recommendationCallback=="function"&&_SgmntfY_._getJq().extend(s,{recommendationCallback:t.recommendationCallback}),typeof t._cb=="function"&&_SgmntfY_._getJq().extend(s,{_cb:t._cb});for(var o=_SgmntfY_._variables.requiredParams[n],c=0;c<o.length;++c)if(_SgmntfY_._isNotEmpty(t[o[c]]))s.data[o[c]]=t[o[c]],typeof s.data[o[c]]=="string"&&(s.data[o[c]]=_SgmntfY_._clearNullByte(s.data[o[c]]).trim());else{_SgmntfY_.LOG_MESSAGE("ERROR","Missing parameter["+o[c]+"] in event: "+n);return}for(var g=_SgmntfY_._variables.optionalParams[n],c=0;c<g.length;++c)_SgmntfY_._isNotEmpty(t[g[c]])&&(s.data[g[c]]=t[g[c]],typeof s.data[g[c]]=="string"&&(s.data[g[c]]=_SgmntfY_._clearNullByte(s.data[g[c]]).trim()));return s},_getRequestParam:function(t,n,r){return _SgmntfY_._variables.doNotTrack===!0?r?n:null:t||n},_storePersistentData:function t(n,r,a,s){if(_SgmntfY_._variables.doNotTrack!==!0)if(typeof Storage<"u"&&s)try{localStorage.setItem(n,r),sessionStorage.setItem(n,r),_SgmntfY_.LOG_MESSAGE("DEBUG","Segmentify Persistent Data (Local Storage) Update: "+n+": "+r)}catch{_SgmntfY_.LOG_MESSAGE("ERROR","Can't store Persistent Data (Local Storage) Update: "+n+": "+r)}else{typeof r=="string"&&(r=encodeURIComponent(r));var o,c="",g="",_;a&&(o=new Date,o.setTime(o.getTime()+a*24*60*60*1e3),c="; expires="+o.toGMTString()),_SgmntfY_._variables.domain&&_SgmntfY_._variables.domain.split(".").length>=2&&(g="; domain="+_SgmntfY_._variables.domain),_=n+"="+r+c+g+"; path=/";try{document.cookie=_,_SgmntfY_.LOG_MESSAGE("DEBUG","Segmentify Persistent Data (Cookie) Update: "+_)}catch{_SgmntfY_.LOG_MESSAGE("ERROR","Can't store Persistent Data (Cookie) Update: "+_)}}},_storeSessionData:function(t,n){if(_SgmntfY_._variables.doNotTrack!==!0&&typeof Storage<"u")try{sessionStorage.setItem(t,n)}catch{_SgmntfY_.LOG_MESSAGE("ERROR","Can't store Session Data (Session Storage): "+t)}},_getPersistentData:function t(n,r){if(_SgmntfY_._variables.doNotTrack===!0)return null;if(typeof Storage<"u"&&r)try{return localStorage.getItem(n)}catch{return _SgmntfY_.LOG_MESSAGE("ERROR","Can't get Persistent Data (Local Storage): "+n),null}else{var a=n+"=";try{for(var s=document.cookie.split(";"),o=0;o<s.length;o++){var c=s[o].trim();if(c.indexOf(a)===0)return decodeURIComponent(c.substring(a.length,c.length))}return null}catch{return _SgmntfY_.LOG_MESSAGE("ERROR","Can't get Persistent Data (Cookie): "+n),null}}},_getSessionData:function(t){if(_SgmntfY_._variables.doNotTrack===!0)return null;try{if(typeof Storage<"u")try{return sessionStorage.getItem(t)}catch{return _SgmntfY_.LOG_MESSAGE("ERROR","Can't get Session Data (Session Storage):  "+t),null}}catch{return _SgmntfY_.LOG_MESSAGE("ERROR","Can't get Session Data (Local Storage): "+t),null}},_clearProductUrl:function(t){var n=["_sgm_source","_sgm_campaign","_sgm_action","_sgm_type","_sgm_test","utm_source","utm_medium","utm_term","utm_content","utm_campaign","utm_type","p_id","gclid","ds_p","ds_eid","ds_aid","ds_e","ds_c","ds_cid","ds_ag","ds_agid","ds_k","ds_kid","ds_kids","ds_kidnl","gclick","gsrc","gclsrc","_sgm_coupon","_sgm_term","_sgm_pinned","_sgm_pin_position"];return _SgmntfY_._stripQueryParameters(t,n)},_stripQueryParameters:function(t,n){if(typeof n>"u"||!n)return t;typeof n=="string"&&(n=[n]);var r=(t||"").split("?");if(r.length>=2){for(var a=[],s=0;s<(n||[]).length;s++)a.push(encodeURIComponent(n[s])+"=");for(var o=r[1].split(/[&;]/g),s=o.length;s-- >0;)for(var c=0;c<a.length;c++)if(o[s].lastIndexOf(a[c],0)!==-1){o.splice(s,1);break}return o.length>0?r[0]+"?"+o.join("&"):r[0]}else return t},_getQueryParameter:function(t,n){var r=location.search;if(this._isEmpty(r)){var a=location.hash;this._isNotEmpty(a)&&a.indexOf("?")!==-1&&(r=a.substring(a.indexOf("?")))}typeof n<"u"&&(r=n),t=t.replace(/[\[]/,"\\[").replace(/[\]]/,"\\]");var s=new RegExp("[\\?&]"+t+"=([^&#?]*)"),o=s.exec(r);return o===null?"":decodeURIComponent(o[1].replace(/\+/g," "))},_sendTrackedEvent:function(t){var n=new URL(window.location).origin,r=new URLSearchParams(window.location.search).get("_sgm_push_redirect_url");r&&r.includes(n)&&_SgmntfY_._isValidUrl(r)&&_SgmntfY_._safeRedirect(r);var a,s,o,c,g,_,m;if(_SgmntfY_._getQueryParameter("utm_source",t)==="segmentify"&&_SgmntfY_._getQueryParameter("_sgm_custom",t)!=="true"?(a=_SgmntfY_._getQueryParameter("utm_campaign",t),s=_SgmntfY_._getQueryParameter("utm_medium",t),o=_SgmntfY_._getQueryParameter("utm_content",t)):(a=_SgmntfY_._getQueryParameter("_sgm_campaign",t),s=_SgmntfY_._getQueryParameter("_sgm_action",t),o=_SgmntfY_._getQueryParameter("_sgm_source",t)),c=_SgmntfY_._getQueryParameter("_sgm_coupon",t),g=_SgmntfY_._getQueryParameter("_sgm_term",t),_=_SgmntfY_._getQueryParameter("_sgm_pinned",t),_==="true"&&(m=_SgmntfY_._getQueryParameter("_sgm_pin_position",t)),s==="push"){var f=_SgmntfY_._getPersistentData(a);(_SgmntfY_._isEmpty(f)||_SgmntfY_._isNotEmpty(f)&&f==="0"||a==="REPLENISHMENT")&&(_SgmntfY_.LOG_MESSAGE("DEBUG","Sending tracked event: "+s+" - "+a+" - "+o+" - type: push-click"),_SgmntfY_._variables.segmentifyObj("push:click:interaction",{type:"push-click",interactionId:o,instanceId:a}))}if(s==="email"){var f=_SgmntfY_._getPersistentData(a+"_email");(_SgmntfY_._isEmpty(f)||_SgmntfY_._isNotEmpty(f)&&f==="0")&&_SgmntfY_._variables.segmentifyObj("email:click",{type:"email-click",interactionId:o,instanceId:a})}var v={};g&&(v.term=g),_==="true"&&m&&(v.pinPosition=m),a&&s&&o&&(_SgmntfY_.LOG_MESSAGE("DEBUG","Sending tracked event: "+s+" - "+a+" - "+o),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:s,interactionId:o,instanceId:a,params:v}),s==="push"&&c&&_SgmntfY_._variables.segmentifyObj("coupon",{type:s,interactionId:o,instanceId:a}),s==="click"&&_SgmntfY_.GA.sendProductClick(a,o))},_setTestMode:function(t){var n=t||_SgmntfY_._getQueryParameter("_sgm_test");if(_SgmntfY_._toggleTestMode(n),_SgmntfY_._getExtensionStatus("test")!=="exists"&&_SgmntfY_._getTestMode()==="true")try{var r=['<div class="sgm-test-mode-header">','<a href="http://www.segmentify.com" target="_blank" class="sgm-logo"> </a>','<a href="https://chrome.google.com/webstore/detail/segmentify/dhcffckfimabfhbbjdngnajhnlohfjeo" target="_blank" class="sgm-ext"><span>Get <strong>Chrome Extension</strong> Now!</span></a>','<span class="sgm-test-mode-Show-Hide" data-hide="Hide" data-show="Show"></span>','<div class="sgm-test-mode-key">','<h2 id="sgm-test-mode-message"> Your browser is in<strong>Segmentify Test Mode</strong> </h2>','<div class="sgm-test-mode-radio">','<input class="sgm-tgl sgm-tgl-ios" id="sgm-cb1" type="checkbox" checked>','<label class="sgm-tgl-btn" for="sgm-cb1"></label>',"</div>","</div>","</div>"].join(`
+`);setTimeout(function(){_SgmntfY_._getJq()("body").prepend(r),_SgmntfY_._variables.ua.name.toLowerCase()!=="chrome"&&_SgmntfY_._getJq()(".sgm-test-mode-header .sgm-ext").hide(),_SgmntfY_._getJq()("body").addClass("sgm-test-body"),_SgmntfY_._getJq()("#sgm-cb1").change(function(){var a=_SgmntfY_._getJq()(this);setTimeout(function(){_SgmntfY_._toggleTestMode(a.is(":checked")?"on":"off")},400)}),_SgmntfY_._getJq()(".sgm-test-mode-Show-Hide").click(function(){_SgmntfY_._getJq()("body").toggleClass("sgm-test-header-open")})},800)}catch(a){_SgmntfY_.LOG_MESSAGE("DEBUG","Can't show test mode header: "+a)}},_getTestMode:function(){return _SgmntfY_._getPersistentData(_SgmntfY_._variables.testMode)},_toggleTestMode:function(t){t==="on"?(_SgmntfY_._getJq()("#sgm-test-mode-message").html("Your browser is in<strong>Segmentify Test Mode</strong>"),_SgmntfY_._getJq()("#sgm-test-mode-message").find("strong").css("color","#50BC61"),_SgmntfY_.LOG_MESSAGE("INFO","Segmentify Test Mode activated"),_SgmntfY_._storePersistentData(_SgmntfY_._variables.testMode,"true",180)):t==="off"&&(_SgmntfY_._getJq()("#sgm-test-mode-message").html("<strong>Segmentify Test Mode</strong> is disabled"),_SgmntfY_._getJq()("#sgm-test-mode-message").find("strong").css("color","#fff"),_SgmntfY_.LOG_MESSAGE("INFO","Segmentify Test Mode deactivated"),_SgmntfY_._storePersistentData(_SgmntfY_._variables.testMode,"false",180),window.alert("You are out of Segmentify Test Mode, you will not see test campaigns."),window.location=_SgmntfY_._stripQueryParameters(document.URL,"_sgm_test"))},_getTracking:function(){var t=_SgmntfY_._getPersistentData(_SgmntfY_._variables.tracking);return _SgmntfY_._isNotEmpty(t)&&_SgmntfY_._setTracking(t),t},_setTracking:function(t){t!=="disabled"&&(t="enabled"),_SgmntfY_._storePersistentData(_SgmntfY_._variables.tracking,t,390)},_getQaMode:function(){try{var t=_SgmntfY_._variables.storage.qaMode;return _SgmntfY_._getPersistentData(t.key,t.local)||"false"}catch{return _SgmntfY_.LOG_MESSAGE("DEBUG","Can't read QA mode status: "+err),"false"}},_setQaMode:function(t){var n=t||_SgmntfY_._getQueryParameter("_sgf_qa");if(_SgmntfY_._toggleQaMode(n),_SgmntfY_._getExtensionStatus("qa")!=="exists"&&_SgmntfY_._getQaMode()==="true")try{var r=['<div class="sgm-test-mode-header">','<a href="http://www.segmentify.com" target="_blank" class="sgm-logo-blue"> </a>','<a href="https://chrome.google.com/webstore/detail/segmentify/dhcffckfimabfhbbjdngnajhnlohfjeo" target="_blank" class="sgm-ext"><span>Get <strong>QA Extension</strong> Now!</span></a>','<span class="sgm-test-mode-Show-Hide" data-hide="Hide" data-show="Show"></span>','<div class="sgm-test-mode-key">','<h2 id="sgm-qa-mode-message"> Your browser is in<strong>Segmentify QA Mode</strong> </h2>','<div class="sgm-test-mode-radio">','<input class="sgm-tgl sgm-tgl-ios" id="sgm-cb1" type="checkbox" checked>','<label class="sgm-tgl-btn" for="sgm-cb1"></label>',"</div>","</div>","</div>"].join(`
+`);setTimeout(function(){_SgmntfY_._getJq()("body").prepend(r),_SgmntfY_._variables.ua.name.toLowerCase()!=="chrome"&&_SgmntfY_._getJq()(".sgm-test-mode-header .sgm-ext").hide(),_SgmntfY_._getJq()("body").addClass("sgm-test-body"),_SgmntfY_._getJq()("#sgm-cb1").change(function(){var a=_SgmntfY_._getJq()(this);setTimeout(function(){_SgmntfY_._toggleQaMode(a.is(":checked")?"on":"off")},400)}),_SgmntfY_._getJq()(".sgm-test-mode-Show-Hide").click(function(){_SgmntfY_._getJq()("body").toggleClass("sgm-test-header-open")})},800)}catch(a){_SgmntfY_.LOG_MESSAGE("DEBUG","Can't show test mode header: "+a)}},_toggleQaMode:function(t){var n=_SgmntfY_._variables.storage.qaMode;t==="on"?(_SgmntfY_._getJq()("#sgm-qa-mode-message").html("Your browser is in<strong>Segmentify QA Mode</strong>"),_SgmntfY_._getJq()("#sgm-qa-mode-message").find("strong").css("color","#50BC61"),_SgmntfY_.LOG_MESSAGE("INFO","Segmentify QA Mode activated"),_SgmntfY_._storePersistentData(n.key,"true",180,n.local)):t==="off"&&(_SgmntfY_._getJq()("#sgm-qa-mode-message").html("<strong>Segmentify QA Mode</strong> is disabled"),_SgmntfY_._getJq()("#sgm-qa-mode-message").find("strong").css("color","#fff"),_SgmntfY_.LOG_MESSAGE("INFO","Segmentify QA Mode deactivated"),_SgmntfY_._storePersistentData(n.key,"false",180,n.local),window.alert("You are out of Segmentify QA Mode."),window.location=_SgmntfY_._stripQueryParameters(document.URL,"_sgf_qa"))},_getSearchVerboseParams:function(t){var n=_SgmntfY_._getSearchQueryOverride();return n?(t._search_no_cache_="true",t._search_query_override_=n):t._search_no_cache_=_SgmntfY_._getSearchNoCache(),_SgmntfY_._variables.search.queryVerboseLog===!0&&(t._search_query_verbose_log_="true"),t},_getSearchNoCache:function(){try{if(_SgmntfY_._variables.search.searchNoCache===!0)return"true";var t=_SgmntfY_._variables.storage.searchNoCache;return _SgmntfY_._getPersistentData(t.key,t.local)||"false"}catch{return _SgmntfY_.LOG_MESSAGE("DEBUG","Can't read Search no cache status: "+err),"false"}},_getSearchQueryOverride:function(){try{var t=_SgmntfY_._getPersistentData(_SgmntfY_._variables.search.queryOverrideKey,!0),n=JSON.parse(t).expires;return Date.parse(n)>new Date?t:(_SgmntfY_._unsetSearchQueryOverride(),null)}catch{return null}},_getEventUrl:function(){return _SgmntfY_._getQaMode()==="true"?_SgmntfY_._variables.segmentifyQaApiUrl:_SgmntfY_._variables.segmentifyApiUrl},_getPushUrl:function(){return _SgmntfY_._getQaMode()==="true"?_SgmntfY_._variables.pushInfo.qaDataCenter:_SgmntfY_._variables.pushInfo.dataCenter},_getSessionId:function(){if(_SgmntfY_._variables.doNotTrack===!0)return"ANONYMOUS_SESSION";var t=_SgmntfY_._getPersistentData(_SgmntfY_._variables.sessionStorageKey,_SgmntfY_._variables.storage.session.local);return t?t.trim():""},_getUserId:function(){if(_SgmntfY_._variables.doNotTrack===!0)return"ANONYMOUS_USER";var t=_SgmntfY_._getPersistentData(_SgmntfY_._variables.userStorageKey,_SgmntfY_._variables.storage.user.local);return t?t.trim():""},_shuffle:function(t){for(var n,r,a=t.length;a;n=Math.floor(Math.random()*a),r=t[--a],t[a]=t[n],t[n]=r)return t},_getClickedBanners:function(){try{var t=_SgmntfY_._variables.storage.clickedBanners;return JSON.parse(_SgmntfY_._getPersistentData(t.key,t.local))||[]}catch(n){_SgmntfY_.LOG_MESSAGE("DEBUG","Can't read clicked banners: "+n)}return[]},_addClickedBanner:function(t,n,r,a){if(!(typeof t>"u"||typeof n>"u"||typeof r>"u"||typeof a>"u")){var s=t+":"+n+":"+r+":"+a,o=_SgmntfY_._getClickedBanners();o.indexOf(s)===-1&&o.push(s),o.length>_SgmntfY_._variables.constants.clickedBannersLimit&&(o=o.splice(o.length-_SgmntfY_._variables.constants.clickedBannersLimit));var c=_SgmntfY_._variables.storage.clickedBanners;_SgmntfY_._storePersistentData(c.key,JSON.stringify(o),0,c.local)}},_getDelayedActions:function(){try{var t=_SgmntfY_._variables.storage.delayedActions;return JSON.parse(_SgmntfY_._getPersistentData(t.key,t.local))||[]}catch(n){_SgmntfY_.LOG_MESSAGE("ERROR","Can't read delayed actions: "+n)}return[]},_setDelayedActions:function(t){var n=_SgmntfY_._variables.storage.delayedActions;_SgmntfY_._storePersistentData(n.key,JSON.stringify(t),0,n.local)},_addDelayedAction:function(t){for(var n=_SgmntfY_._getDelayedActions(),r=0;r<n.length;r++)if(n[r].params.actionId===t.params.actionId)return!1;var a=new Date;if(t.delayDate.getTime()<a.getTime())return!1;var s=t.type,o=_SgmntfY_._actions[t.type],c=t.params,g=t.request;return setTimeout(function(){for(var _=_SgmntfY_._getDelayedActions(),m=!1,f=0;f<_.length;f++)_[f].params.actionId===t.params.actionId&&(m=!0);m&&(_SgmntfY_.LOG_MESSAGE("INFO","Action("+s+") is triggered after delay"),o.call(null,c,g),_SgmntfY_._removeDelayedAction(c.actionId))},t.delayDate.getTime()-a.getTime()+Math.floor(Math.random()*750)),n.push(t),_SgmntfY_._setDelayedActions(n),!0},_removeDelayedAction:function(t){for(var n=_SgmntfY_._getDelayedActions(),r=0;r<n.length;r++)if(n[r].params.actionId===t){n.splice(r,1),_SgmntfY_._setDelayedActions(n);return}},_getRetryQueue:function(){try{var t=_SgmntfY_._variables.storage.retryQueue;return JSON.parse(_SgmntfY_._getPersistentData(t.key,t.local))||[]}catch(n){_SgmntfY_.LOG_MESSAGE("ERROR","Can't read retry queue: "+n)}return[]},_setRetryQueue:function(t){var n=_SgmntfY_._variables.storage.retryQueue;_SgmntfY_._storePersistentData(n.key,JSON.stringify(t),0,n.local)},_addToRetryQueue:function(t){for(var n=_SgmntfY_._getRetryQueue();t.length>0;){var r=t.shift(),a=r.eventName==="CHECKOUT"||r.eventName==="BASKET_OPERATIONS"||r.eventName==="INTERACTION";if(a){var s=r.data.tryCount||0;s<_SgmntfY_._variables.constants.retryLimit&&(r.data.tryCount=s+1,_SgmntfY_._variables.isPageHide&&(r.originalParams.discardResponse="true"),n.push(r))}}_SgmntfY_._setRetryQueue(n)},_consumeRetryQueue:function(){var t=_SgmntfY_._getRetryQueue();if(t&&t.length>0){for(var n=[];t.length>0;){var r=t.shift();r.data.userId=_SgmntfY_._getUserId(),r.data.sessionId=_SgmntfY_._getSessionId(),n.push(r)}_SgmntfY_._sendRequestToServer(n),_SgmntfY_._setRetryQueue([])}},_getDataLayer:function(){return window[_SgmntfY_._variables.dataLayer]},_consumeDataLayer:function(){if(_SgmntfY_._variables.consumeDataLayer){var t=[],n=function(g,_){if(!(_.hasOwnProperty("__processed__")&&_.__processed__===!0)){var m=_SgmntfY_._extend(_,s),f=_SgmntfY_._functions.getDataLayerFunction(g,m),v=f.apply(null,[m]);v&&t.push(v)}},r=function(g,_){var m=JSON.parse(JSON.stringify(_)),f=_SgmntfY_._variables.dataLayerConfig[g]||{};for(var v in f)if(f.hasOwnProperty(v)){var Y=f[v];if(m.hasOwnProperty(Y)){var S=m[Y];delete m[Y],m[v]=S}}return m},a=_SgmntfY_._getDataLayer()||{},s=r("common",a.common||{});for(var o in a)if(a.hasOwnProperty(o)){if(o==="common")continue;if(_SgmntfY_._getJq().isArray(a[o]))for(var c=0;c<a[o].length;++c)n(o,r(o,a[o][c])),_SgmntfY_._getDataLayer()[o][c].__processed__=!0;else n(o,r(o,a[o])),_SgmntfY_._getDataLayer()[o].__processed__=!0}t.length>0&&_SgmntfY_._sendRequestToServer(t)}},_getNextPageQueue:function(){try{var t=_SgmntfY_._variables.storage.nextPageQueue;return JSON.parse(_SgmntfY_._getPersistentData(t.key,t.local))||[]}catch(n){_SgmntfY_.LOG_MESSAGE("ERROR","Can't read next page queue: "+n)}return[]},_setNextPageQueue:function(t){var n=_SgmntfY_._variables.storage.nextPageQueue;_SgmntfY_._storePersistentData(n.key,JSON.stringify(t),0,n.local)},_addToNextPageQueue:function(t){var n=_SgmntfY_._getNextPageQueue();n.push(t),_SgmntfY_._setNextPageQueue(n)},_consumeNextPageQueue:function(){var t=_SgmntfY_._getNextPageQueue();if(t&&t.length>0){for(var n=[];t.length>0;){var r=t.shift();r.hasOwnProperty("data")||(r=_SgmntfY_._prepareRequest(r.params,r.eventName,!0)),r.data.userId=_SgmntfY_._getUserId(),r.data.sessionId=_SgmntfY_._getSessionId(),n.push(r)}_SgmntfY_._sendRequestToServer(n),_SgmntfY_._setNextPageQueue([])}},_addRecommendedProduct:function(t){_SgmntfY_._variables.recommendedProducts.push(t)},_containsRecommendedProduct:function(t){return _SgmntfY_._variables.recommendedProducts.indexOf(t)>=0},_addRecommendedPromotion:function(t){_SgmntfY_._variables.recommendedPromotions.push(t)},_containsRecommendedPromotion:function(t){return _SgmntfY_._variables.recommendedPromotions.indexOf(t)>=0},_getExtensionStatus:function(t){try{var n;return t==="qa"?n=_SgmntfY_._variables.storage.qaExtensionStatus:n=_SgmntfY_._variables.storage.extensionStatus,_SgmntfY_._getPersistentData(n.key,n.local)||""}catch(r){_SgmntfY_.LOG_MESSAGE("DEBUG","Can't read extension status: "+r)}return""},_getDelayedCampaigns:function(){try{var t=_SgmntfY_._variables.storage.delayedCampaigns;return JSON.parse(_SgmntfY_._getPersistentData(t.key,t.local))||[]}catch(n){_SgmntfY_.LOG_MESSAGE("ERROR","Can't read delayed campaigns: "+n)}return[]},_setDelayedCampaigns:function(t){var n=_SgmntfY_._variables.storage.delayedCampaigns;_SgmntfY_._storePersistentData(n.key,JSON.stringify(t),0,n.local)},_addDelayedCampaign:function(t){for(var n=_SgmntfY_._getDelayedCampaigns(),r=0;r<n.length;++r)if(n[r].campaign.instanceId===t.campaign.instanceId)return!1;var a=new Date;if(t.time.getTime()<a.getTime())return!1;var s=t.campaign,o=t.request,c=_SgmntfY_._campaigns[s.type];return setTimeout(function(){for(var g=_SgmntfY_._getDelayedCampaigns(),_=!1,m=0;m<g.length;++m)g[m].campaign.instanceId===t.campaign.instanceId&&(_=!0);_&&(_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+s.type+") triggered after delay"),c.call(null,s,o),_SgmntfY_._removeDelayedCampaign(s.instanceId))},t.time.getTime()-a.getTime()+Math.floor(Math.random()*750)),n.push(t),_SgmntfY_._setDelayedCampaigns(n),!0},_removeDelayedCampaign:function(t){for(var n=_SgmntfY_._getDelayedCampaigns(),r=0;r<n.length;r++)if(n[r].campaign.instanceId===t){n.splice(r,1),_SgmntfY_._setDelayedCampaigns(n);return}},_getSessionCampaigns:function(){try{var t=_SgmntfY_._variables.storage.sessionCampaigns,n=sessionStorage.getItem(t.key),r=JSON.parse(n)||[];return r}catch(a){_SgmntfY_.LOG_MESSAGE("ERROR","Can't read session campaigns: "+a)}return[]},_setSessionCampaigns:function(t){var n=_SgmntfY_._variables.storage.sessionCampaigns,r=JSON.stringify(t);_SgmntfY_._storeSessionData(n.key,r)},_removeSessionCampaign:function(t){for(var n=_SgmntfY_._getSessionCampaigns(),r=0;r<n.length;r++)if(n[r].campaign.instanceId===t){n.splice(r,1),_SgmntfY_._setSessionCampaigns(n);return}},_getPageViewsCampaigns:function(){try{var t=_SgmntfY_._variables.storage.pageViewCampaigns;return JSON.parse(_SgmntfY_._getPersistentData(t.key,t.local))||[]}catch(n){_SgmntfY_.LOG_MESSAGE("ERROR","Can't read pageview campaigns: "+n)}return[]},_setPageViewsCampaigns:function(t){var n=_SgmntfY_._variables.storage.pageViewCampaigns;_SgmntfY_._storePersistentData(n.key,JSON.stringify(t),0,n.local)},_addPageViewsCampaign:function(t){for(var n=_SgmntfY_._getPageViewsCampaigns(),r=0;r<n.length;++r)if(n[r].campaign.instanceId===t.campaign.instanceId){if(t.sessionId===_SgmntfY_._getSessionId())return!1;_SgmntfY_._removePageViewsCampaign(t.campaign.instanceId);break}return n.push(t),_SgmntfY_._setPageViewsCampaigns(n),!0},_removePageViewsCampaign:function(t){for(var n=_SgmntfY_._getPageViewsCampaigns(),r=0;r<n.length;r++)if(n[r].campaign.instanceId===t){n.splice(r,1),_SgmntfY_._setPageViewsCampaigns(n);return}},_triggerPageViewsCampaign:function(t){if(t.pageView===0&&t.sessionId===_SgmntfY_._getSessionId()){for(var n=t.campaign,r=t.request,a=_SgmntfY_._campaigns[n.type],s=_SgmntfY_._getPageViewsCampaigns(),o=!1,c=0;c<s.length;++c)s[c].campaign.instanceId===t.campaign.instanceId&&(o=!0);o&&(_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+n.type+") triggered after pageviews"),a.call(null,n,r),_SgmntfY_._removePageViewsCampaign(n.instanceId))}},_interaction:function(t,n,r){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:t,instanceId:n,interactionId:r})},_getFireTime:function(t){function n(r,a){for(var s=r.toString();s.length<a;)s="0"+s;return s}try{return t.getFullYear()+"."+n(t.getMonth()+1,2)+"."+n(t.getDate(),2)+" "+n(t.getHours(),2)+":"+n(t.getMinutes(),2)+":"+n(t.getSeconds(),2)+"."+n(t.getMilliseconds(),3)}catch{return""}},_getTimeZone:function(t){try{return t.getTimezoneOffset().toString()}catch{return""}},_getJq:function(){return _SgmntfY_._variables.jq},_getMustache:function(){return _SgmntfY_._variables.mustache},_getObjectByString:function(t,n){n=n.replace(/\[(\w+)\]/g,".$1"),n=n.replace(/^\./,"");for(var r=n.split("."),a=0,s=r.length;a<s;++a){var o=r[a];if(o in t)t=t[o];else return}return t},_isUndefined:function(t){return typeof t>"u"},_notNull:function(t){return typeof t<"u"&&t!=null},_isEmpty:function(t){return typeof t>"u"||t==null||t===""},_isArray:function(t){return Array.isArray(t)},_hasGivenConsent(t){let n=new Set(["true","1","yes","granted","ok","allow"]);for(let r of t.values())if(r){let a=String(r).trim().toLowerCase();if(n.has(a))return!0}return!1},_isValidUrl:function(t){try{return new URL(t),!0}catch{return!1}},_safeRedirect:function(t){try{const n=new URL(t,window.location.origin);if(!["http:","https:"].includes(n.protocol)||n.origin!==window.location.origin)throw new Error;window.location.href=n.toString()}catch{_SgmntfY_.LOG_MESSAGE("ERROR","Can't redirect to: "+t)}},_isNotEmpty:function(t){return!_SgmntfY_._isEmpty(t)},_isPlainObject:function(t){if(typeof t=="object"&&t!==null){if(typeof Object.getPrototypeOf=="function"){var n=Object.getPrototypeOf(t);return n===Object.prototype||n===null}return Object.prototype.toString.call(t)=="[object Object]"}return!1},_isElemVisible:function(t){try{if(_SgmntfY_._exists(t)&&t.css("display")!=="none"){var n=_SgmntfY_._getJq()(window),r=n.scrollTop(),a=r+n.height();t instanceof HTMLElement?t=_SgmntfY_._getJq()(t):t instanceof HTMLCollection&&(t=_SgmntfY_._getJq()(t[0]));var s=t.offset().top,o=s+100;return o<=a&&s>=r}else return!1}catch{return!1}},_exists:function(t){return t instanceof HTMLElement?t!==null:t instanceof HTMLCollection||t instanceof _SgmntfY_._getJq()||t instanceof jQuery||t instanceof $?t.length>0:!1},_extend:function(){var t,n,r,a,s,o=arguments[0]||{},c=1,g=arguments.length,_=!1;for(typeof o=="boolean"&&(_=o,o=arguments[c]||{},c++);c<g;c++)if((t=arguments[c])!=null){for(n in t)if(t.hasOwnProperty(n)){if(r=o[n],a=t[n],o===a)continue;_&&a&&_SgmntfY_._isPlainObject(a)?(s=r&&typeof r=="object"&&r!==null?r:{},o[n]=_SgmntfY_._extend(_,s,a)):a!==void 0&&(o[n]=a)}}return o},_split:function(t,n,r){if(t&&typeof t=="string"){var a,s=t.split(n);for(a=0;a<s.length;a++)s[a]=s[a].trim();if(r&&r<s.length){var o=s.splice(0,r-1);o.push(s.join(n)),s=o}return s}else return null},_parseFloat:function(t){return t==null?t:typeof t>"u"?null:typeof t=="number"?t:typeof t=="string"?parseFloat(t):t},_parseBoolean:function(t){return typeof t>"u"?null:typeof t=="number"?t===0?"false":"true":typeof t=="string"?t==="0"||t.toLowerCase()==="false"?"false":"true":typeof t=="boolean"?t.toString():t},_null:function(t){return t!=null&&t!=""},_clearNullByte:function(t){return t.replace(/\0/g,"")},_checkVersion:function(t,n){var r=n.split("."),a=t.split(".");prevs=[];for(var s=0,o=Math.max(r.length,a.length);s<o;s++){if(r[s]=parseInt(r[s]),isNaN(r[s])&&(r[s]=0),a[s]=parseInt(a[s]),isNaN(a[s])&&(a[s]=0),r[s]<a[s])return!1;if(r[s]>a[s])return!0}return!0},_updateBrowserAndDeviceInfo:function(){if(!(typeof window.bowser>"u")){var t=window.bowser._detect(_SgmntfY_._variables.ua.agentString);_SgmntfY_._variables.ua.type==null&&(t.tablet?_SgmntfY_._variables.ua.type="tablet":t.mobile?_SgmntfY_._variables.ua.type="mobile":_SgmntfY_._variables.ua.type="PC",t.chromium?_SgmntfY_._variables.ua.name="Chrome":_SgmntfY_._variables.ua.name=t.name,_SgmntfY_._variables.ua.version=t.version),_SgmntfY_._variables.ua.os==null&&(_SgmntfY_._variables.ua.os=t.osname||"Other",_SgmntfY_._variables.ua.osversion=t.osversion)}},_addLeavePageHandler:function(t,n){var r=t.type,a=t.params,s=_SgmntfY_._actions[r];_SgmntfY_.LOG_MESSAGE("INFO","Action("+r+") will be triggered when user leaves page");var o=function(c){c.clientY<0&&(_SgmntfY_.LOG_MESSAGE("INFO","Action("+r+") is triggered at user leave page"),_SgmntfY_._getJq()(document).unbind("mouseleave",o),s.call(null,a,n))};_SgmntfY_._getJq()(document).bind("mouseleave",o)},_addWaitPageHandler:function(t,n){var r=t.type,a=t.params,s=t.delayAction||null,o=_SgmntfY_._actions[r],c=parseInt(s.time);_SgmntfY_.LOG_MESSAGE("INFO","Action("+r+") will be triggered after "+c+" second(s) delay on same page"),setTimeout(function(){_SgmntfY_.LOG_MESSAGE("INFO","Action("+r+") is triggered after delay"),o.call(null,a,n)},c*1e3)},_addScrollHandler:function(t,n){var r=t.type,a=t.delayAction,s=parseInt(a.time)||0;_SgmntfY_.LOG_MESSAGE("INFO","Action ("+r+") will be triggered after "+s+"% of page is scrolled");var o=function(){if(s<=_SgmntfY_._getScrollPercent()){_SgmntfY_.LOG_MESSAGE("INFO","Action ("+r+") triggered after "+s+"% of page is scrolled"),_SgmntfY_._getJq()(document).unbind("scroll",o);var c=_SgmntfY_._actions[r];c.call(null,t.params,n)}};_SgmntfY_._getJq()(document).bind("scroll",o)},_addCampaignDelayHandler:function(t,n){var r=t.type,a=t.timing,s=parseInt(a.param);_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+r+") will be triggered after "+s+" second(s) delay on same page"),window.setTimeout(function(){_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+r+") triggered after "+s+" delay");var o=_SgmntfY_._campaigns[r];o.call(null,t,n),_SgmntfY_._removeSessionCampaign(t.instanceId)},s*1e3)},_addCampaignDelayAllPagesHandler:function(t,n){var r=t.timing||"0",a=new Date(new Date().getTime()+1e3*parseInt(r.param)),s={campaign:t,request:n,time:a};_SgmntfY_._addDelayedCampaign(s)?_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+t.instanceId+") added for delayed campaign in future"):_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+t.instanceId+") already added for delayed campaign")},_addCampaignPageViewsHandler:function(t,n){var r=t.timing||"0",a=parseInt(r.param)-1,s={campaign:t,request:n,pageView:a,sessionId:_SgmntfY_._getSessionId()};_SgmntfY_._addPageViewsCampaign(s)?_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+t.instanceId+") added for pageview campaign in future"):_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+t.instanceId+") already added for pageview campaign")},_addCampaignScrollHandler:function(t,n){var r=t.type,a=t.timing,s=parseInt(a.param);_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+r+") will be triggered after "+s+"% of page is scrolled");var o=function(){if(s<=_SgmntfY_._getScrollPercent()){_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+r+") triggered after "+s+"% of page is scrolled"),_SgmntfY_._getJq()(document).unbind("scroll",o);var c=_SgmntfY_._campaigns[r];c.call(null,t,n),_SgmntfY_._removeSessionCampaign(t.instanceId)}};_SgmntfY_._getJq()(document).bind("scroll",o)},_addCampaignLeaveHandler:function(t,n){var r=t.type;_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+r+") will be triggered when user leaves page");var a=function(s){if(s.clientY<0){_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+r+") triggered at user leave page"),_SgmntfY_._getJq()(document).unbind("mouseleave",a);var o=_SgmntfY_._campaigns[r];o.call(null,t,n),_SgmntfY_._removeSessionCampaign(t.instanceId)}};_SgmntfY_._getJq()(document).bind("mouseleave",a)},_addCampaignInteractionHandler:function(t,n){},_addCampaignSessionHandler:function({campaign:t,request:n,addedAt:r}){var a=_SgmntfY_._getSessionCampaigns();a.push({campaign:t,request:n,addedAt:r}),_SgmntfY_._setSessionCampaigns(a)},_checkSessionCampaignFilters:function(t){try{for(var n=t.filters||[],r=window.location.href,a=window.location.pathname,s=window.location.origin,o=s+a,c=_SgmntfY_._variables.pageCategory?_SgmntfY_._variables.pageCategory:"Unknown Page",g=0;g<n.length;g++){var _=n[g];if(_.type==="PAGE"){var m=_.excludedCategories||[];if(m.indexOf(c)!==-1)return _SgmntfY_.LOG_MESSAGE("INFO","Session campaign filtered out by excluded category: "+c),!1;var f=_.includedCategories||[];if(f.length>0&&f.indexOf(c)===-1)return _SgmntfY_.LOG_MESSAGE("INFO","Session campaign filtered out by included categories: "+c),!1}if(_.type==="PAGE_URL"){var v=_.exactMatchUrls||[];if(v.length>0){for(var Y=!1,S=0;S<v.length;S++)if(o===v[S]){Y=!0;break}if(!Y)return _SgmntfY_.LOG_MESSAGE("INFO","Session campaign filtered out by exact match URLs"),!1}for(var E=_.excludedUrls||[],S=0;S<E.length;S++)if(r.indexOf(E[S])!==-1)return!1;var d=_.includedUrls||[];if(d.length>0){for(var h=!1,S=0;S<d.length;S++)if(r.indexOf(d[S])!==-1){h=!0;break}if(!h)return!1}for(var C=_.notExactMatchUrls||[],S=0;S<C.length;S++)if(o===C[S])return!1}}return!0}catch(p){return _SgmntfY_.LOG_MESSAGE("ERROR","Error checking session campaign filters: "+p),!0}},_getScrollPercent:function(){var t=document.documentElement,n=document.body,r="scrollTop",a="scrollHeight";return(t[r]||n[r])/((t[a]||n[a])-t.clientHeight)*100},_updateUserAndSessionId:function(t){if(_SgmntfY_._variables.doNotTrack!==!0){_SgmntfY_._variables.waitingKeys=!0;var n={data:null,url:_SgmntfY_._getEventUrl()+"/get/key/v1.json?count="+t};_SgmntfY_._getJq().ajax({contentType:"text/plain",processData:!1,type:"GET",url:n.url,timeout:_SgmntfY_._variables.constants.eventTimeout*1e3}).done(function(r,a,s){_SgmntfY_._ajaxSuccess(n,r,a),t===2&&_SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey,r[1],390,_SgmntfY_._variables.storage.user.local);var o=_SgmntfY_._getUserId();if(_SgmntfY_._isEmpty(o)){_SgmntfY_.LOG_MESSAGE("ERROR","Can't update User Id");return}if(_SgmntfY_.LOG_MESSAGE("INFO","User Id Changed: "+o),_SgmntfY_._storePersistentData(_SgmntfY_._variables.sessionStorageKey,r[0],0,_SgmntfY_._variables.storage.session.local),_SgmntfY_._storeSessionData("SGM_SESSIONID",r[0]),_SgmntfY_._storeSessionData("SGM_USERID",r[1]),_SgmntfY_._isEmpty(_SgmntfY_._getSessionId())){_SgmntfY_.LOG_MESSAGE("ERROR","Can't update User Session");return}_SgmntfY_.LOG_MESSAGE("INFO","User Session Changed: "+r[0]),_SgmntfY_._variables.waitingKeys=!1,_SgmntfY_._variables.keysTryCount++}).fail(function(r,a,s){_SgmntfY_._ajaxError(n,r,a,s),_SgmntfY_._variables.keysTryCount++,_SgmntfY_._variables.waitingKeys=!1})}},_sendRequestToServer:function(t){if(!(!t||t.length<=0)){for(var n=[],r=0;r<t.length;r++)n.push(t[r].data),t[r].eventName==="PAGE_VIEW"&&(_SgmntfY_._variables.pageCategory=t[r].data.category);var a={"X-Sfy-Api-Key":_SgmntfY_._variables.apiKey};_SgmntfY_._getJq().ajax({contentType:"text/plain",processData:!1,type:"POST",url:_SgmntfY_._getEventUrl()+"/add/events/v1.json?apiKey="+_SgmntfY_._variables.apiKey,data:JSON.stringify(n),headers:a,timeout:_SgmntfY_._variables.constants.eventTimeout*1e3}).done(function(s,o,c){_SgmntfY_._ajaxSuccess(n,s,o);var g=s.statusCode||"";if(g==="SUCCESS"){var _=s.responses,m=s.campaigns,f=s.search,v=s.coupons||[[]],Y=s.experiments||{};_SgmntfY_._experiment.get()!==_SgmntfY_._experiment.toString(Y)&&_SgmntfY_._experiment.store(_SgmntfY_._experiment.toString(Y)),_SgmntfY_._setUserData(s.u||{});var S=Object.freeze({ACTIVE:"SGM_ACTIVE",CONTROL:"SGM_CONTROL"});let y=function(){return _SgmntfY_._variables.ga.gaRequestCount<1&&s.u&&!!s.u.ug};for(;y();)try{let u=s.u.ug,b=S[u];window.gtag&&window.gtag("event",b),window.dataLayer&&window.dataLayer.push({event:b}),_SgmntfY_._variables.ga.gaRequestCount++}catch{_SgmntfY_.LOG_MESSAGE("ERROR","Error while setting user data: "+e),Segmentify("event:custom",{type:"error_handler",params:{errorMessage:err.toString(),nextPage:!1}})}if(_.length===t.length&&m.length===t.length)for(var E=0;E<_.length;E++){var d=t[E],h=_[E],C=m[E],p=f[E],I=v[E];d.originalParams.discardResponse!=="true"?(_SgmntfY_._getResponse(d,h),_SgmntfY_._getCampaign(d,C),window.Segmentify&&window.Segmentify.config&&window.Segmentify.config.searchify?_SgmntfY_._getSearchifyCampaign(p):_SgmntfY_._getSearchCampaign(d,p),_SgmntfY_.initCoupon(I),typeof d._cb=="function"&&p&&(p?d._cb(p):d._cb())):_SgmntfY_.LOG_MESSAGE("DEBUG","Action("+d.eventName+") responses are discarded")}else _SgmntfY_.LOG_MESSAGE("WARN","Segmentify response length("+_.length+") doesn't match request length("+t.length+")")}else _SgmntfY_.LOG_MESSAGE("WARN","Segmentify response is ("+g+")"),g==="NO_SESSIONID"?_SgmntfY_._updateUserAndSessionId(1):g==="NO_USERID"&&_SgmntfY_._updateUserAndSessionId(2)}).fail(function(s,o,c){for(var g=!1,_=0;_<t.length;_++)_SgmntfY_._jbOverFlowOperations._journeyFinished(t[_])&&(g=!0);g&&_SgmntfY_._jbOnDestroyJourneyFlowExecution(!1),_SgmntfY_._searchFailHandler(t,s,o,c),_SgmntfY_._addToRetryQueue(t),_SgmntfY_._ajaxError(n,s,o,c)})}},_searchFailHandler:function(t,n,r,a){var s=null;if(t&&t.length>0&&(s=t.filter(function(c){return c.eventName==="SEARCH"})),s&&s.length>0){var o=s[0];if(o.data&&o.data.type==="faceted"&&typeof o._cb=="function")o._cb(null,{jqXHR:n,textStatus:r,errorThrown:a});else if(_SgmntfY_._getJq()(".seg-search-wrapper").length!==0)if(_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth){var s=null;s&&s.length>0&&_SgmntfY_._variables.search.initialCampaign?_SgmntfY_._getSearchCampaign(s[0],[{campaign:_SgmntfY_._variables.search.initialCampaign}]):_SgmntfY_._getJq().each(_SgmntfY_._searchGetInputElement(),function(){_SgmntfY_._getJq()(this).css("transform")=="matrix(1, 0, 0, 1, 0, -2000)"&&(_SgmntfY_._getJq()(this).addClass("seg-search-unset"),_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("open"),_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-open"),_SgmntfY_._getJq()(this).blur())})}else(_SgmntfY_._getJq()(".seg-search-wrapper").hasClass("open")||_SgmntfY_._getJq()(".seg-search-wrapper").hasClass("sgm-search-open"))&&(_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("open"),_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-open"))}},_setUserData:function(t){try{if(_SgmntfY_._variables?.doNotPersonalize?.enabled)return;_SgmntfY_._storePersistentData(_SgmntfY_._variables.storage.userData.key,JSON.stringify(t),0,_SgmntfY_._variables.storage.userData.local)}catch(n){_SgmntfY_.LOG_MESSAGE("ERROR","Error while setting user data: "+n)}},_getUserMode:function(){try{var t=JSON.parse(_SgmntfY_._getPersistentData(_SgmntfY_._variables.storage.userData.key,_SgmntfY_._variables.storage.userData.local))||{};return t&&t.gm?t.gm:""}catch(n){return _SgmntfY_.LOG_MESSAGE("ERROR","Error while getting user data: "+n),""}},_getResponse:function(t,n){_SgmntfY_._jbCheckDeliveryStep(t,n);for(var r=0;r<n.length;r++){var a=n[r];if(a.hasOwnProperty("type")){var s=a.type,o=a.delayAction||null,c=a.params,g=a.instanceId,_=_SgmntfY_._actions[s];if(c.isControlGroup===!1){_SgmntfY_.LOG_MESSAGE("DEBUG","User is in control group for campaign: "+c.instanceId);continue}if(typeof _=="function")if(o&&o.type==="LEAVE_PAGE")_SgmntfY_._addLeavePageHandler(a,t);else if(o&&o.type==="WAIT_SAME_PAGE"&&parseInt(o.time)>0)_SgmntfY_._addWaitPageHandler(a,t);else if(o&&o.type==="WAIT_ALL_PAGES"&&parseInt(o.time)>0){var m=new Date(new Date().getTime()+1e3*parseInt(o.time)),f={delayDate:m,params:c,type:s,request:t};_SgmntfY_._addDelayedAction(f)?_SgmntfY_.LOG_MESSAGE("INFO","Action(id="+f.params.actionId+") is added for delayed action in future"):_SgmntfY_.LOG_MESSAGE("INFO","Action(id="+f.params.actionId+") is already added for delayed action")}else o&&o.type==="SCROLL"?_SgmntfY_._addScrollHandler(a,t):(_SgmntfY_.LOG_MESSAGE("INFO","Action("+s+") triggered immediately"),_.call(null,c,t));else _SgmntfY_.LOG_MESSAGE("WARN","Unknown action: "+s)}}},_jbCheckDeliveryStep:function(t,n){if(_SgmntfY_._jbOverFlowOperations._journeyFinished(t)){for(var r=!1,a=!1,s=!1,o,c=0;c<n.length;c++){var g=n[c],_=g.type;_==="recommendProducts"&&Object.keys(g.params.recommendedProducts)&&Object.keys(g.params.recommendedProducts).forEach(function(m){g.params.recommendedProducts[m]&&g.params.recommendedProducts[m].length>0&&(r=!0)}),_==="giveCoupon"&&(a=!0),_==="landingPage"&&(o=g.params.landingPageUrl,o&&o.length>0&&(s=!0))}r===!0||a===!0||s===!0?(_SgmntfY_._jbOnDestroyJourneyFlowExecution(!0),r===!1&&a===!1&&(_SgmntfY_.LOG_MESSAGE("DEBUG","Redirecting action to url: "+o),window.location=o)):_SgmntfY_._jbOnDestroyJourneyFlowExecution(!1)}},_getCampaign:function(t,n){for(var r=0;r<n.length;r++){var a=n[r]||{};if(a.hasOwnProperty("type")){var s=a.type,o=_SgmntfY_._campaigns[s];if(typeof o=="function"){var c=a.timing||{};switch(c.type){case"DELAY":_SgmntfY_._addCampaignDelayHandler(a,t);break;case"DELAY_ALL_PAGES":_SgmntfY_._addCampaignDelayAllPagesHandler(a,t);break;case"PAGE_VIEWS":_SgmntfY_._addCampaignPageViewsHandler(a,t);break;case"SCROLL":_SgmntfY_._addCampaignScrollHandler(a,t);break;case"PAGELEAVE":_SgmntfY_._addCampaignLeaveHandler(a,t);break;case"INTERACTION":_SgmntfY_._addCampaignInteractionHandler(a,t);break;default:_SgmntfY_.LOG_MESSAGE("INFO","Campaign ("+s+") triggered immediately."),o.call(null,a,t);break}a.frequency&&a.frequency.type==="SESSION"&&a.timing.type!=="IMMEDIATE"&&_SgmntfY_._addCampaignSessionHandler({campaign:a,request:t,addedAt:Date.now()})}else _SgmntfY_.LOG_MESSAGE("WARN","Unknown campaign: "+s)}}},initCoupon:function(t){try{if(t.length===0)return;var n=_SgmntfY_._getJq()(document).find("#seg-coupon-asimov");if(n&&n.length>0)return;var r=t[0],a=r.widget.html,s=r.widget.validationText,o={code:r.code,valid_until:s+" "+new Date(r.validUntil).toLocaleDateString(),copy_button_text:r.widget.copyButtonText,description:r.widget.description,title:r.widget.title},c=_SgmntfY_._getMustache().render(a,o);c=_SgmntfY_._getJq()(c);var g=c.first(),_=c.find(".seg-coupon-asimov_content"),m=c.find(".seg-coupon-asimov_switch");r.widget.position==="RIGHT"&&g.addClass("seg-coupon-asimov_right"),_.css({"background-color":r.widget.backgroundColor,color:r.widget.foregroundColor}),m.css({"background-color":r.widget.backgroundColor,color:r.widget.foregroundColor}),_SgmntfY_._getJq()("body").prepend(c),_SgmntfY_.bindCouponBindings({copiedInfoText:r.widget.copiedInfoText}),_SgmntfY_._openCoupon(),setTimeout(function(){_SgmntfY_._closeCoupon()},2e3)}catch{_SgmntfY_.LOG_MESSAGE("WARN","Coupon couldn't be rendered!")}},bindCouponBindings:function(t){try{let r=function(){var a=_SgmntfY_._getJq()("#seg-coupon-asimov");if(a.addClass("no-interaction"),a.css("height",_SgmntfY_._getJq()("#seg-coupon-asimov").prop("scrollHeight")),a.hasClass("seg-coupon-asimov_open")){var s=a.children(".seg-coupon-asimov_switch").height();a.css("height",s)}else setTimeout(function(){a.css("height","auto")},500);setTimeout(function(){a.removeClass("no-interaction")},500),a.toggleClass("seg-coupon-asimov_open")};var n=r;_SgmntfY_._getJq()(document).on("click",".seg-coupon-asimov_switch",function(){var a=_SgmntfY_._getJq()(this).parent("#seg-coupon-asimov");if(a.hasClass("no-interaction"))return!1;r()}),_SgmntfY_._getJq()(document).on("click",".seg-coupon-asimov_copy:not(.no-interaction)",function(){_SgmntfY_._getJq()("#seg-coupon-asimov").addClass("no-interaction"),_SgmntfY_._getJq()(this).addClass("no-interaction"),_SgmntfY_._textCopyToClipBoard("seg-coupon-asimov_code");var a=_SgmntfY_._getJq()(".seg-coupon-asimov_copy").html();return _SgmntfY_._getJq()(".seg-coupon-asimov_copy").html(t.copiedInfoText),setTimeout(function(){r(),setTimeout(function(){_SgmntfY_._getJq()(".seg-coupon-asimov_copy").html(a),_SgmntfY_._getJq()("#seg-coupon-asimov").removeClass("no-interaction"),_SgmntfY_._getJq()(".seg-coupon-asimov_copy").removeClass("no-interaction")},400)},1e3),!1})}catch{_SgmntfY_.LOG_MESSAGE("WARN","Could not bind coupon bindings.")}},_textCopyToClipBoard:function(t){if(t=document.getElementsByClassName(t)[0],document.body.createTextRange){var n=document.body.createTextRange();n.moveToElementText(t),n.select()}else if(window.getSelection){var r=window.getSelection(),n=document.createRange();n.selectNodeContents(t),r.removeAllRanges(),r.addRange(n)}else _SgmntfY_.LOG_MESSAGE("WARN","Could not select text in node: Unsupported browser.");document.execCommand("copy"),window.getSelection?window.getSelection().removeAllRanges():document.selection&&document.selection.empty()},_openCoupon:function(){var t=_SgmntfY_._getJq()("#seg-coupon-asimov");t.addClass("no-interaction"),t.css("height",_SgmntfY_._getJq()("#seg-coupon-asimov").prop("scrollHeight")),setTimeout(function(){t.css("height","auto")},500),setTimeout(function(){t.removeClass("no-interaction")},500),t.toggleClass("seg-coupon-asimov_open")},_closeCoupon:function(){var t=_SgmntfY_._getJq()("#seg-coupon-asimov");if(t.addClass("no-interaction"),t.css("height",_SgmntfY_._getJq()("#seg-coupon-asimov").prop("scrollHeight")),t.hasClass("seg-coupon-asimov_open")){var n=t.children(".seg-coupon-asimov_switch").height();t.css("height",n)}setTimeout(function(){t.removeClass("no-interaction")},500),t.toggleClass("seg-coupon-asimov_open")},_decodeHtml:function(t){var n=document.createElement("textarea");return n.innerHTML=t,n.value},_getControlGroup:function(){var t="REAL";try{if(_SgmntfY_._variables.controlGroup&&_SgmntfY_._variables.controlGroup.source==="OPTIMIZE"){var n=window.google_optimize&&window.google_optimize.get(_SgmntfY_._variables.controlGroup.experimentID);n&&n==_SgmntfY_._variables.controlGroup.controlValue&&(t="CONTROL")}}catch(r){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing _getControlGroup: "+r)}return t},_getSearchCampaign:function(request,searchArray){if(request.eventName==="SEARCH"&&request.data.type==="faceted"){if(typeof request._cb=="function")return request._cb(searchArray)}else if(isSearchEventAndExecutable()&&searchArray.length===0&&(searchArray=[{campaign:_SgmntfY_._variables.search.initialCampaign}]),searchArray.length!==0){if(searchArray[0].isExecutable===!0||searchArray[0].isExecutableForAfter===!0)setSearchVariables(),_SgmntfY_._initSearch();else if(typeof searchArray[0].isExecutable>"u"&&typeof searchArray[0].isExecutableForAfter>"u"){var queryOnInput=void 0;_SgmntfY_._variables.search.currentActiveInput&&_SgmntfY_._variables.search.currentActiveInput.value&&(queryOnInput=_SgmntfY_._variables.search.currentActiveInput.value.trim()),(request.data.query===void 0||typeof _SgmntfY_._variables.search.currentActiveInput>"u"||request.data.query===_SgmntfY_._prepareSearchQuery(queryOnInput))&&_SgmntfY_._searchResultHandler(request,searchArray)}}isSearchEventHasRedirection()&&eval(_SgmntfY_._variables.search.redirectionJs);function setSearchVariables(){var t=searchArray[0].initialCampaign;_SgmntfY_._variables.search.isExecutable=searchArray[0].isExecutable,_SgmntfY_._variables.search.isExecutableForAfter=searchArray[0].isExecutableForAfter,_SgmntfY_._variables.search.input=searchArray[0].idOrClassName,_SgmntfY_._variables.search.manuelTrigger=searchArray[0].manuelTrigger,_SgmntfY_._variables.search.initialCampaign=t,_SgmntfY_._variables.search.searchMinChar=t&&t.minCharacterCount||3,_SgmntfY_._variables.search.searchDelay=t&&t.searchDelay||500,_SgmntfY_._variables.search.shadowRootElements=searchArray[0].shadowRootElements||[],_SgmntfY_._variables.search.shadowRootElementsForHide=searchArray[0].shadowRootElementsForHide||[],_SgmntfY_._variables.search.shadowRootElementsForTrigger=searchArray[0].shadowRootElementsForTrigger||[],_SgmntfY_._variables.search.forceRemoveInputVal=t&&typeof t.forceRemoveInputVal<"u"?t.forceRemoveInputVal:!1,_SgmntfY_._variables.search.clearInputBindingsOnSite=searchArray[0].clearInputBindingsOnSite,_SgmntfY_._variables.search.redirectionEnabled=searchArray[0].redirectionEnabled,_SgmntfY_._variables.search.redirectionEnabled&&(_SgmntfY_._variables.search.redirectionJs=searchArray[0].redirectionJs),_SgmntfY_._variables.search.input.indexOf(",input#sgm-qa-search")===-1&&(_SgmntfY_._variables.search.input=_SgmntfY_._variables.search.input+",input#sgm-qa-search"),_SgmntfY_._searchSetActiveRootElement()}function isSearchEventAndExecutable(){return request.eventName==="SEARCH"&&(_SgmntfY_._variables.search.isExecutable||_SgmntfY_._variables.search.isExecutableForAfter)}function isSearchEventHasRedirection(){return request.eventName==="PAGE_VIEW"&&_SgmntfY_._variables.search.redirectionEnabled}},_getSearchifyCampaign:function(searchArray){searchArray.length&&searchArray[0].isExecutable&&(searchArray[0].redirectionEnabled&&eval(searchArray[0].redirectionJs),_SgmntfY_.searchisExecutable=!0)},_searchSetActiveRootElement:function(){_SgmntfY_._variables.search.activeRootElement=document,_SgmntfY_._variables.search.activeRootElementForHide=document,_SgmntfY_._variables.search.activeRootElementForTrigger=document,_SgmntfY_._variables.search.shadowRootElements.forEach(t),_SgmntfY_._variables.search.shadowRootElementsForHide.forEach(n),_SgmntfY_._variables.search.shadowRootElementsForTrigger.forEach(r);function t(a){var s=_SgmntfY_._getJq()(a,_SgmntfY_._variables.search.activeRootElement);s&&s.length>0?_SgmntfY_._variables.search.activeRootElement=s[0].shadowRoot:_SgmntfY_.LOG_MESSAGE("WARN","ShadowRoot Element could not be found: "+a)}function n(a){var s=_SgmntfY_._getJq()(a,_SgmntfY_._variables.search.activeRootElementForHide);s&&s.length>0?_SgmntfY_._variables.search.activeRootElementForHide=s[0].shadowRoot:_SgmntfY_.LOG_MESSAGE("WARN","ShadowRoot Element For Hide could not be found: "+a)}function r(a){var s=_SgmntfY_._getJq()(a,_SgmntfY_._variables.search.activeRootElementForTrigger);s&&s.length>0?_SgmntfY_._variables.search.activeRootElementForTrigger=s[0].shadowRoot:_SgmntfY_.LOG_MESSAGE("WARN","ShadowRoot Element For Trigger could not be found: "+a)}},_isSearchOpen:function(){var t=_SgmntfY_._getJq()(".seg-search-wrapper");return t.hasClass("open")||t.hasClass("sgm-search-open")},_searchInputActivateHandler:function(t){if(_SgmntfY_._getJq()(".seg-search-wrapper")&&_SgmntfY_._isSearchOpen())return;if(_SgmntfY_._variables.search.currentActiveInput=t.target,_SgmntfY_._getJq()(".seg-search-wrapper").length===0){var n=_SgmntfY_._getJq()("<div/>",{class:"seg-search-wrapper"});n.appendTo("body")}a(),_SgmntfY_._variables.search.forceRemoveInputVal===!0&&(_SgmntfY_._variables.search.currentActiveInput.value="");var r=_SgmntfY_._variables.search.currentActiveInput.value.trim().length;_SgmntfY_._variables.search.keywordSearch=r>=_SgmntfY_._variables.search.searchMinChar,_SgmntfY_._variables.search.emptySearch=r===0||r<_SgmntfY_._variables.search.searchMinChar,(_SgmntfY_._variables.search.emptySearch===!0||_SgmntfY_._variables.search.keywordSearch===!0)&&_SgmntfY_._sendSearchRequest();function a(){if(_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth){/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream&&(_SgmntfY_._getJq()(".seg-search-wrapper").addClass("keyboard-on"),_SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-keyboard-on"),_SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-ios-device"));var s=typeof sgmSearchSettings<"u"&&sgmSearchSettings.mobileSearchAssets&&sgmSearchSettings.mobileSearchAssets.length===0;s&&(_SgmntfY_._getJq()(".seg-search-wrapper").addClass("no-sidebar"),_SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-no-sidebar")),_SgmntfY_._getJq()(".seg-search-wrapper").addClass("mobile"),_SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-mobile");var o=!1,c=_SgmntfY_._getJq()("meta");if(c.each(function(_){_.name==="viewport"&&(o=!0,_.content.includes("width=")===!0&&_.content.includes("width=device-width")!==!0||(_.content.includes("width=device-width")!==!0&&(_.content=_.content.concat(" ,width=device-width")),_.content.includes("initial-scale=")!==!0&&(_.content=_.content.concat(" ,initial-scale=1.0")),_.content.includes("maximum-scale=")!==!0&&(_.content=_.content.concat(" ,maximum-scale=1.0"))),_.content.includes("user-scalable=")!==!0&&(_.content=_.content.concat(" ,user-scalable=no")))}),!o){var g=document.createElement("meta");g.name="viewport",g.content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",document.getElementsByTagName("head")[0].appendChild(g)}}}},_setSearchQueryOverride:function(t){if(t&&typeof t=="object"){var n=new Date;n.setHours(n.getHours()+2),t.expires=n,_SgmntfY_._storePersistentData(_SgmntfY_._variables.search.queryOverrideKey,JSON.stringify(t),1,!0)}},_unsetSearchQueryOverride:function(){_SgmntfY_._storePersistentData(_SgmntfY_._variables.search.queryOverrideKey,null,0,!0)},_disableSearchTriggerEventsOnSite:function(){_SgmntfY_._variables.search.clearInputBindingsOnSite===!0&&_SgmntfY_._searchGetInputElement().off(),_SgmntfY_._getActiveSearchManuelTrigger()&&_SgmntfY_._searchGetManuelTriggerElementForMobile().off(),_SgmntfY_._searchGetInputElement().attr("autocomplete","OFF")},_getActiveSearchManuelTrigger:function(){return _SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth?_SgmntfY_._variables.search.manuelTrigger:_SgmntfY_._getJq()(window).width()>=_SgmntfY_._variables.search.maxMobileWidth&&_SgmntfY_._variables.search.manuelTriggerEnabledForDesktop===!0?_SgmntfY_._variables.search.manuelTriggerDesktop:null},_activateSgmSearchTriggerEvents:function(){var t=_SgmntfY_._variables.search.activeRootElement.querySelectorAll(_SgmntfY_._variables.search.input);bowser.name.toLowerCase()==="safari"||/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream?t&&t.length?(t.forEach(function(n){n.addEventListener("click",_SgmntfY_._searchInputActivateHandler)}),_SgmntfY_._getJq()(document).on("click","#sgm-mobile-input input",_SgmntfY_._searchInputActivateHandler)):(_SgmntfY_.LOG_MESSAGE("WARN","search input element could not found while loading the script"),_SgmntfY_._getJq()(document).on("click",_SgmntfY_._variables.search.input+", #sgm-mobile-input input",_SgmntfY_._searchInputActivateHandler)):t&&t.length?(t.forEach(function(n){n.addEventListener("focus",_SgmntfY_._searchInputActivateHandler)}),_SgmntfY_._getJq()(document).on("focus","#sgm-mobile-input input",_SgmntfY_._searchInputActivateHandler)):(_SgmntfY_.LOG_MESSAGE("WARN","search input element could not found while loading the script"),_SgmntfY_._getJq()(document).on("focus",_SgmntfY_._variables.search.input+", #sgm-mobile-input input",_SgmntfY_._searchInputActivateHandler))},_searchGetInputElement:function(){return _SgmntfY_._getJq()(_SgmntfY_._variables.search.input,_SgmntfY_._variables.search.activeRootElement)},_searchGetManuelTriggerElementForDesktop:function(){return _SgmntfY_._getJq()(_SgmntfY_._variables.search.manuelTriggerDesktop,_SgmntfY_._variables.search.activeRootElementForTrigger)},_searchGetManuelTriggerElementForMobile:function(){return _SgmntfY_._getJq()(_SgmntfY_._variables.search.manuelTrigger,_SgmntfY_._variables.search.activeRootElementForTrigger)},_initSearch:function(){_SgmntfY_._disableSearchTriggerEventsOnSite(),_SgmntfY_._activateSgmSearchTriggerEvents(),_SgmntfY_._getJq().each(_SgmntfY_._searchGetInputElement(),function(o){if(this===_SgmntfY_._variables.search.activeRootElement.activeElement)return _SgmntfY_._searchInputActivateHandler({target:this}),!1});var t=_SgmntfY_._variables.search.activeRootElement.querySelectorAll(_SgmntfY_._variables.search.input);if(t&&t.length>0?(t.forEach(function(o){o.addEventListener("input",r),o.addEventListener("blur",s)}),_SgmntfY_._getJq()(document).on("input","#sgm-mobile-input input",r),_SgmntfY_._getJq()(document).on("blur","#sgm-mobile-input input",s)):(_SgmntfY_.LOG_MESSAGE("WARN","search input element could not found while loading the script"),_SgmntfY_._getJq()(document).on("input",_SgmntfY_._variables.search.input+", #sgm-mobile-input input",r),_SgmntfY_._getJq()(document).on("blur",_SgmntfY_._variables.search.input+", #sgm-mobile-input input",s)),_SgmntfY_._getActiveSearchManuelTrigger()){var n=_SgmntfY_._variables.search.activeRootElementForTrigger.querySelectorAll(_SgmntfY_._getActiveSearchManuelTrigger());n&&n.length?n.forEach(function(o){o.addEventListener("click",a)}):(_SgmntfY_.LOG_MESSAGE("WARN","search manuel trigger element could not found while binding the event"),_SgmntfY_._getJq()(document).on("click",_SgmntfY_._getActiveSearchManuelTrigger(),a))}_SgmntfY_._evalSearchBodyScrollLockPreJs();function r(o){_SgmntfY_._variables.search.currentActiveInput=o.target;var c=_SgmntfY_._variables.search.currentActiveInput.value;_SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput).not("#sgm-mobile-input input").attr("value",c),_SgmntfY_._variables.search.keywordSearch=c.length>=_SgmntfY_._variables.search.searchMinChar,_SgmntfY_._variables.search.emptySearch=c.length===0||c.length<_SgmntfY_._variables.search.searchMinChar,(_SgmntfY_._variables.search.emptySearch===!0||_SgmntfY_._variables.search.keywordSearch===!0)&&_SgmntfY_._sendSearchRequest()}function a(){if(_SgmntfY_._getJq()(".seg-search-wrapper").length===0){var o=_SgmntfY_._getJq()("<div/>",{class:"seg-search-wrapper"});o.appendTo("body")}_SgmntfY_._variables.search.emptySearch=!0,_SgmntfY_._variables.search.keywordSearch=!1,_SgmntfY_._sendSearchRequest(!0)}function s(){_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("keyboard-on"),_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-keyboard-on"),_SgmntfY_._searchGetInputElement().removeAttr("readonly")}},_initSearchify:function(){var t=_SgmntfY_._variables.segmentifyCDNUrl+window._SgmntfY_._variables.apiKey+"/search.js";if(!document.querySelector(`script[src="${t}"]`)){var n=document.createElement("script");n.id="segmentify-search",n.type="text/javascript",n.src=t,document.head.appendChild(n);var r=_SgmntfY_._variables.segmentifyCDNUrl+window._SgmntfY_._variables.apiKey+"/search.css",a=document.createElement("link");a.id="segmentify-search-style",a.href=r,a.rel="stylesheet",document.head.appendChild(a)}},_sendSearchRequest:function(t){var n="";_SgmntfY_._variables.search.manuelTriggerClicked=!1,t?_SgmntfY_._variables.search.manuelTriggerClicked=!0:n=_SgmntfY_._variables.search.currentActiveInput&&_SgmntfY_._variables.search.currentActiveInput.value&&_SgmntfY_._variables.search.currentActiveInput.value.trim();try{_SgmntfY_._variables.search.searchTimer&&clearTimeout(_SgmntfY_._variables.search.searchTimer)}catch{}_SgmntfY_._variables.search.searchTimer=setTimeout(r,_SgmntfY_._variables.search.searchDelay);function r(){_SgmntfY_._variables.search.emptySearch===!0&&_SgmntfY_._variables.segmentifyObj("search",{query:""}),_SgmntfY_._variables.search.keywordSearch===!0&&n.length>=_SgmntfY_._variables.search.searchMinChar&&_SgmntfY_._variables.segmentifyObj("search",{query:_SgmntfY_._prepareSearchQuery(n)})}},_triggerSearch:function(t){if(_SgmntfY_._variables.search.isExecutable===!0||_SgmntfY_._variables.search.isExecutableForAfter===!0){var n=t&&t.searchText;if(!n){_SgmntfY_.LOG_MESSAGE("WARN","searchText is mandatory field to trigger search");return}var r={delay:0,isManuelTriggered:!1,inputSelector:_SgmntfY_._variables.search.input,manuelTrigger:_SgmntfY_._getActiveSearchManuelTrigger()},a=_SgmntfY_._getCopiedObject(r,t);setTimeout(s,a.delay)}else _SgmntfY_.LOG_MESSAGE("WARN","search is not executable to trigger search");function s(){var o=_SgmntfY_._getJq()(a.inputSelector);o&&o.length>0&&(_SgmntfY_._variables.search.currentActiveInput=o[0],_SgmntfY_._variables.search.currentActiveInput.value=n,_SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput,_SgmntfY_._variables.search.activeRootElement).click(),_SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput,_SgmntfY_._variables.search.activeRootElement).focus(),a.isManuelTriggered===!0&&a.manuelTrigger?_SgmntfY_._getJq()(a.manuelTrigger).click():_SgmntfY_._sendSearchRequest())}},_prepareSearchQuery:function(t){let n;return t&&(n=t.slice(0,250)),n},_searchResultHandler:function(request,searchResult){var searchArray=searchResult[0],campaign=searchArray.campaign,products=searchArray.products||[],brands=searchArray.brands||{},brandProducts=searchArray.brandProducts||{},categories=searchArray.categories||{},categoryProducts=searchArray.categoryProducts||{},mostSearchedProducts=searchArray.mostSearchedProducts||{},keywords=searchArray.keywords||{},meta=searchArray.meta||{},additionalContents=searchArray.contents||[],banners=searchArray.banners||[],lastSearches=searchArray.lastSearches||[],meanings=searchArray.meanings||[],noResultSearch=searchArray.noResult||{},isProductsFound=products.length>0,redirectUrl=searchArray.redirectUrl||{},isBigScreen=sessionStorage.getItem("isBigScreen");if(campaign==null)return;if(_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"impression",interactionId:"static",instanceId:campaign.instanceId}),(products!==null&&products.length>0||noResultSearch!==null&&noResultSearch.recommendedProducts&&noResultSearch.recommendedProducts.length>0)&&_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:"static",instanceId:campaign.instanceId}),_SgmntfY_._variables.search.emptySearch=campaign.instanceId==="BEFORE_SEARCH",_SgmntfY_._variables.search.keywordSearch=campaign.instanceId==="SEARCH",_SgmntfY_._variables.search.forceRemoveInputVal=campaign.forceRemoveInputVal,sgmSearchSettings={data:{},mobileInput:"#sgm-mobile-input",searchResultsEl:".seg-search-wrapper",incremental:searchArray.incremental,searchUrlPrefix:campaign.searchUrlPrefix,instanceId:campaign.instanceId,html:campaign.html,postJs:campaign.postJs,preJs:campaign.preJs,css:campaign.css,openingDirection:campaign.openingDirection,input:campaign.searchInputSelector,forceRemoveInputVal:campaign.forceRemoveInputVal,currentSearchBoxEl:campaign.hideCurrentSelector,searchAssets:campaign.searchAssets||[],mobileSearchAssets:campaign.mobileSearchAssets||[],searchAssetsTexts:campaign.stringSearchAssetTextMap||[],categoryTreeView:!1,manuelTrigger:campaign.triggerSelector,sgmSearchShowAll:!1,resultsTopMargin:{mobile:0,desktop:0},searchHistoryClearSettings:{clearQueryBasedEnabled:!1,clearButtonEnabled:!1,clearButtonText:""},isSidebarItemsClickable:{categories:!1,brands:!1,keywords:!1,lastSearches:!1},highlightEnabled:{categories:!1,brands:!1,keywords:!1},itemLimits:{howManyBrand:0,howManyCategory:0,howManyKeyword:0,howManyDesktopProduct:noResultSearch.desktopItemCount||campaign.desktopItemCount,howManyMobileProduct:noResultSearch.mobileItemCount||campaign.mobileItemCount},itemEnable:{category:!1,brand:!1,keyword:!1,lastSearches:!1},sidebar:{mobile:!1,desktop:!0},texts:{categories:"",popularCategories:"",brands:"",popularBrands:"",keywords:"",products:"",showAll:"Show All",currency:"",notFound:"",cancelText:""}},sgmSearchSettings.input.indexOf(",input#sgm-qa-search")===-1&&(sgmSearchSettings.input=sgmSearchSettings.input+",input#sgm-qa-search"),_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth&&sgmSearchSettings.mobileSearchAssets.length===0&&(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar")),_SgmntfY_._getJq()("#sgm_current_search_box").length===0){var siteSearchBoxSelector=_SgmntfY_._variables.search.activeRootElementForHide;_SgmntfY_._variables.search.activeRootElementForHide===document&&(siteSearchBoxSelector="head"),_SgmntfY_._getJq()(siteSearchBoxSelector).append('<style id="sgm_current_search_box">'+sgmSearchSettings.currentSearchBoxEl+" { display: none!important; position: absolute!important; left: -999999px!important; top: -99999999px!important; visibility: hidden!important; opacity: 0!important }</style>")}_SgmntfY_._variables.search.searchDelay=campaign.searchDelay>50?campaign.searchDelay:50,_SgmntfY_._variables.search.searchMinChar=campaign.minCharacterCount,sgmSearchSettings.texts.showAll=_SgmntfY_._variables.search.showAll;var searchAssetElements=_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth?sgmSearchSettings.mobileSearchAssets:sgmSearchSettings.searchAssets;_SgmntfY_._getJq().each(searchAssetElements,function(t,n){n.type==="CATEGORY"?(sgmSearchSettings.categoryTreeView=n.categoryTreeView,sgmSearchSettings.isSidebarItemsClickable.categories=n.clickable,sgmSearchSettings.itemLimits.howManyCategory=n.itemCount,sgmSearchSettings.itemEnable.category=!0,sgmSearchSettings.highlightEnabled.categories=n.highlight):n.type==="BRAND"?(sgmSearchSettings.isSidebarItemsClickable.brands=n.clickable,sgmSearchSettings.itemLimits.howManyBrand=n.itemCount,sgmSearchSettings.itemEnable.brand=!0,sgmSearchSettings.highlightEnabled.brands=n.highlight):n.type==="KEYWORD"?(sgmSearchSettings.isSidebarItemsClickable.keywords=n.clickable,sgmSearchSettings.itemLimits.howManyKeyword=n.itemCount,sgmSearchSettings.itemEnable.keyword=!0,sgmSearchSettings.highlightEnabled.keywords=n.highlight):n.type==="LAST_SEARCHES"&&(sgmSearchSettings.itemLimits.howManyKeyword=n.itemCount,sgmSearchSettings.itemEnable.lastSearches=!0,sgmSearchSettings.isSidebarItemsClickable.lastSearches=n.clickable,sgmSearchSettings.searchHistoryClearSettings.clearButtonText=n.clearButtonText,sgmSearchSettings.searchHistoryClearSettings.clearButtonEnabled=n.clearButtonEnabled,sgmSearchSettings.searchHistoryClearSettings.clearQueryBasedEnabled=n.clearQueryBasedEnabled)});var currentDeviceIsPC=(_SgmntfY_._variables.ua.type||"PC").toUpperCase()==="PC";_SgmntfY_._getJq().each(sgmSearchSettings.searchAssetsTexts,function(t,n){t===request.data.lang&&(sgmSearchSettings.texts.categories=n.categoriesText,sgmSearchSettings.texts.popularCategories=currentDeviceIsPC?n.popularCategoriesText:n.mobilePopularCategoriesText,sgmSearchSettings.texts.brands=n.brandsText,sgmSearchSettings.texts.popularBrands=currentDeviceIsPC?n.popularBrandsText:n.mobilePopularBrandsText,sgmSearchSettings.texts.popularProducts=n.popularProductsText,sgmSearchSettings.texts.products=n.popularProductsText,sgmSearchSettings.texts.keywords=currentDeviceIsPC?n.popularKeywordsText:n.mobilePopularKeywordsText,sgmSearchSettings.texts.lastSearchesText=n.lastSearchesText,sgmSearchSettings.texts.cancelText=n.mobileCancelText,sgmSearchSettings.texts.notFound=n.notFoundText)}),sgmSearchSettings.data.categories=_SgmntfY_._getArrayOfMap(categories),sgmSearchSettings.data.brands=_SgmntfY_._getArrayOfMap(brands),sgmSearchSettings.data.keywords=_SgmntfY_._getArrayOfKeywordsMap(keywords),sgmSearchSettings.data.texts=sgmSearchSettings.texts,products.length?sgmSearchSettings.data.products=_SgmntfY_._getArrayOfProductMap(products):noResultSearch!==null&&noResultSearch.recommendedProducts&&noResultSearch.recommendedProducts.length>0&&(sgmSearchSettings.data.products=_SgmntfY_._getArrayOfProductMap(noResultSearch.recommendedProducts),sgmSearchSettings.data.texts.products=noResultSearch.text),sgmSearchSettings.data.meta=meta,sgmSearchSettings.data.keywordsProducts=keywords,sgmSearchSettings.data.categoryProducts=categoryProducts,sgmSearchSettings.data.mostSearchedProducts=mostSearchedProducts,sgmSearchSettings.data.brandProducts=brandProducts,sgmSearchSettings.data.itemEnable=sgmSearchSettings.itemEnable,sgmSearchSettings.data.synonyms=searchArray.synonyms,sgmSearchSettings.data.additionalContents=additionalContents,sgmSearchSettings.data.banners=banners.slice(0,5),sgmSearchSettings.data.lastSearches=lastSearches,sgmSearchSettings.data.meanings=meanings,sgmSearchSettings.data.request=request,sgmSearchSettings.data.redirectUrl=redirectUrl,sgmSearchSettings.data.searchHistoryClearSettings=sgmSearchSettings.searchHistoryClearSettings;try{if(sgmSearchSettings.preJs){eval(sgmSearchSettings.preJs);var retVal=preRenderConf(sgmSearchSettings);if(typeof retVal<"u"&&!retVal){_SgmntfY_.LOG_MESSAGE("WARN","preRenderConf returned false exiting!");return}}}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product search pre js code: "+t)}if(!sgmSearchSettings.data.products||(_SgmntfY_._populateSearchResults(sgmSearchSettings.data,null,!0),isProductsFound||(addNoResultIcon(),noResultStyle()),_SgmntfY_._getJq()(document).on("submit",sgmSearchSettings.searchResultsEl+" form",function(t){t.preventDefault(),_SgmntfY_._goToSearchResultPage()}),_SgmntfY_._getJq()(document).on("click",".sgm-search-sidebar ul li",function(){var t=_SgmntfY_._getJq()(this).parent("ul").data("group");if(sgmSearchSettings.isSidebarItemsClickable[t]===!0){var n=_SgmntfY_._getJq()(this).attr("data-url")||"";n&&(window.location.href=_SgmntfY_._getJq()(this).attr("data-url"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("open"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-open"))}}),_SgmntfY_._getJq()(document).on("mouseover",".sgm-search-sidebar li",function(){var t=_SgmntfY_._getJq()(this).data("original"),n=s();if(_SgmntfY_._getJq()(window).width()>=_SgmntfY_._variables.search.maxMobileWidth&&t!=n){var r=_SgmntfY_._getJq()(this).parent("ul").data("group");_SgmntfY_._getJq()(".sgm-search-sidebar li.selected").removeClass("selected"),_SgmntfY_._getJq()(".sgm-search-sidebar li.sgm-search-selected").removeClass("sgm-search-selected"),_SgmntfY_._getJq()(this).addClass("selected"),_SgmntfY_._getJq()(this).addClass("sgm-search-selected");var a={};r==="keywords"?a=sgmSearchSettings.data.keywordsProducts:r==="categories"?a=sgmSearchSettings.data.categoryProducts:r==="brands"&&(a=sgmSearchSettings.data.brandProducts),_SgmntfY_._getJq().each(a,function(o,c){if(o&&t&&o.toString()===t.toString()){var g={};g.products=_SgmntfY_._getArrayOfProductMap(c),_SgmntfY_._populateSearchResults(g,"products")}}),_SgmntfY_._getJq()(".sgm-search-products-title").html(_SgmntfY_._getJq()(this).text())}function s(){var o=document.querySelector(".sgm-search-sidebar li.selected");return o&&o.dataset&&o.dataset.original?o.dataset.original.toString():""}}),_SgmntfY_._getJq()(window).on("load resize scroll orientationchange",onChangeWindowOrOrientation),_SgmntfY_._getJq()(document).on("click","#sgm-mobile-input-cancel",_SgmntfY_.mobileSearchCancel),_SgmntfY_._getJq()(document).on("click",".sgm-search-show-all",function(t){document.location=sgmSearchSettings.searchUrlPrefix+_SgmntfY_._variables.search.currentActiveInput.value.trim()}),isBigScreen==="1"))return;_SgmntfY_._getJq()(document).on("click","*",onCloseSearchResult),_SgmntfY_._getJq()(".sgm-search-wrapper").addClass("seg-infinit-z-index");function onChangeWindowOrOrientation(t){_SgmntfY_._setSearchResultsPosition(),_SgmntfY_._openSearchResults(),_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth?(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("mobile"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-mobile"),/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream&&_SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-ios-device")):(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("mobile"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-mobile"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-ios-device"))}function onCloseSearchResult(t){try{if(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("open")||_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("sgm-search-open")){var n=_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl),r=_SgmntfY_._getJq()(sgmSearchSettings.input,_SgmntfY_._variables.search.activeRootElement);if(!n.is(t.target)&&n.has(t.target).length===0&&!_SgmntfY_._getJq()(r).is(_SgmntfY_._variables.search.activeRootElement.activeElement)||_SgmntfY_._getJq()(t.target).attr("id")==="sgm-mobile-input-cancel"){var a=document.querySelector(sgmSearchSettings.searchResultsEl);bodyScrollLock.enableBodyScroll(a),_SgmntfY_._getJq()(".seg-search-wrapper").remove(),_SgmntfY_._variables.search.manuelTriggerClicked=!1}}}catch(s){_SgmntfY_.LOG_MESSAGE("WARN","Error in document click: "+s)}}function addNoResultIcon(){try{var t=`
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.9765 0.398438C7.84221 0.398438 0.399597 7.84034 0.399597 16.9753C0.399597 26.1096 7.8415 33.5522 16.9765 33.5522C20.9273 33.5522 24.5561 32.1554 27.4087 29.8368L38.626 41.0542C39.2957 41.7239 40.3857 41.7239 41.0554 41.0542C41.725 40.3846 41.725 39.3125 41.0554 38.6428L29.838 27.4254C32.1613 24.5715 33.5534 20.9309 33.5534 16.976C33.5534 7.84176 26.1115 0.399146 16.9765 0.399146V0.398438ZM16.9765 3.82785C24.2576 3.82785 30.1233 9.69351 30.1233 16.9746C30.1233 24.2557 24.2576 30.1214 16.9765 30.1214C9.69538 30.1214 3.82972 24.2557 3.82972 16.9746C3.82972 9.69351 9.69538 3.82785 16.9765 3.82785Z" fill="#999999"/>
+            </svg>`,n=new DOMParser,r=n.parseFromString(t,"text/html").getElementsByTagName("svg")[0],a=document.createElement("br"),s=document.querySelector(".sgm-search-products-title-container");s.prepend(a),s.prepend(r),s.style["text-align"]="center",s.style["margin-bottom"]="8px"}catch(o){_SgmntfY_.LOG_MESSAGE("WARN","Error in adding no search result icon in after search: ",+o)}}function noResultStyle(){var t=_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl);t.find("ul a").css("width","calc(50% - 6px)"),t.find("ul a:nth-child(odd)").css("margin-right","10px"),t.find("ul a:nth-child(even)").css("margin-right","unset"),t.find("hr").css("background-color","transparent")}},_getArrayOfMap:function(t){var n=[],r=0;return _SgmntfY_._getJq().each(t,function(a,s){n[r]={name:a,url:s},r=r+1}),n},_populateSearchResults:function(data,type,openResultsFlag){data.emptySearch=_SgmntfY_._variables.search.emptySearch,data.keywordSearch=_SgmntfY_._variables.search.keywordSearch;var productsTemplate=null,domparser=new DOMParser;try{productsTemplate=domparser.parseFromString(sgmSearchSettings.html,"text/html").getElementById("sgm-search-product-template")}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in html parsing for id: sgm-search-product-template: "+t);return}var template,rendered,tempSgmSearchSettingsData=_SgmntfY_._getCopiedObject(data);if(_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth?tempSgmSearchSettingsData.products=data.products.slice(0,sgmSearchSettings.itemLimits.howManyMobileProduct):tempSgmSearchSettingsData.products=data.products.slice(0,sgmSearchSettings.itemLimits.howManyDesktopProduct),type==="products")rendered=_SgmntfY_._getMustache().render(productsTemplate.innerHTML,tempSgmSearchSettingsData),_SgmntfY_._fillSearchResults(rendered,"products");else{if(_SgmntfY_._getJq()(".sgm-search-sidebar").length===0)try{template=domparser.parseFromString(sgmSearchSettings.html,"text/html").getElementById("sgm-search-template"),template&&(template=_SgmntfY_._decodeHtml(template.innerHTML),rendered=_SgmntfY_._getMustache().render(template,tempSgmSearchSettingsData,{products:productsTemplate.innerHTML}),_SgmntfY_._fillSearchResults(rendered))}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in html parsing for id: sgm-search-template: "+t)}else getTemplateAndFillSearchResult("sgm-search-sidebar"),getTemplateAndFillSearchResult("sgm-search-header"),getTemplateAndFillSearchResult("sgm-search-products");_SgmntfY_._getJq()(".sgm-search-sidebar").length===1&&(rendered=_SgmntfY_._getMustache().render(productsTemplate.innerHTML,tempSgmSearchSettingsData),_SgmntfY_._fillSearchResults(rendered,"products"))}if(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).find(".sgm-search-sidebar").find("li").each(function(){var t=_SgmntfY_._getJq()(this).text();t=_SgmntfY_._prepareSearchAssetText(t);var n="";_SgmntfY_._variables.search.currentActiveInput&&_SgmntfY_._variables.search.currentActiveInput.value&&(n=_SgmntfY_._variables.search.currentActiveInput.value.trim());var r=this.parentElement.getAttribute("data-group"),a=sgmSearchSettings.data.synonyms||[];a.length===0&&a.push(n),n&&n!==""&&(r==="categories"&&sgmSearchSettings.highlightEnabled.categories||r==="brands"&&sgmSearchSettings.highlightEnabled.brands||r==="keywords"&&sgmSearchSettings.highlightEnabled.keywords)&&(t=_SgmntfY_._highlight(a,t)),_SgmntfY_._getJq()(this).html(t)}),_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth){var newFormWrapper='<form action="/"></form>',newInputWrapper='<div id="sgm-mobile-input"></div>';if(_SgmntfY_._getJq()("#sgm-mobile-input").length===0){var currentInputClone=_SgmntfY_._getJq()("<input type='search' name='search' autocomplete='OFF'>");currentInputClone.insertBefore(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).children(".sgm-search-header")).wrap(newInputWrapper).wrap(newFormWrapper),_SgmntfY_._getJq()("#sgm-mobile-input").append('<div id="sgm-mobile-input-clear"></div><div id="sgm-mobile-input-cancel">'+sgmSearchSettings.texts.cancelText+"</div>");var sgmMobileInput=_SgmntfY_._getJq()("#sgm-mobile-input input");sgmMobileInput&&sgmMobileInput.length>0&&(_SgmntfY_._variables.search.currentActiveInput||(_SgmntfY_._variables.search.currentActiveInput=sgmMobileInput[0]),setTimeout(function(){sgmMobileInput.val(_SgmntfY_._variables.search.currentActiveInput.value).focus(),_SgmntfY_._variables.search.currentActiveInput=sgmMobileInput[0],_SgmntfY_._searchGetInputElement().not("#sgm-mobile-input input").attr("readonly","readonly")},10))}}openResultsFlag===!0&&(_SgmntfY_._openSearchResults(!0),_SgmntfY_._searchFillAdditionalContents(),_SgmntfY_._searchFillBanners(sgmSearchSettings.data.banners)),applyPostProcess();function getTemplateAndFillSearchResult(t){try{var n=domparser.parseFromString(sgmSearchSettings.html,"text/html").getElementsByClassName(t)[0];n&&(n=_SgmntfY_._decodeHtml(n.innerHTML),rendered=_SgmntfY_._getMustache().render(n,tempSgmSearchSettingsData,{products:productsTemplate.innerHTML}),_SgmntfY_._fillSearchResults(rendered,t))}catch(r){_SgmntfY_.LOG_MESSAGE("WARN","Error in parsing html for  "+t+" in search "+r)}}function applyPostProcess(){try{var sgmSearchStyleId="sgmStyle"+sgmSearchSettings.instanceId,sgmStyleElement=document.getElementById(sgmSearchStyleId);sgmStyleElement!==null&&sgmSearchSettings.css?sgmStyleElement.innerHTML=sgmSearchSettings.css:sgmSearchSettings.css&&_SgmntfY_._getJq()('<style id="'+sgmSearchStyleId+'" />').html(sgmSearchSettings.css).prependTo(_SgmntfY_._getJq()("body")),sgmSearchSettings.postJs&&eval(sgmSearchSettings.postJs)}catch(t){_SgmntfY_.LOG_MESSAGE("WARN","Error in executing product SEARCH post js or css code: "+t)}}},_searchResetAdditionalContents:function(){_SgmntfY_._getJq()(".seg-search-wrapper div[data-sgm-ac-position^=searchbox]").each(t);function t(n,r){_SgmntfY_._getJq()(r).html("")}},_searchFillAdditionalContents:function(){if(_SgmntfY_._searchResetAdditionalContents(),sgmSearchSettings.data.additionalContents)for(var t=0;t<sgmSearchSettings.data.additionalContents.length;t++){var n=sgmSearchSettings.data.additionalContents[t];_SgmntfY_._getJq()(".seg-search-wrapper div[data-sgm-ac-position="+n.key+"]").html(n.html)}},_searchResetBanners:function(){_SgmntfY_._getJq()(".seg-search-wrapper .seg-search-banner").each(function(t,n){_SgmntfY_._getJq()(n).html("")})},_searchRenderBanner:function(t){var n=document.querySelector('[seg-search-banner-position="'+t.position+'"]');if(n===null){var r=_SgmntfY_._variables.search.bannerTargets;n=document.createElement("div"),n.classList.add("seg-search-banner-position"),n.setAttribute("seg-search-banner-position",t.position),t.position==="ASSETS_HEADER"||t.position==="RESULTS_HEADER"?_SgmntfY_._getJq()(r[t.position]).prepend(n):_SgmntfY_._getJq()(r[t.position]).append(n)}var a=document.createElement("div");a.classList.add("seg-search-banner"),a.style.width=t.width||"100%",a.style.height=t.height||"auto",n.appendChild(a);var s=document.createElement("a");s.classList.add("seg-search-banner__anchor"),s.href=t.targetUrl,t.newtab===!0&&(s.target="_blank"),a.appendChild(s);var o=document.createElement("img");o.classList.add("seg-search-banner__image"),o.alt=t.name,o.src=t.bannerUrl,o.style.width="100%",o.style.height=t.height||"auto",s.appendChild(o)},_searchFillBanners:function(t){try{if(_SgmntfY_._searchResetBanners(),t)for(var n=0;n<t.length;n++){var r=t[n];_SgmntfY_._searchRenderBanner(r),_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"widget-view",interactionId:_SgmntfY_._getQueryParameter("_sgm_source",r.targetUrl),instanceId:_SgmntfY_._getQueryParameter("_sgm_campaign",r.targetUrl)})}}catch(a){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling searchbox banners."+a)}},_prepareSearchAssetText:function(t){if(sgmSearchSettings.categoryTreeView===!1)try{t=t.replace(/>/g,"/").toLocaleLowerCase(_SgmntfY_._variables.language).split("/"),t=t[t.length-1]}catch{t=t.replace(/>/g,"/").toLocaleLowerCase().split("/"),t=t[t.length-1]}else try{t=t.replace(/>/g,"/").toLocaleLowerCase(_SgmntfY_._variables.language)}catch{t=t.replace(/>/g,"/").toLocaleLowerCase()}return t=n(t),t;function n(r){return r.toLowerCase().split(" ").map(function(a){return a.charAt(0).toUpperCase()+a.substring(1)}).join(" ")}},mobileSearchCancel:function(t){t.stopImmediatePropagation();var n=document.querySelector(".seg-search-wrapper");bodyScrollLock.enableBodyScroll(n),_SgmntfY_._getJq()("body, .wrapper-1").removeClass("noscroll"),_SgmntfY_._getJq()(".seg-search-wrapper").remove(),_SgmntfY_._searchGetInputElement().val(""),_SgmntfY_._variables.search.manuelTriggerClicked=!1},_goToSearchResultPage:function(){return _SgmntfY_._variables.search.currentActiveInput.value.trim().length>0&&(window.location.href=sgmSearchSettings.searchUrlPrefix+encodeURIComponent(_SgmntfY_._variables.search.currentActiveInput.value.trim())),!1},_highlight:function(t,n){return t.forEach(function(r){var a=r.toLocaleLowerCase(),s=new RegExp(a,"ig");try{a=r.toLocaleLowerCase(_SgmntfY_._variables.language),s=new RegExp(a,"ig")}catch{}n=n.replace(s,"<span class='sgm-search-keyword-highlight'>$&</span>")}),n},_openSearchResults:function(t){_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("mobile")||_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).hasClass("sgm-search-mobile"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).find(".sgm-search-sidebar li").length===0?(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar")):(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("no-sidebar"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-no-sidebar")),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).find(".sgm-search-products li").length===0?(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-products"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-products")):(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("no-products"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-no-products")),sgmSearchSettings.isSidebarItemsClickable.categories===!0&&_SgmntfY_._getJq()(".sgm-search-sidebar ul[data-group=categories] li").addClass("sgm-cursor-pointer"),sgmSearchSettings.isSidebarItemsClickable.brands===!0&&_SgmntfY_._getJq()(".sgm-search-sidebar ul[data-group=brands] li").addClass("sgm-cursor-pointer"),sgmSearchSettings.isSidebarItemsClickable.keywords===!0&&_SgmntfY_._getJq()(".sgm-search-sidebar ul[data-group=keywords] li").addClass("sgm-cursor-pointer"),sgmSearchSettings.sgmSearchShowAll===!1&&(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-show-all"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-show-all")),_SgmntfY_._variables.search.manuelTriggerClicked===!0?(_SgmntfY_._disableBodyScrollAndAddOpen(t),_SgmntfY_._variables.search.manuelTriggerClicked=!1):_SgmntfY_._getJq().each(_SgmntfY_._getJq()(sgmSearchSettings.input,_SgmntfY_._variables.search.activeRootElement),function(){if(_SgmntfY_._getJq()(this).is(":focus"))return _SgmntfY_._disableBodyScrollAndAddOpen(t),!1})},_disableBodyScrollAndAddOpen:function(t){if(_SgmntfY_._setSearchResultsPosition(),t&&(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("open"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-open"),_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth)){var n=document.querySelector(".seg-search-wrapper");n&&bodyScrollLock.disableBodyScroll(n),sgmSearchSettings.mobileSearchAssets.length===0&&(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("no-sidebar"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-no-sidebar"))}},_setSearchProductCategory:function(t,n){if(n.category&&n.category.length>0){if(sgmSearchSettings.categoryTreeView===!1){var r=n.category[0].replace(/>/g,"/").toLocaleLowerCase();try{r=n.category[0].replace(/>/g,"/").toLocaleLowerCase(_SgmntfY_._variables.language)}catch{}r=r.split("/"),r=r[r.length-1],t.category=r}else try{t.category=n.category[0].replace(/>/g,"/").toLocaleLowerCase(_SgmntfY_._variables.language)}catch{t.category=n.category[0].replace(/>/g,"/").toLocaleLowerCase()}t["categories-original"]=n.category[0],sgmSearchSettings.incremental===!0&&(t["categories-original"]=[],_SgmntfY_._getJq().each(n.category,function(a,s){t["categories-original"].push(s)}))}},_getArrayOfProductMap:function(t){var n=[];return Array.isArray(t)&&t.forEach(r),n;function r(a){var s={};if(_SgmntfY_._getJq().extend(s,a),s.name=_SgmntfY_._decodeHtml(a.name),_SgmntfY_._setSearchProductCategory(s,a),s.brand){try{s.brand=a.brand.toLocaleLowerCase(_SgmntfY_._variables.language)}catch{s.brand=a.brand.toLocaleLowerCase()}s["brands-original"]=a.brand}n.push(s)}},_getArrayOfKeywordsMap:function(t){var n=[],r=0;return _SgmntfY_._getJq().each(t,function(a,s){n[r]={name:a,url:sgmSearchSettings.searchUrlPrefix+a},r=r+1}),n},_fillSearchResults:function(t,n){try{_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).length===0?_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).html(t):n==="products"?_SgmntfY_._getJq()(".sgm-search-products ul").html(t):_SgmntfY_._getJq()(".sgm-search-sidebar").length===0?_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).html(t):n==="sgm-search-sidebar"?_SgmntfY_._getJq()(".sgm-search-sidebar").html(t):n==="sgm-search-header"?_SgmntfY_._getJq()(".sgm-search-header").html(t):n==="sgm-search-products"&&_SgmntfY_._getJq()(".sgm-search-products").html(t)}catch(r){_SgmntfY_.LOG_MESSAGE("WARN","Error in filling target element["+n+"] with product recommendations: "+r)}},_setSearchResultsPosition:function(){if(_SgmntfY_._getJq()(window).width()<_SgmntfY_._variables.search.maxMobileWidth){var t=_SgmntfY_._getJq()(window).innerHeight()*.01;document.documentElement.style.setProperty("--vh",t+"px"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("mobile"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("sgm-search-mobile"),/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream&&_SgmntfY_._getJq()(".seg-search-wrapper").addClass("sgm-search-ios-device")}else{_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("mobile"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-mobile"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("sgm-search-ios-device");var n=Date.now()|0;_SgmntfY_._setSearchPositionInterval(),_SgmntfY_._renderOnNextTick(_SgmntfY_._setSearchPositionInterval,n,3e3)}},_renderOnNextTick:function(t,n,r){var a=Date.now()|0;a-n<r&&requestAnimationFrame(function(){requestAnimationFrame(t),requestAnimationFrame(function(){_SgmntfY_._renderOnNextTick(t,n,r)})})},_setSearchPositionInterval:function(){if(!(_SgmntfY_._getJq()(window).width()>_SgmntfY_._variables.search.maxMobileWidth&&(_SgmntfY_._getJq()(".seg-search-wrapper").hasClass("no-products")||_SgmntfY_._getJq()(".seg-search-wrapper").hasClass("sgm-search-no-products")))){var t=sgmSearchSettings.openingDirection.toLowerCase(),n=!1,r=!1,a=!1,s=_SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput,_SgmntfY_._variables.search.activeRootElement);if(s.parents().not("body").not("html").each(function(Y,S){if(_SgmntfY_._getJq()(S).css("position")==="fixed")return n=!0,!1;if(_SgmntfY_._getJq()(S).css("position")==="static")return r=!0,!1;if(_SgmntfY_._getJq()(S).css("display")==="none")return a=!0,_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("open"),_SgmntfY_._getJq()(".seg-search-wrapper").removeClass("sgm-search-open"),!1}),a===!1){n===!0||r===!0?(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("seg-position-absolute"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("seg-position-fixed")):(_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).removeClass("seg-position-absolute"),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).addClass("seg-position-absolute"));var o=_SgmntfY_._variables.search.currentActiveInput.getBoundingClientRect(),c={top:"",left:""};if(typeof o>"u")return;if(o.top!==c.top){var g=_SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput,_SgmntfY_._variables.search.activeRootElement).outerHeight();_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).css("top",o.top+g+1),c.top=o.top}if(o.left!==c.left){var _=_SgmntfY_._getJq()(window).width(),m=_SgmntfY_._getJq()(_SgmntfY_._variables.search.currentActiveInput,_SgmntfY_._variables.search.activeRootElement).parent().outerWidth(),f=_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).outerWidth(),v={right:o.left,center:o.left-f/2+m/2,left:o.left+m-f};t==="right"?v[t]+f>=_&&(v[t]=v.center):t==="left"&&v[t]<=0&&(v[t]=v.center),v[t]===v.center&&(v.center<=0||v.center+f>=_)&&(v[t]=_/2-f/2),_SgmntfY_._getJq()(sgmSearchSettings.searchResultsEl).css("left",v[t])}c=o}}},_evalSearchBodyScrollLockPreJs:function(){(function(t,n){var r={exports:{}};n(r.exports),window.bodyScrollLock=r.exports})(this,function(t){"use strict";Object.defineProperty(t,"__esModule",{value:!0});function n(y){if(Array.isArray(y)){for(var u=0,b=Array(y.length);u<y.length;u++)b[u]=y[u];return b}else return Array.from(y)}var r=!1;if(typeof window<"u"){var a={get passive(){r=!0}};window.addEventListener("testPassive",null,a),window.removeEventListener("testPassive",null,a)}var s=typeof window<"u"&&window.navigator&&window.navigator.platform&&/iP(ad|hone|od)/.test(window.navigator.platform),o=[],c=!1,g=-1,_=void 0,m=void 0,f=void 0,v=function(u){return o.some(function(b){return!!(b.options.allowTouchMove&&b.options.allowTouchMove(u))})},Y=function(u){var b=u||window.event;return v(b.target)||b.touches.length>1?!0:(b.preventDefault&&b.preventDefault(),!1)},S=function(u){setTimeout(function(){if(f===void 0){var b=!!u&&u.reserveScrollBarGap===!0,T=window.innerWidth-document.documentElement.clientWidth;b&&T>0&&(f=document.body.style.paddingRight,document.body.style.paddingRight=T+"px")}_===void 0&&(_=document.body.style.overflow,document.body.style.cssText="overflow:hidden !important",_SgmntfY_._getJq()("html").css("overflow","hidden !important")),m===void 0&&(m=_SgmntfY_._getJq()("html").css("overflow"),_SgmntfY_._getJq()("html").css("overflow","hidden"))})},E=function(){setTimeout(function(){f!==void 0&&(document.body.style.paddingRight=f,f=void 0),_!==void 0&&(document.body.style.overflow=_,_=void 0),m!==void 0&&(_SgmntfY_._getJq()("html").css("overflow",m),m=void 0)})},d=function(u){return u?u.scrollHeight-u.scrollTop<=u.clientHeight:!1},h=function(u,b){var T=u.targetTouches[0].clientY-g;return v(u.target)?!1:b&&b.scrollTop===0&&T>0||d(b)&&T<0?Y(u):(u.stopPropagation(),!0)},C=t.disableBodyScroll=function(u,b){if(s){if(!u){console.error("disableBodyScroll unsuccessful - targetElement must be provided when calling disableBodyScroll on IOS devices.");return}if(u&&!o.some(function(w){return w.targetElement===u})){var T={targetElement:u,options:b||{}};o=[].concat(n(o),[T]),u.ontouchstart=function(w){w.targetTouches.length===1&&(g=w.targetTouches[0].clientY)},u.ontouchmove=function(w){w.targetTouches.length===1&&h(w,u)},c||(document.addEventListener("touchmove",Y,r?{passive:!1}:void 0),c=!0)}}else{S(b);var R={targetElement:u,options:b||{}};o=[].concat(n(o),[R])}},p=t.clearAllBodyScrollLocks=function(){s?(o.forEach(function(u){u.targetElement.ontouchstart=null,u.targetElement.ontouchmove=null}),c&&(document.removeEventListener("touchmove",Y,r?{passive:!1}:void 0),c=!1),o=[],g=-1):(E(),o=[])},I=t.enableBodyScroll=function(u){if(s){if(!u){console.error("enableBodyScroll unsuccessful - targetElement must be provided when calling enableBodyScroll on IOS devices.");return}u.ontouchstart=null,u.ontouchmove=null,o=o.filter(function(b){return b.targetElement!==u}),c&&o.length===0&&(document.removeEventListener("touchmove",Y,r?{passive:!1}:void 0),c=!1)}else o=o.filter(function(b){return b.targetElement!==u}),o.length||E()}})},_getCopiedObject:function(){for(var t=Object(),n=0;n<arguments.length;n++)typeof Object.assign=="function"?Object.assign(t,arguments[n]):_SgmntfY_._getJq().extend(t,arguments[n]);return t},_pushInitPermissionCampaign:function(t,n){if(n.safariEnabled&&_SgmntfY_._variables.pushInfo.agent==="Safari"){if(_SgmntfY_._variables.pushInfo.subscription!=="GRANTED"&&_SgmntfY_._variables.pushInfo.subscription!=="DENIED"){let g=function(_){if(_.permission==="denied"){if(_SgmntfY_._variables.pushInfo.subscription!=="DENIED"){fetch(_SgmntfY_._getPushUrl()+"subscription/deny?apiKey="+_SgmntfY_._variables.apiKey+"&userId="+_SgmntfY_._getUserId()+"&instanceId="+_SgmntfY_._variables.pushInfo.instanceId+"&browser="+_SgmntfY_._variables.pushInfo.agent+"&device="+_SgmntfY_._variables.ua.type.toUpperCase());return}_SgmntfY_._variables.pushInfo.promptInteraction="denied"}else _.permission==="granted"?(_SgmntfY_._pushSendSafariSubscription(_,!0),_SgmntfY_._variables.pushInfo.promptInteraction="granted"):(_SgmntfY_._pushRenderHtml(t,n),_SgmntfY_._pushBindClickHandlers(!1,!1),_SgmntfY_._variables.pushInfo.safariEnabled=n.safariEnabled)};var c=g;g(window.safari.pushNotification.permission(_SgmntfY_._variables.pushInfo.safari.webPushId))}}else{var r=_SgmntfY_._variables.pushInfo.permissionMethod==="Vapid",a=_SgmntfY_._variables.pushInfo.isFirebaseCompatible&&_SgmntfY_._variables.pushInfo.permissionMethod==="Firebase",s=_SgmntfY_._variables.pushInfo.isFirebaseCompatible&&_SgmntfY_._variables.pushInfo.useV2&&_SgmntfY_._variables.pushInfo.permissionMethod==="FirebaseV2",o=_SgmntfY_._pushShouldShowPopUp(n);_SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.getSubscription().then(function(g){g?_SgmntfY_._variables.pushInfo.subscription!=="GRANTED"&&g.unsubscribe().then(function(_){_&&_SgmntfY_._pushRequestPermissionFunc(r,a,s,!0)}).catch(function(_){_SgmntfY_.LOG_MESSAGE("ERROR","Error while unsubscribing user: "+_)}):_SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.permissionState({userVisibleOnly:!0}).then(function(_){_==="denied"||_==="DENIED"?(_SgmntfY_._variables.pushInfo.promptInteraction="denied",_SgmntfY_.LOG_MESSAGE("WARN","Permission request denied!"),_SgmntfY_._variables.pushInfo.subscription!=="DENIED"&&fetch(_SgmntfY_._getPushUrl()+"subscription/deny?apiKey="+_SgmntfY_._variables.apiKey+"&userId="+_SgmntfY_._getUserId()+"&instanceId="+_SgmntfY_._variables.pushInfo.instanceId+"&browser="+_SgmntfY_._variables.pushInfo.agent+"&device="+_SgmntfY_._variables.ua.type.toUpperCase())):_==="granted"||_==="GRANTED"?(_SgmntfY_._variables.pushInfo.promptInteraction="granted",_SgmntfY_._variables.pushInfo.subscription!=="GRANTED"&&_SgmntfY_._pushRequestPermissionFunc(r,a,s,!0)):(_==="prompt"||_==="PROMPT")&&(_SgmntfY_._variables.pushInfo.promptInteraction="prompt",o?(_SgmntfY_._pushRenderHtml(t,n),_SgmntfY_._pushBindClickHandlers(!0,!1)):_SgmntfY_._pushRequestPermissionFunc(r,a,s,!1))}).catch(function(_){_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting push permission state, isVapid ["+r+"], isFirebase ["+a+"] "+_),_SgmntfY_._pushFadeUp(1)})}).catch(function(g){_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription, isVapid ["+r+"], isFirebase ["+a+"] "+g),_SgmntfY_._pushFadeUp(1)})}},_pushRequestPermissionFunc:function(t,n,r,a){t?_SgmntfY_._pushRequestPermissionVapid(a):n?_SgmntfY_._pushRequestPermission(a):r&&_SgmntfY_._pushRequestPermissionV2(a)},_pushFadeUp:function(t){_SgmntfY_._getJq()(".seg-popup-push").addClass("seg-fade-up"),window.setTimeout(function(){_SgmntfY_._getJq()(".seg-popup-push").remove()},t)},_pushRenderHtml:function(t,n){var r=_SgmntfY_._getMustache().render(t.html,n);_SgmntfY_._getJq()("body").prepend(r),t.css&&_SgmntfY_._getJq()("<style />").html(t.css).prependTo(_SgmntfY_._getJq()("body")),_SgmntfY_.LOG_MESSAGE("DEBUG","Push Permission appended to html body for campaign("+t.instanceId+")")},_pushBindClickHandlers:function(t,n){_SgmntfY_._getJq()(".seg-popup-push-bttn-later-new").click(function(){_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"push-permission-impression",instanceId:_SgmntfY_._variables.pushInfo.instanceId,interactionId:_SgmntfY_._variables.pushInfo.instanceId}),_SgmntfY_._pushFadeUp(500)}),_SgmntfY_._getJq()(".seg-popup-push-bttn-allow-new").click(function(){if(_SgmntfY_._variables.segmentifyObj("event:interaction",{type:"push-permission-impression",instanceId:_SgmntfY_._variables.pushInfo.instanceId,interactionId:_SgmntfY_._variables.pushInfo.instanceId}),_SgmntfY_._pushFadeUp(500),t)if(_SgmntfY_._variables.pushInfo.permissionMethod==="Firebase")_SgmntfY_._variables.pushInfo.messaging.requestPermission().then(function(){_SgmntfY_._pushGetFirebasePermission(n)}).catch(function(a){a.code==="messaging/permission-blocked"?(_SgmntfY_._variables.pushInfo.promptInteraction="denied",_SgmntfY_.LOG_MESSAGE("WARN","Permission requested denied :"+a),_SgmntfY_._variables.pushInfo.subscription!=="DENIED"&&fetch(_SgmntfY_._getPushUrl()+"subscription/deny?apiKey="+_SgmntfY_._variables.apiKey+"&userId="+_SgmntfY_._getUserId()+"&instanceId="+_SgmntfY_._variables.pushInfo.instanceId+"&browser="+_SgmntfY_._variables.pushInfo.agent+"&device="+_SgmntfY_._variables.ua.type.toUpperCase())):a.code==="messaging/permission-default"?_SgmntfY_._variables.pushInfo.promptInteraction="close":(_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription details at _pushBindClickHandlers() isFireBase [true]: "+a),_SgmntfY_._pushFadeUp(1))});else if(_SgmntfY_._variables.pushInfo.permissionMethod==="Vapid"){var r={userVisibleOnly:!0,applicationServerKey:_SgmntfY_._pushUrlBase64ToUint8Array(_SgmntfY_._variables.pushInfo.vapid.publicKey)};_SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.subscribe(r).then(function(a){_SgmntfY_._pushSendSubscription(a,!0,n),_SgmntfY_._variables.pushInfo.promptInteraction="granted"}).catch(function(a){_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription details at _pushBindClickHandlers() isVapid [true]: "+a),_SgmntfY_._pushFadeUp(1),_SgmntfY_._pushSetPromptInteractionForVapid()})}else _SgmntfY_._variables.pushInfo.permissionMethod==="FirebaseV2"&&_SgmntfY_._pushRequestPermissionV2(!1);_SgmntfY_._variables.pushInfo.agent==="Safari"&&_SgmntfY_._variables.pushInfo.safariEnabled&&_SgmntfY_._pushGetSafariPermission()})},_pushGetSafariPermission:function(){t(window.safari.pushNotification.permission(_SgmntfY_._variables.pushInfo.safari.webPushId));function t(n){n.permission==="default"?window.safari.pushNotification.requestPermission(_SgmntfY_._variables.pushInfo.safari.packageUrl,_SgmntfY_._variables.pushInfo.safari.webPushId,{},t):n.permission==="denied"?(_SgmntfY_._variables.pushInfo.promptInteraction="denied",_SgmntfY_._variables.pushInfo.subscription!=="DENIED"&&fetch(_SgmntfY_._getPushUrl()+"subscription/deny?apiKey="+_SgmntfY_._variables.apiKey+"&userId="+_SgmntfY_._getUserId()+"&instanceId="+_SgmntfY_._variables.pushInfo.instanceId+"&browser="+_SgmntfY_._variables.pushInfo.agent+"&device="+_SgmntfY_._variables.ua.type.toUpperCase())):n.permission==="granted"&&(_SgmntfY_._variables.pushInfo.promptInteraction="granted",_SgmntfY_._pushSendSafariSubscription(n,!1))}},_pushShouldShowPopUp:function(t){if(!t.twoStepEnabled)return!1;var n=bowser.name.toLowerCase(),r=parseFloat(bowser.version);return n.indexOf("chrome")>=0&&r>=80||n.indexOf("firefox")>=0&&r>=72||n.indexOf("opera")>=0&&r>=67||n.indexOf("yandex")>=0&&r>=20||n.indexOf("samsung")>=0&&r>=12},_pushGetFirebasePermission:function(t){_SgmntfY_._variables.pushInfo.messaging.getToken().then(function(n){n&&_SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.getSubscription().then(function(r){_SgmntfY_._pushSendSubscription(r,!1,t)}).catch(function(r){_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription details at _pushGetFirebasePermission() : "+r)})}).catch(function(n){n.code&&n.code==="messaging/token-unsubscribe-failed"?_SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.getSubscription().then(function(r){_SgmntfY_._pushSendSubscription(r,!1,t)}).catch(function(r){_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription details at _pushGetFirebasePermission() : "+r)}):_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription token at _pushGetFirebasePermission() :  "+n)})},_pushRequestPermission:function(t){_SgmntfY_._variables.pushInfo.messaging.requestPermission().then(function(){_SgmntfY_._pushGetFirebasePermission(t)}).catch(function(n){n.code==="messaging/permission-blocked"?(_SgmntfY_._variables.pushInfo.promptInteraction="denied",_SgmntfY_.LOG_MESSAGE("WARN","Permission requested denied :"+n),_SgmntfY_._variables.pushInfo.subscription!=="DENIED"&&fetch(_SgmntfY_._getPushUrl()+"subscription/deny?apiKey="+_SgmntfY_._variables.apiKey+"&userId="+_SgmntfY_._getUserId()+"&instanceId="+_SgmntfY_._variables.pushInfo.instanceId+"&browser="+_SgmntfY_._variables.pushInfo.agent+"&device="+_SgmntfY_._variables.ua.type.toUpperCase())):n.code==="messaging/permission-default"?_SgmntfY_._variables.pushInfo.promptInteraction="close":(_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription details at _pushRequestPermission() isFireBase [true]: "+n),_SgmntfY_._pushFadeUp(1))})},_pushRequestPermissionV2:function(t){_SgmntfY_._variables.pushInfo.fcm.getToken(_SgmntfY_._variables.pushInfo.fcm.messaging,{vapidKey:_SgmntfY_._variables.pushInfo.fcm.vapidKey,serviceWorkerRegistration:_SgmntfY_._variables.pushInfo.serviceWorkerReg}).then(function(n){n?_SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.getSubscription().then(function(r){r&&_SgmntfY_._pushSendSubscription(r,!1,t,n)}):_SgmntfY_.LOG_MESSAGE("WARN","No registration token available. Request permission to generate one isFireBaseV2 [true]")}).catch(function(n){n.code==="messaging/permission-blocked"?(_SgmntfY_._variables.pushInfo.promptInteraction="denied",_SgmntfY_.LOG_MESSAGE("WARN","Permission requested denied :"+n),_SgmntfY_._variables.pushInfo.subscription!=="DENIED"&&fetch(_SgmntfY_._getPushUrl()+"subscription/deny?apiKey="+_SgmntfY_._variables.apiKey+"&userId="+_SgmntfY_._getUserId()+"&instanceId="+_SgmntfY_._variables.pushInfo.instanceId+"&browser="+_SgmntfY_._variables.pushInfo.agent+"&device="+_SgmntfY_._variables.ua.type.toUpperCase())):n.code==="messaging/permission-default"?_SgmntfY_._variables.pushInfo.promptInteraction="close":(_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription details at _pushRequestPermission() isFireBaseV2 [true]: "+n),_SgmntfY_._pushFadeUp(1))})},_pushRequestPermissionVapid:function(t){var n={userVisibleOnly:!0,applicationServerKey:_SgmntfY_._pushUrlBase64ToUint8Array(_SgmntfY_._variables.pushInfo.vapid.publicKey)};_SgmntfY_._variables.pushInfo.serviceWorkerReg.pushManager.subscribe(n).then(function(r){_SgmntfY_._pushSendSubscription(r,!0,t)}).catch(function(r){_SgmntfY_.LOG_MESSAGE("ERROR","Error while getting subscription details at _pushRequestPermissionVapid() : "+r),_SgmntfY_._pushSetPromptInteractionForVapid()})},_pushSendSubscription:function(t,n,r,a){var s=t.endpoint.split("/").slice(-1)[0],o=t.endpoint.replace(s,"").slice(0,-1),c=t.getKey?t.getKey("auth"):"",g=t.getKey?t.getKey("p256dh"):"",_=_SgmntfY_._getUserId(),m={subscriptionId:s,auth:c?btoa(String.fromCharCode.apply(null,new Uint8Array(c))):"",key:g?btoa(String.fromCharCode.apply(null,new Uint8Array(g))):"",userId:_,agent:_SgmntfY_._variables.pushInfo.agent,endpoint:o,deviceType:_SgmntfY_._variables.ua.type.toUpperCase(),isVapid:n,fcmToken:a};_SgmntfY_._variables.pushInfo.promptInteraction="granted",_SgmntfY_._pushSendFetchSubscriptionAllowRequest(m,r)},_pushSendSafariSubscription:function(t,n){var r={subscriptionId:t.deviceToken,auth:"",key:"",userId:_SgmntfY_._getUserId(),agent:"Safari",endpoint:"",deviceType:_SgmntfY_._variables.ua.type.toUpperCase(),isVapid:!1};_SgmntfY_._pushSendFetchSubscriptionAllowRequest(r,n)},_pushSendFetchSubscriptionAllowRequest:function(t,n){var r=_SgmntfY_._getPushUrl()+"subscription/push?apiKey="+_SgmntfY_._variables.apiKey+"&instanceId="+_SgmntfY_._variables.pushInfo.instanceId+"&isSilent="+n;fetch(r,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(t)}).then(function(a){a.ok||a.text().then(function(s){_SgmntfY_._pushSendPermissionError(t.subscriptionId,s)})},function(a){_SgmntfY_._pushSendPermissionError(t.subscriptionId,a),_SgmntfY_.LOG_MESSAGE("ERROR","Error while sending subscription info to BE: "+a)})},_pushSendPermissionError:function(t,n){var r=_SgmntfY_._getPushUrl()+"subscription/error?apiKey="+_SgmntfY_._variables.apiKey,a={subscriptionId:t,userId:_SgmntfY_._getUserId(),message:n};fetch(r,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(a)})},_pushUrlBase64ToUint8Array:function(t){for(var n="=".repeat((4-t.length%4)%4),r=(t+n).replace(/\-/g,"+").replace(/_/g,"/"),a=window.atob(r),s=new Uint8Array(a.length),o=0;o<a.length;++o)s[o]=a.charCodeAt(o);return s},_pushSetPromptInteractionForVapid:function(){"Notification"in window&&(Notification.permission==="denied"?_SgmntfY_._variables.pushInfo.promptInteraction="denied":Notification.permission==="default"&&(_SgmntfY_._variables.pushInfo.promptInteraction="close"))},_pushInitFCM:function(t,n){const r=document.createElement("script");r.type="module";const a={apiKey:_SgmntfY_._variables.pushInfo.fcm.apiKey,messagingSenderId:_SgmntfY_._variables.pushInfo.fcm.messagingSenderId,projectId:_SgmntfY_._variables.pushInfo.fcm.projectId,appId:_SgmntfY_._variables.pushInfo.fcm.appId};r.textContent=`
+                import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+                import { getMessaging, getToken } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js';
+                const app = initializeApp(${JSON.stringify(a)});
+                const messaging = getMessaging(app);
+                _SgmntfY_._variables.pushInfo.fcm.messaging = messaging;
+                _SgmntfY_._variables.pushInfo.fcm.getToken = getToken;
+                _SgmntfY_._pushInitFCMCallBack(${JSON.stringify(t)},${JSON.stringify(n)});
+            `,document.body.appendChild(r)},_pushInitFCMCallBack:function(t,n){"serviceWorker"in navigator&&navigator.serviceWorker.register(n.swPath,{updateViaCache:"none"}).then(function(r){_SgmntfY_._variables.pushInfo.serviceWorkerReg=r,_SgmntfY_._pushInitPermissionCampaign(t,n)}).catch(function(r){_SgmntfY_.LOG_MESSAGE("ERROR","Error while registering service worker "+r)})},GA:{activateTracker:function(){try{if(++_SgmntfY_._variables.ga.activateTriedCount,_SgmntfY_._variables.ga.activateTriedCount>_SgmntfY_._variables.ga.activateTryCount)return;var t;if(_SgmntfY_._variables.ga.ga4){t=Function("return "+_SgmntfY_._variables.ga.tracker4)(),t?(_SgmntfY_._variables.ga.activated=!0,_SgmntfY_._variables.ga.tracker=t):_SgmntfY_.LOG_MESSAGE("WARN","Error evaluating _SgmntfY_._variables.ga.tracker4, cannot evaluate ga4!");return}if(t=Function("return "+_SgmntfY_._variables.ga.tracker)(),!t)_SgmntfY_.LOG_MESSAGE("WARN","Error evaluating _SgmntfY_._variables.ga.tracker, cannot evaluate ga!");else if(t.loaded)if(_SgmntfY_._variables.ga.tracker=t,_SgmntfY_._variables.ga.trackerName)_SgmntfY_._variables.ga.activated=!0;else for(var n=_SgmntfY_._variables.ga.tracker.getAll(),r=0;r<n.length;r++){var a=n[r];if(a){_SgmntfY_._variables.ga.trackerName=a.get("name"),_SgmntfY_._variables.ga.activated=!0;break}}}catch(s){_SgmntfY_.LOG_MESSAGE("ERROR","Error evaluating _SgmntfY_._variables.ga.tracker: "+s)}},setDimension:function(t,n){_SgmntfY_._variables.ga.activated||(_SgmntfY_.GA.activateTracker(),_SgmntfY_._variables.ga.activateTriedCount<_SgmntfY_._variables.ga.activateTryCount&&_SgmntfY_.GA.setDimension(t,n));var r=_SgmntfY_._variables.ga.trackerName;r&&_SgmntfY_._variables.ga.tracker(r+".set",t,n)},setGroup:function(t){_SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmGroup,t),_SgmntfY_._variables.ga.activeGroup=t},setUser:function(t){_SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmUser,t)},setSession:function(t){_SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmSession,t)},setPage:function(t){_SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmPage,t)},setWidget:function(t){_SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmWidget,t)},setProduct:function(t){_SgmntfY_.GA.setDimension(_SgmntfY_._variables.ga.dimensions.sgmProduct,t)},eventCategory:function(){if(_SgmntfY_._variables.ga.activeGroup)return"Segmentify."+_SgmntfY_._variables.ga.activeGroup;if(_SgmntfY_._variables.ga.group&&_SgmntfY_._variables.ga.group==="CHECK")_SgmntfY_.GA.getGroup(_SgmntfY_._getUserId(),_SgmntfY_.GA.setGroup);else{var t=_SgmntfY_._variables.ga.groups[_SgmntfY_._variables.ga.group];return t?"Segmentify."+t:"Segmentify."+_SgmntfY_._variables.ga.groups.unknown}},convertAndSend:function(t){var n=_SgmntfY_._variables.ga.ga4,r;n?r={eventAction:"sgm_"+t.action.toLowerCase().replace(/ /g,"_"),event_label:t.label,event_value:t.value,non_interaction:!0}:r={eventCategory:t.category||_SgmntfY_.GA.eventCategory(),eventAction:t.action,eventLabel:t.label,eventValue:t.value,nonInteraction:!0},_SgmntfY_._variables.ga.dimensions.sgmPage&&(r[_SgmntfY_._variables.ga.dimensions.sgmPage]=_SgmntfY_._variables.ga.activePage),t.sgmWidget&&_SgmntfY_._variables.ga.dimensions.sgmWidget&&(r[_SgmntfY_._variables.ga.dimensions.sgmWidget]=t.sgmWidget),t.sgmProduct&&_SgmntfY_._variables.ga.dimensions.sgmProduct&&(r[_SgmntfY_._variables.ga.dimensions.sgmProduct]=t.sgmProduct),_SgmntfY_.GA.sendEvent(r)},sendEvent:function(t){if(_SgmntfY_._variables.ga.enabled){if(!t.eventCategory&&!t.event_category&&!_SgmntfY_._variables.ga.ga4){t.eventCategory=_SgmntfY_.GA.eventCategory(),_SgmntfY_._variables.segmentifyObj("ga:event",t);return}_SgmntfY_._variables.ga.activated||_SgmntfY_.GA.activateTracker();var n=_SgmntfY_._variables.ga.activated;if(n)if(_SgmntfY_._variables.ga.ga4){const r=t.eventAction,a=Object.assign({},t);delete a.eventAction,_SgmntfY_._variables.ga.tracker("event",r,a)}else _SgmntfY_._variables.ga.tracker(_SgmntfY_._variables.ga.trackerName+".send","event",t);else _SgmntfY_._variables.ga.activateTriedCount<_SgmntfY_._variables.ga.activateTryCount&&_SgmntfY_._variables.segmentifyObj("ga:event",t)}},sendPageView:function(t){_SgmntfY_.GA.convertAndSend({action:"Page View",label:t||_SgmntfY_._variables.ga.activePage})},sendWidgetImpression:function(t,n){_SgmntfY_.GA.convertAndSend({action:"Widget Impression",label:t,sgmWidget:n})},sendWidgetView:function(t,n){_SgmntfY_.GA.convertAndSend({action:"Widget View",label:t,sgmWidget:n})},sendWidgetClick:function(t,n){_SgmntfY_.GA.convertAndSend({action:"Widget Click",label:t,sgmWidget:n})},sendArrowClick:function(t,n){_SgmntfY_.GA.convertAndSend({action:"Arrow Click",label:t,sgmWidget:n})},sendProductClick:function(t,n,r){_SgmntfY_.GA.convertAndSend({action:"Product Click",label:t,sgmWidget:n,sgmProduct:r})},sendQuickBasket:function(t,n,r){_SgmntfY_.GA.convertAndSend({action:"Quick Basket",label:t,sgmWidget:n,sgmProduct:r})},getGroup:function(t,n){if(!_SgmntfY_._variables.apiKey)return n(_SgmntfY_._variables.ga.groups.unknown);var r=_SgmntfY_._getEventUrl()+"/v2/global/user/"+_SgmntfY_._variables.apiKey+"/"+t,a=function(o){var c=o.customObject==="REAL"?_SgmntfY_._variables.ga.groups.groupA:_SgmntfY_._variables.ga.groups.control;_SgmntfY_._storePersistentData(_SgmntfY_._variables.ga.groupCookie,c,1),n(c)},s=function(){n(_SgmntfY_._variables.ga.groups.unknown)};_SgmntfY_._getRequest(r,{},a,s)}},_getRequest:function(t,n,r,a){var s=new XMLHttpRequest;s.open("GET",t,!0),s.responseType="json",s.timeout=5e3;for(var o in n||{})s.setRequestHeader(o,n[o]);s.ontimeout=function(c){a()},s.onreadystatechange=function(){if(s.readyState===XMLHttpRequest.DONE)if(s.status>=200&&s.status<400){var c=s.response;try{typeof c=="string"&&(c=JSON.parse(c))}catch{}r(c)}else a()},s.send()},_sourceOfUrl:function(){var t="",n=document.referrer||document.URL;if(n){let g=function(m){var f=n,v=["facebook","instagram","pinterest","snapchat","tiktok","twitter"];return m?!!v.find(function(Y){return f.indexOf(Y)>-1}):v.find(function(Y){return f.indexOf(Y)>-1})},_=function(m){if(m){var f={facebook:"FACEBOOK",instagram:"INSTAGRAM",pinterest:"PINTEREST",snapchat:"SNAPCHAT",twitter:"TWITTER",tiktok:"TIKTOK"};return{source:"SOCIAL",subSource:f[g(!1)]}}return null};var o=g,c=_,r=_SgmntfY_._getQueryParameter("gclid"),a=_SgmntfY_._getQueryParameter("utm_medium");if(g(!0))return _(document.referrer||document.URL);if(r.length)return"PAID";if(a.length)switch(a){case"social":t="SOCIAL";break;case"organic":t="SEARCH";break;case"cpc":case"cpm":case"ocpm":case"paid-media":case"affiliate":case"banner":case"retargeting":case"shopping":t="PAID";break;case"email":t="EMAIL";break;case"push":case"webpush":t="PUSH";break;default:break}if(!t.length&&_SgmntfY_._notNull(document.referrer)){var s=document.referrer.replace("https://","").replace("http://","");s=s.substring(0,s.indexOf("/")),s.indexOf(_SgmntfY_._variables.domain)!==-1?t="INTERNAL":g(s)?t=_(s):s.indexOf("google")!==-1||s.indexOf("g.co")!==-1||s.indexOf("bing")!==-1||s.indexOf("yandex")!==-1||s.indexOf("yahoo")!==-1?t="SEARCH":(s.indexOf("cimri.com")!==-1||s.indexOf("akakce.com")!==-1||s.indexOf("ucuzcu.com")!==-1||s.indexOf("bilio.com")!==-1||s.indexOf("auspreiser.de")!==-1||s.indexOf("billiger.de")!==-1||s.indexOf("dooyoo.de")!==-1||s.indexOf("geizhals.de")!==-1||s.indexOf("guenstiger.de")!==-1||s.indexOf("idealo.de")!==-1||s.indexOf("kelkoo.de")!==-1||s.indexOf("preis.de")!==-1||s.indexOf("preissuchmaschine.de")!==-1||s.indexOf("geizkragen.de")!==-1||s.indexOf("preisvergleich.de")!==-1||s.indexOf("preisroboter.de")!==-1||s.indexOf("vergelijk.be")!==-1||s.indexOf("pazaruvaj")!==-1||s.indexOf("nabava.net")!==-1||s.indexOf("ceneje.si")!==-1||s.indexOf("heureka")!==-1||s.indexOf("pricerunner")!==-1||s.indexOf("hinnavaatlus")!==-1||s.indexOf("skroutz.gr")!==-1||s.indexOf("agrep.hu")!==-1||s.indexOf("arukereso.hu")!==-1||s.indexOf("trovaprezzi.it")!==-1||s.indexOf("prisjakt.no")!==-1||s.indexOf("prisguiden.no")!==-1||s.indexOf("ceneo.pl")!==-1||s.indexOf("kuantokusta.pt")!==-1||s.indexOf("compari.ro")!==-1)&&(t="LISTING")}t.length||(t="OTHER")}return t},_enableSerializeForm:function(t){t.fn.sgmSerializeForm||(t.fn.sgmSerializeForm=function(){"use strict";var n={},r=function(a,s){var o=n[s.name];typeof o<"u"&&o!==null?t.isArray(o)?o.push(s.value):n[s.name]=[o,s.value]:n[s.name]=s.value};return t.each(this.serializeArray(),r),t.each(n,function(a,s){typeof s<"u"&&s!==null&&t.isArray(s)&&(n[a]=s.join())}),n})},init:function(){console.warn("Segmentify: Do not Track will be deprecated. Please migrate to Do not Personalize"),_SgmntfY_._variables.namespace=window.SegmentifyTrackingObject,_SgmntfY_._variables.segmentifyObj=window[_SgmntfY_._variables.namespace];var t=_SgmntfY_._getQueryParameter("_sgm_tracking");if(_SgmntfY_._isNotEmpty(t)&&_SgmntfY_._setTracking(t),_SgmntfY_._getTracking()==="disabled"){_SgmntfY_.LOG_MESSAGE("DEBUG","End-user opted-out Segmentify tracking!");return}if(!_SgmntfY_._notNull(_SgmntfY_._variables.segmentifyObj)||!_SgmntfY_._notNull(_SgmntfY_._variables.segmentifyObj.q)){if(++_SgmntfY_._variables.initTryCount,_SgmntfY_._variables.initTryCount>_SgmntfY_._variables.initTryLimit){window.clearTimeout(_SgmntfY_._variables.initTimer);return}window.clearTimeout(_SgmntfY_._variables.initTimer),_SgmntfY_._variables.initTimer=window.setTimeout(_SgmntfY_.init,100)}else{if(_SgmntfY_._variables.initTimer&&window.clearTimeout(_SgmntfY_._variables.initTimer),_SgmntfY_.modernize(),_SgmntfY_.LOG_MESSAGE("DEBUG","*** Segmentify is loading... ***"),_SgmntfY_._extend(!0,_SgmntfY_._variables,_SgmntfY_._variables.segmentifyObj.config),_SgmntfY_._functions.setLogLevel(_SgmntfY_._variables.logLevel),!(_SgmntfY_._variables.domain&&document.URL.indexOf(_SgmntfY_._variables.domain)>=0)){console.error("Segmentify domain is not set properly: "+_SgmntfY_._variables.domain);return}if(window.onpagehide=_SgmntfY_._windowPageHide,_SgmntfY_._variables.jq==null)_SgmntfY_._loadJavascript(_SgmntfY_._variables.jQueryUrl,!0,function(){_SgmntfY_._variables.jq=jQuery.noConflict(!0),_SgmntfY_._doNotPersonalize(),_SgmntfY_._enableSerializeForm(_SgmntfY_._variables.jq),_SgmntfY_._initializeDelayedActions(),_SgmntfY_._initializeDelayedCampaigns(),_SgmntfY_._initializePageViewsCampaigns(),_SgmntfY_._initializeSessionCampaigns(),_SgmntfY_._sendTrackedEvent(),_SgmntfY_._segmentifyIdentifyUser(),_SgmntfY_._setTestMode(),_SgmntfY_._setQaMode()});else{if(!_SgmntfY_._checkVersion("1.7",_SgmntfY_._variables.jq.fn.jquery)){console.error("Segmentify requires jQuery version >= 1.7");return}_SgmntfY_._doNotPersonalize(),_SgmntfY_._enableSerializeForm(_SgmntfY_._variables.jq),_SgmntfY_._initializeDelayedActions(),_SgmntfY_._initializeDelayedCampaigns(),_SgmntfY_._initializePageViewsCampaigns(),_SgmntfY_._initializeSessionCampaigns(),_SgmntfY_._sendTrackedEvent(),_SgmntfY_._segmentifyIdentifyUser(),_SgmntfY_._setTestMode(),_SgmntfY_._setQaMode()}_SgmntfY_._variables.doNotTrack===!1&&_SgmntfY_._variables.pa.loaded===!1&&(_SgmntfY_._loadJavascript(_SgmntfY_._variables.paUrl,!0,function(){_SgmntfY_._variables.pa.loaded=!0,_SgmntfY_._variables.pa.data=__PA.default}),setTimeout(function(){_SgmntfY_._variables.pa.loaded===!1&&(_SgmntfY_._variables.pa.loaded=!0,_SgmntfY_._variables.pa.disabled=!0)},_SgmntfY_._variables.constants.frequency*5)),_SgmntfY_._variables.mustache==null&&(_SgmntfY_._variables.mustache={},initializeMustache(_SgmntfY_._variables.mustache),_SgmntfY_._variables.mustache.tags=["[[","]]"]),_SgmntfY_._updateBrowserAndDeviceInfo(),_SgmntfY_.LOG_MESSAGE("DEBUG","*** Running on a "+_SgmntfY_._variables.ua.type+" ***"),_SgmntfY_.LOG_MESSAGE("DEBUG","*** Segmentify loaded and started... ***"),_SgmntfY_.run(),_SgmntfY_._dispatchInitEvent()}},_initializeDelayedActions:function(){try{var t=_SgmntfY_._getDelayedActions();_SgmntfY_._setDelayedActions([]);for(var n=new Date,r=0;r<t.length;r++)t[r].delayDate=new Date(t[r].delayDate),t[r].delayDate.getTime()>n.getTime()&&_SgmntfY_._addDelayedAction(t[r])}catch(a){_SgmntfY_.LOG_MESSAGE("ERROR","Can't initialize delayed actions: "+a)}},_initializeDelayedCampaigns:function(){try{var t=_SgmntfY_._getDelayedCampaigns();_SgmntfY_._setDelayedCampaigns([]);for(var n=new Date,r=0;r<t.length;++r)t[r].time=new Date(t[r].time),t[r].time.getTime()>n.getTime()&&_SgmntfY_._addDelayedCampaign(t[r])}catch(a){_SgmntfY_.LOG_MESSAGE("ERROR","Can't initialize delayed campaigns: "+a)}},_initializePageViewsCampaigns:function(){try{for(var t=_SgmntfY_._getPageViewsCampaigns(),n=0;n<t.length;++n)t[n].pageView=t[n].pageView-1,_SgmntfY_._setPageViewsCampaigns(t),_SgmntfY_._triggerPageViewsCampaign(t[n])}catch(r){_SgmntfY_.LOG_MESSAGE("ERROR","Can't initialize pageview campaigns: "+r)}},_initializeSessionCampaigns:function(){try{if(!_SgmntfY_._variables.pageCategory)return;for(var t=_SgmntfY_._getSessionCampaigns(),n=0;n<t.length;++n){var r=t[n],a=r.campaign,s=r.request;if(_SgmntfY_._checkSessionCampaignFilters(a)){var o=a.timing||{};switch(o.type){case"DELAY":_SgmntfY_._addCampaignDelayHandler(a,s);break;case"DELAY_ALL_PAGES":_SgmntfY_._addCampaignDelayAllPagesHandler(a,s);break;case"PAGE_VIEWS":_SgmntfY_._addCampaignPageViewsHandler(a,s);break;case"SCROLL":_SgmntfY_._addCampaignScrollHandler(a,s);break;case"PAGELEAVE":_SgmntfY_._addCampaignLeaveHandler(a,s);break;case"INTERACTION":_SgmntfY_._addCampaignInteractionHandler(a,s);break}}}}catch(c){_SgmntfY_.LOG_MESSAGE("ERROR","Can't initialize session campaigns: "+c)}},_dispatchInitEvent:function(){try{if(window.dispatchEvent){var t={testMode:_SgmntfY_._getTestMode(),qaMode:_SgmntfY_._getQaMode()};window.dispatchEvent(new CustomEvent("segmentifyInited",{detail:t}))}}catch{}},_segmentifyIdentifyUser:function(){var t=_SgmntfY_._getQueryParameter("utm_code");if(t)try{_SgmntfY_._variables.segmentifyObj("user:identify",{triggerType:"withUtmCode"})}catch(n){console.log("Error Segmentify Cannot Identify User: ",n)}},_ajaxError:function(t,n,r,a){_SgmntfY_.LOG_MESSAGE("WARN",`Error in sending event:
+Event Data: `+JSON.stringify(t.data)+`
+Response: `+n.responseText+`
+Status: `+r+`
+Error: `+a)},_ajaxSuccess:function(t,n,r){_SgmntfY_.LOG_MESSAGE("DEBUG",`Success in sending event:
+Event Data: `+JSON.stringify(t)+`
+Status: `+r+`
+Response Data: `+JSON.stringify(n))},_windowPageHide:function(){_SgmntfY_._variables.isPageHide=!0,window.clearTimeout(_SgmntfY_._variables.runTimer);for(var t=[];_SgmntfY_._variables.segmentifyObj.q.length>0;)try{var n=_SgmntfY_._variables.segmentifyObj.q.shift(),r=_SgmntfY_._functions.getFunction(n[0]),a=Array.prototype.slice.call(n,1),s=r.apply(null,a);s.originalParams.discardResponse="true",t.push(s)}catch{}for(var o=_SgmntfY_._getRetryQueue();o.length>0;)try{var s=o.shift();s.originalParams.discardResponse="true",t.push(s)}catch{}_SgmntfY_._setRetryQueue(t)},run:function(){try{var t;if(_SgmntfY_._variables.pa.wait===!0?t=_SgmntfY_._variables.pa.loaded===!0:t=!0,_SgmntfY_._variables.jq&&t&&(_SgmntfY_._variables.segmentifyObj.q&&_SgmntfY_._variables.segmentifyObj.q.length>0||_SgmntfY_._getDataLayer())&&!_SgmntfY_._variables.waitingKeys&&_SgmntfY_._variables.keysTryCount<5){!_SgmntfY_._isEmpty(_SgmntfY_._getSessionData("SGM_USERID"))&&!_SgmntfY_._isEmpty(_SgmntfY_._getSessionData("SGM_SESSIONID"))&&_SgmntfY_._isEmpty(_SgmntfY_._getUserId())&&_SgmntfY_._isEmpty(_SgmntfY_._getSessionId())&&(_SgmntfY_._storePersistentData(_SgmntfY_._variables.sessionStorageKey,_SgmntfY_._getSessionData("SGM_SESSIONID"),0,_SgmntfY_._variables.storage.session.local),_SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey,_SgmntfY_._getSessionData("SGM_USERID"),390,_SgmntfY_._variables.storage.user.local));var n=0;if(_SgmntfY_._variables.doNotTrack===!1){var r=_SgmntfY_._getUserId(),a=_SgmntfY_._getSessionId();if(_SgmntfY_._isEmpty(r)&&!_SgmntfY_._isEmpty(_SgmntfY_._getSessionData("SGM_USERID")))return _SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey,_SgmntfY_._getSessionData("SGM_USERID"),390,_SgmntfY_._variables.storage.user.local);if(_SgmntfY_._isEmpty(a)&&!_SgmntfY_._isEmpty(_SgmntfY_._getSessionData("SGM_SESSIONID")))return _SgmntfY_._storePersistentData(_SgmntfY_._variables.sessionStorageKey,_SgmntfY_._getSessionData("SGM_SESSIONID"),0,_SgmntfY_._variables.storage.session.local);_SgmntfY_._isEmpty(r)?n=2:_SgmntfY_._isEmpty(a)?n=1:_SgmntfY_._isNotEmpty(a)&&_SgmntfY_._variables.segmentifyObj.q.length>0&&(_SgmntfY_._storePersistentData(_SgmntfY_._variables.sessionStorageKey,a,0,_SgmntfY_._variables.storage.session.local),_SgmntfY_._storePersistentData(_SgmntfY_._variables.userStorageKey,r,390,_SgmntfY_._variables.storage.user.local),_SgmntfY_._storeSessionData("SGM_USERID",r),_SgmntfY_._storeSessionData("SGM_SESSIONID",a))}if(n>0)_SgmntfY_._updateUserAndSessionId(n);else{if(_SgmntfY_._variables.segmentifyObj.q&&_SgmntfY_._variables.segmentifyObj.q.length>0){var s=_SgmntfY_._variables.segmentifyObj.q.splice(0,_SgmntfY_._variables.segmentifyObj.q.length);_SgmntfY_._functions.callFunction(s)}_SgmntfY_._getDataLayer()&&_SgmntfY_._consumeDataLayer()}}window.clearTimeout(_SgmntfY_._variables.runTimer),_SgmntfY_._variables.runTimer=window.setTimeout(_SgmntfY_.run,_SgmntfY_._variables.constants.frequency)}catch(o){_SgmntfY_.LOG_MESSAGE("ERROR","Error in run: "+o),window.clearTimeout(_SgmntfY_._variables.runTimer),_SgmntfY_._variables.runTimer=window.setTimeout(_SgmntfY_.run,_SgmntfY_._variables.constants.frequency)}},modernize:function(){typeof String.prototype.startsWith!="function"&&(String.prototype.startsWith=function(r){return this.lastIndexOf(r,0)===0}),typeof String.prototype.endsWith!="function"&&(String.prototype.endsWith=function(r){return this.indexOf(r,this.length-r.length)!==-1}),typeof String.prototype.trim!="function"&&(String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g,"")}),Array.prototype.indexOf||(Array.prototype.indexOf=function(r,a){if(this==null)throw new TypeError('"this" is null or not defined');var s=Object(this),o=s.length>>>0;if(o===0)return-1;var c=+a||0;if(Math.abs(c)===1/0&&(c=0),c>=o)return-1;for(var g=Math.max(c>=0?c:o-Math.abs(c),0);g<o;){if(g in s&&s[g]===r)return g;g++}return-1}),Array.prototype.map||(Array.prototype.map=function(r,a){var s,o,c;if(this==null)throw new TypeError(" this is null or not defined");var g=Object(this),_=g.length>>>0;if(typeof r!="function")throw new TypeError(r+" is not a function");for(arguments.length>1&&(s=a),o=new Array(_),c=0;c<_;){var m,f;c in g&&(m=g[c],f=r.call(s,m,c,g),o[c]=f),c++}return o});var t=JSON.stringify;if(JSON.stringify=function(r,a,s){var o=Array.prototype.toJSON,c=Number.prototype.toJSON,g=String.prototype.toJSON;delete Number.prototype.toJSON,delete Array.prototype.toJSON,delete String.prototype.toJSON;var _=void 0;try{_=t(r,a,s)}catch{_=void 0}return o&&(Array.prototype.toJSON=o),c&&(Number.prototype.toJSON=c),g&&(String.prototype.toJSON=g),_},typeof window.CustomEvent!="function"){let r=function(a,s){s=s||{bubbles:!1,cancelable:!1,detail:void 0};var o=document.createEvent("CustomEvent");return o.initCustomEvent(a,s.bubbles,s.cancelable,s.detail),o};var n=r;r.prototype=window.Event.prototype,window.CustomEvent=r}},LOG_MESSAGE:function(t,n){var r=_SgmntfY_._variables.logLevel,a=_SgmntfY_.LOG_LEVELS[t];typeof a<"u"&&a<=r&&console.log("Segmentify["+t+"]: "+n)},_experiment:{toString:function(t){try{for(var n=_SgmntfY_._experiment.config,r=Object.keys(n.modules),a=[],s=0;s<r.length;s++){var o=r[s];for(var c in t[o])if(Object.prototype.hasOwnProperty.call(t[o],c)){var g=t[o][c],_=n.modules[o];a.push([c,g,_].join(n.seperator.sub))}}return a.join(n.seperator.items)}catch(m){_SgmntfY_.LOG_MESSAGE("WARN","Error in converting experiments to string: "+m)}},toJson:function(t){try{if(t===null||t==="")return{};for(var n=_SgmntfY_._experiment.config,r=t.split(n.seperator.items),a=Object.fromEntries(Object.entries(n.modules).map(function(f){return[f[1],f[0]]})),s={},o=0;o<r.length;o++){var c=r[o].split(n.seperator.sub),g=c[0],_=c[1],m=c[2];typeof s[a[m]]>"u"&&(s[a[m]]={}),s[a[m]][g]=_}return s}catch(f){_SgmntfY_.LOG_MESSAGE("WARN","Error in converting experiments to JSON: "+f)}},store:function(t){if(!_SgmntfY_._variables?.doNotPersonalize?.enabled){var n=_SgmntfY_._experiment.config;_SgmntfY_.LOG_MESSAGE("INFO","Experiment stored: ["+t+"]"),_SgmntfY_._storePersistentData(n.storage.name,t,n.storage.expire)}},get:function(){var t=_SgmntfY_._experiment.config;return _SgmntfY_._getPersistentData(t.storage.name)},preview:function(t){try{var n=_SgmntfY_._experiment.config,r=t||_SgmntfY_._getQueryParameter("_sgf_experiment");if(r==="")return;for(var a=r.split(n.seperator.sub)[0],s=r.split(n.seperator.sub)[1],o=Object.keys(n.modules),c=_SgmntfY_._experiment.toJson(_SgmntfY_._experiment.get()),g=0;g<o.length;g++){var _=o[g];typeof c[_]<"u"&&typeof c[_][a]<"u"&&(c[_][a]=s,_SgmntfY_._experiment.toString(c)!==_SgmntfY_._experiment.get()&&(_SgmntfY_.LOG_MESSAGE("INFO",'Experiment "'+a+'" group changed to the "'+s+'"'),_SgmntfY_._experiment.store(_SgmntfY_._experiment.toString(c))))}}catch(m){_SgmntfY_.LOG_MESSAGE("WARN","Error in experiments preview: "+m)}},init:function(){return _SgmntfY_._experiment.preview(),_SgmntfY_._experiment.toJson(_SgmntfY_._experiment.get())||{}},config:{storage:{name:"_sgf_exp",expire:30},queryName:"_sgf_experiment",modules:{RECOMMENDATION:"R",SEARCH:"S",PUSH:"P",BT:"B"},seperator:{items:"|",sub:":"}}}};_SgmntfY_.init()})(window);})();
+
+      
