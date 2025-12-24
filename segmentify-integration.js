@@ -21,7 +21,8 @@
        segmentifyApiUrl: '//gandalf-dev.segmentify.com/',
        segmentifyPushUrl: '//gimli-dev.segmentify.com/',
        categoryHierarchy: true,
-       currency: 'TRY'
+       currency: 'TRY',
+       language: 'EN'
    });
 
    Segmentify('apiKey', 'ae272bfb-214b-4cdd-b5c4-1dddde09e95e', true, false);
