@@ -61,6 +61,10 @@
         #purchase { background-color: #4CAF50; } /* Yeşil (Satın Al) */
         #purchase:hover { background-color: #388E3C; }
 
+        /* Yeni Eklenen Ana Sayfa Butonu - Gri/Mavi Tonu */
+        #goHome { background-color: #607d8b; } 
+        #goHome:hover { background-color: #455a64; }
+
         .iconBasket { margin-right: 10px; }
 
         /* Esnek Hizalama (Flexbox) */
@@ -78,6 +82,7 @@
             <button class="basket" id="addToBasket" title="Sepete Ekle"><span class="icon iconBasket">🛒</span>Sepete Ekle</button>
             <button class="basket" id="removeFromBasket" title="Sepetten Çıkar"><span class="icon iconBasket">❌</span>Sepetten Çıkar</button>
             <button class="basket" id="purchase" title="Satın Al"><span class="icon iconBasket">💳</span>Satın Al</button>
+            <button class="basket" id="goHome" title="Ana Sayfaya Dön"><span class="icon iconBasket">🏠</span>Ana Sayfaya Dön</button>
         </div>
         
         <div>
@@ -93,17 +98,26 @@
             segJquery(document).ready(function() {
                 SegmentifyIntegration(window.segJquery).init();
 
+                // Sepete Ekle
                 window.segJquery("#addToBasket").click(function(){
                     Segmentify('basket:add', {productId:"86",quantity:1, price:223.0, nextPage:false});
-
                 });
+
+                // Sepetten Çıkar
                 window.segJquery("#removeFromBasket").click(function(){
                     Segmentify('basket:remove', {productId:"86", nextPage:false});
                 });
+
+                // Satın Al
                 window.segJquery("#purchase").click(function(){
-                         Segmentify('checkout:purchase', {productList: [{productId: '86', quantity: 1, price: 223}],nextPage:false, totalPrice: 223});
-         
-                     });
+                    Segmentify('checkout:purchase', {productList: [{productId: '86', quantity: 1, price: 223}],nextPage:false, totalPrice: 223});
+                });
+
+                // --- Ana Sayfaya Dön Yönlendirmesi ---
+                window.segJquery("#goHome").click(function(){
+                    window.location.href = "https://ihalilaltun.github.io";
+                });
+
             });
         } else {
             setTimeout(waitSegmentifyAndjQuery, 100);
