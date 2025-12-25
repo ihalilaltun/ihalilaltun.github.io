@@ -11,7 +11,16 @@
     <link type="text/css" rel="stylesheet" media="screen" href="/segmentify.css">
     <style>
         body { margin: 0; padding: 20px; background-color: #121212; color: #e0e0e0; font-family: 'Inconsolata', monospace; }
-        .make-it-fit { max-width: 100%; border-radius: 10px; background-color: #fff; padding: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .make-it-fit { 
+            max-width: 100%; 
+            /* Yüksekliği sınırla ki butonlar kaybolmasın */
+            max-height: 60vh; 
+            width: auto; 
+            border-radius: 10px; 
+            background-color: #fff; 
+            padding: 10px; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); 
+        }
         button.basket { display: block; width: 200px; margin-bottom: 10px; padding: 12px 15px; color: white; border: none; cursor: pointer; font-size: 16px; border-radius: 5px; text-align: left; transition: background 0.3s; font-family: 'Inconsolata', monospace; }
         #addToBasket { background-color: #2196F3; } #addToBasket:hover { background-color: #0b7dda; }
         #removeFromBasket { background-color: #d32f2f; } #removeFromBasket:hover { background-color: #b71c1c; }
