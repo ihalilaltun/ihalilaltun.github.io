@@ -15,7 +15,7 @@
     
     <script src="/segmentify-integration.js" charset="UTF-8"></script>
     <link type="text/css" rel="stylesheet" media="screen" href="/segmentify.css">
-    
+
     <style>
         /* --- DARK MODE & LAYOUT STYLES --- */
         body {
@@ -61,11 +61,15 @@
         #purchase { background-color: #4CAF50; } /* Yeşil (Satın Al) */
         #purchase:hover { background-color: #388E3C; }
 
+        /* Yeni Eklenen Ana Sayfa Butonu - Gri/Mavi Tonu */
+        #goHome { background-color: #607d8b; } 
+        #goHome:hover { background-color: #455a64; }
+
         .iconBasket { margin-right: 10px; }
 
         /* Esnek Hizalama (Flexbox) */
         .fill-screen {
-            display: flex; /* Modern hizalama */
+            display: flex;
             flex-wrap: wrap;
             gap: 30px;
             align-items: flex-start;
@@ -78,6 +82,7 @@
             <button class="basket" id="addToBasket" title="Sepete Ekle"><span class="icon iconBasket">🛒</span>Sepete Ekle</button>
             <button class="basket" id="removeFromBasket" title="Sepetten Çıkar"><span class="icon iconBasket">❌</span>Sepetten Çıkar</button>
             <button class="basket" id="purchase" title="Satın Al"><span class="icon iconBasket">💳</span>Satın Al</button>
+            <button class="basket" id="goHome" title="Ana Sayfaya Dön"><span class="icon iconBasket">🏠</span>Ana Sayfaya Dön</button>
         </div>
         
         <div>
@@ -105,6 +110,11 @@
                          Segmentify('checkout:purchase', {productList: [{productId: '81', quantity: 1, price: 87}],nextPage:false, totalPrice: 87});
          
                      });
+
+                // --- Ana Sayfaya Dön Yönlendirmesi ---
+                window.segJquery("#goHome").click(function(){
+                    window.location.href = "https://ihalilaltun.github.io";
+                });
 
             });
         } else {
