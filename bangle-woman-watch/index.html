@@ -8,6 +8,7 @@
     <meta name="keywords" content="ihalilaltun, ibrahim halil altun">
     <meta name="author" content="">
     <meta name="description" content="">
+    
     <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
     <link href='/style.css' rel='stylesheet' type='text/css'>
     <link rel='shortcut icon' type='image/x-icon' href='https://ihalilaltun.github.io/favicon.ico' />
@@ -15,17 +16,78 @@
     <script src="/segmentify-integration.js" charset="UTF-8"></script>
     <link type="text/css" rel="stylesheet" media="screen" href="/segmentify.css">
 
+    <style>
+        /* --- DARK MODE & LAYOUT STYLES --- */
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #121212; /* Koyu Arka Plan */
+            color: #e0e0e0; /* Açık Gri Yazı */
+            font-family: 'Inconsolata', monospace;
+        }
+
+        /* Resim Alanı */
+        .make-it-fit {
+            max-width: 100%;
+            border-radius: 10px;
+            background-color: #fff; /* Resim net görünsün diye arkası beyaz */
+            padding: 10px; 
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        /* Butonlar Genel Yapısı */
+        button.basket {
+            display: block;
+            width: 200px;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: left;
+            transition: background 0.3s;
+            font-family: 'Inconsolata', monospace;
+        }
+
+        /* Renkler */
+        #addToBasket { background-color: #2196F3; } /* Mavi */
+        #addToBasket:hover { background-color: #0b7dda; }
+
+        #removeFromBasket { background-color: #d32f2f; } /* Kırmızı */
+        #removeFromBasket:hover { background-color: #b71c1c; }
+
+        #purchase { background-color: #4CAF50; } /* Yeşil (Satın Al) */
+        #purchase:hover { background-color: #388E3C; }
+
+        #goHome { background-color: #607d8b; } /* Gri/Mavi (Ana Sayfa) */
+        #goHome:hover { background-color: #455a64; }
+
+        .iconBasket { margin-right: 10px; }
+
+        /* Esnek Hizalama (Flexbox) */
+        .fill-screen {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-start;
+        }
+    </style>
 </head>
 <body>
-    <div class='fill-screen' style="display: contents">
-        <div style="float: left; margin-bottom: 15px">
-            <button class="basket" id="addToBasket" title="Sepete Ekle"><span class="icon iconBasket"></span>Sepete Ekle</button>
-            <button class="basket" id="removeFromBasket" title="Sepete Ekle"><span class="icon iconBasket"></span>Sepetten Çıkar</button>
+    <div class='fill-screen'>
+        <div>
+            <button class="basket" id="addToBasket" title="Sepete Ekle"><span class="icon iconBasket">🛒</span>Sepete Ekle</button>
+            <button class="basket" id="removeFromBasket" title="Sepetten Çıkar"><span class="icon iconBasket">❌</span>Sepetten Çıkar</button>
+            <button class="basket" id="purchase" title="Satın Al"><span class="icon iconBasket">💳</span>Satın Al</button>
+            <button class="basket" id="goHome" title="Ana Sayfaya Dön"><span class="icon iconBasket">🏠</span>Ana Sayfaya Dön</button>
         </div>
+        
         <div>
             <img class='make-it-fit' src='https://cdn11.bigcommerce.com/s-pkla4xn3/images/stencil/640w/products/29509/275964/Fashion-Rhinestone-Diamond-Whirlwind-Design-Steel-Weave-Dress-Wristwatch-Woman-Girl-Ladies-Bracelet-Bangle-Quartz-watch__11053.1566488496.jpg?c=2'>
         </div>
-</div>
+    </div>
 
 <script type="text/javascript">
     function waitSegmentifyAndjQuery() {
@@ -35,13 +97,24 @@
             segJquery(document).ready(function() {
                 SegmentifyIntegration(window.segJquery).init();
 
+                // Sepete Ekle
                 window.segJquery("#addToBasket").click(function(){
                     Segmentify('basket:add', {productId:"40000-2",quantity:1, price:335.75, nextPage:false});
-
                 });
+
+                // Sepetten Çıkar
                 window.segJquery("#removeFromBasket").click(function(){
                     Segmentify('basket:remove', {productId:"40000-2", nextPage:false});
+                });
 
+                // Satın Al (Yeni Eklendi - ID ve Fiyat Güncellendi)
+                window.segJquery("#purchase").click(function(){
+                    Segmentify('checkout:purchase', {productList: [{productId: '40000-2', quantity: 1, price: 335.75}],nextPage:false, totalPrice: 335.75});
+                });
+
+                // Ana Sayfaya Dön (Yeni Eklendi)
+                window.segJquery("#goHome").click(function(){
+                    window.location.href = "https://ihalilaltun.github.io/";
                 });
 
             });
@@ -60,3 +133,4 @@
 
 </script>
 </body>
+</html>
